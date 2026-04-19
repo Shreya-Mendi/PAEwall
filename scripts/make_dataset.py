@@ -312,8 +312,11 @@ class ProductCollector:
     """
     Pulls product descriptions from SEC EDGAR 10-K filings.
 
-    For each defendant company, searches EDGAR for their most recent 10-K
-    and extracts the business description (Item 1).
+    Strategy:
+    1. Download EDGAR's company_tickers.json (10k public companies, CIK + name)
+    2. Fuzzy-match each defendant company name to find their CIK
+    3. Use data.sec.gov/submissions to get their most recent 10-K accession number
+    4. Download the 10-K and extract Item 1 (Business Description)
     """
 
     def __init__(self, user_agent: str = EDGAR_USER_AGENT):
@@ -322,40 +325,111 @@ class ProductCollector:
             "User-Agent": user_agent,
             "Accept-Encoding": "gzip, deflate",
         })
+        self._ticker_lookup: tuple[dict, dict, dict] | None = None
+
+    _SUFFIXES = [
+        ", inc.", ", llc", ", ltd.", ", corp.", ", l.p.", ", lp.",
+        " inc.", " llc", " ltd.", " corp.", " inc", " llc", " lp",
+        ", incorporated", " incorporated",
+    ]
+
+    def _strip_suffix(self, name: str) -> str:
+        """Remove common legal entity suffixes from a company name."""
+        for sfx in self._SUFFIXES:
+            if name.endswith(sfx):
+                name = name[: -len(sfx)].strip().rstrip(",").strip()
+        return name
+
+    @staticmethod
+    def _normalize(name: str) -> str:
+        """
+        Normalize a company name for fuzzy matching:
+        - lowercase
+        - replace dots in domain-like patterns (amazon.com → amazon com)
+        - collapse extra whitespace
+        """
+        name = name.lower().strip()
+        # Replace dots surrounded by word chars (domain names, abbreviations)
+        name = re.sub(r"(?<=\w)\.(?=\w)", " ", name)
+        name = re.sub(r"\s+", " ", name).strip()
+        return name
+
+    def _load_ticker_lookup(self) -> tuple[dict, dict, dict]:
+        """
+        Download and index the EDGAR company tickers file. Cached after first call.
+        Returns three dicts: raw title, stripped title, normalized title -> entry.
+        """
+        if self._ticker_lookup is not None:
+            return self._ticker_lookup
+        url = "https://www.sec.gov/files/company_tickers.json"
+        resp = self.session.get(url, timeout=15)
+        resp.raise_for_status()
+        companies = resp.json()
+
+        raw: dict[str, dict] = {}
+        stripped: dict[str, dict] = {}
+        normalized: dict[str, dict] = {}
+        for v in companies.values():
+            title = v["title"].lower().strip()
+            raw[title] = v
+            core = self._strip_suffix(title)
+            stripped.setdefault(core, v)
+            norm_core = self._strip_suffix(self._normalize(title))
+            normalized.setdefault(norm_core, v)
+
+        self._ticker_lookup = (raw, stripped, normalized)
+        logger.info(f"Loaded EDGAR tickers: {len(raw)} companies")
+        return self._ticker_lookup
+
+    def find_cik(self, company_name: str) -> str | None:
+        """
+        Fuzzy-match a company name to an EDGAR CIK.
+        Tries: exact → suffix-stripped → normalized → starts-with → word-overlap.
+        """
+        raw, stripped, normalized = self._load_ticker_lookup()
+        name = company_name.lower().strip()
+        core = self._strip_suffix(name)
+        norm_name = self._normalize(name)
+        norm_core = self._strip_suffix(norm_name)
+
+        # 1. Exact match on raw title
+        if name in raw:
+            return str(raw[name]["cik_str"])
+
+        # 2. Exact match on stripped title (handles "Viasat, Inc." -> "viasat")
+        if core in stripped:
+            return str(stripped[core]["cik_str"])
+
+        # 3. Normalized match — handles domain names like "amazon.com" -> "amazon com"
+        if norm_core in normalized:
+            return str(normalized[norm_core]["cik_str"])
+
+        # 4. Raw title starts-with core name or vice versa (normalized)
+        for key, val in normalized.items():
+            if norm_core == key:
+                return str(val["cik_str"])
+            if len(norm_core) > 4 and (key.startswith(norm_core) or norm_core.startswith(key)):
+                return str(val["cik_str"])
+
+        # 5. Two-or-more meaningful word overlap (excludes legal/generic terms)
+        _STOP = {"co", "co.", "the", "of", "and", "or", "inc", "llc", "ltd",
+                 "corp", "group", "holding", "holdings", "services", "solutions",
+                 "systems", "technologies", "technology", "global", "international"}
+        core_words = set(norm_core.split()) - _STOP
+        if len(core_words) >= 2:
+            for key, val in normalized.items():
+                key_words = set(key.split()) - _STOP
+                if len(core_words & key_words) >= min(2, len(core_words)):
+                    return str(val["cik_str"])
+
+        return None
 
     def search_company(self, company_name: str) -> dict | None:
-        """
-        Search EDGAR for a company by name. Returns CIK and basic info.
-        Uses the company search endpoint.
-        """
-        url = "https://efts.sec.gov/LATEST/search-index"
-        params = {
-            "q": f'"{company_name}"',
-            "forms": "10-K",
-            "dateRange": "custom",
-            "startdt": "2020-01-01",
-            "enddt": "2026-12-31",
-            "size": 1,
-        }
-
-        resp = self.session.get(url, params=params)
-        if resp.status_code != 200:
-            logger.warning(f"EDGAR search failed for '{company_name}': HTTP {resp.status_code}")
+        """Look up a company in EDGAR by name and return its CIK."""
+        cik = self.find_cik(company_name)
+        if not cik:
             return None
-
-        data = resp.json()
-        hits = data.get("hits", {}).get("hits", [])
-        if not hits:
-            return None
-
-        hit = hits[0]["_source"]
-        return {
-            "company_name": hit.get("entity_name", company_name),
-            "cik": hit.get("entity_id", ""),
-            "accession_number": hit.get("file_num", ""),
-            "filing_date": hit.get("file_date", ""),
-            "form_type": hit.get("form_type", ""),
-        }
+        return {"company_name": company_name, "cik": cik}
 
     def fetch_company_submissions(self, cik: str) -> dict | None:
         """

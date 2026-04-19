@@ -1,0 +1,166 @@
+{
+  "bm25_failures": [
+    {
+      "patent_id": "US-10218033-B1",
+      "vertical": "other",
+      "claims_excerpt": "What is claimed is:               1. A battery comprising:  an anode, wherein the anode comprises silicon monoxide (SiO);   a cathode, wherein the cathode comprises lithium cobalt oxide (LCO);   a separator, wherein the separator comprises an electrically-insulating material;   a solid electrolyte i\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "johnson & johnson inc.",
+        "united parcel service, inc.",
+        "united states patent and trademark office"
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 312
+    },
+    {
+      "patent_id": "US-10339934-B2",
+      "vertical": "software",
+      "claims_excerpt": "What is claimed is:               1. A method performed by one or more processing devices of a server system, the method comprising:  storing, by the one or more processing devices of the server system, predetermined assignment data that specifies, for each of multiple different action types, whethe\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "johnson & johnson inc.",
+        "united parcel service, inc.",
+        "home depot, inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 2684
+    },
+    {
+      "patent_id": "US-10673996-B2",
+      "vertical": "consumer_electronics",
+      "claims_excerpt": "What is claimed is:               1. A modular electronic device, comprising:  a plurality of electronic modules;   at least one input sensor that provides data indicative of a location of a touch of the modular electronic device by a user; and   a frame adapted to respectively receive the plurality\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "johnson & johnson inc.",
+        "united parcel service, inc.",
+        "apple, inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 1688
+    },
+    {
+      "patent_id": "US-10769923-B2",
+      "vertical": "consumer_electronics",
+      "claims_excerpt": "What is claimed is:               1. A system for automatically providing instant voice alerts to remote electronic devices, the system comprising:  a processor;   a data bus coupled to said processor; and   a computer-usable medium embodying computer code, said computer-usable medium being coupled\u2026",
+      "true_company": "clearly ip inc",
+      "true_rank": null,
+      "top3_returned": [
+        "johnson & johnson inc.",
+        "united parcel service, inc.",
+        "apple, inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 652
+    },
+    {
+      "patent_id": "US-11240938-B2",
+      "vertical": "industrial",
+      "claims_excerpt": "What is claimed is:               1. A method for cooling a data center comprising:  drawing outside air at ambient conditions into an entry zone of the data center;   spraying atomized water into the outside air downstream of the entry zone;   providing an evaporation zone where the atomized water\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "johnson & johnson inc.",
+        "united parcel service, inc.",
+        "the tile shop, llc"
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 4207
+    }
+  ],
+  "classical_failures": [
+    {
+      "patent_id": "US-10218033-B1",
+      "vertical": "other",
+      "claims_excerpt": "What is claimed is:               1. A battery comprising:  an anode, wherein the anode comprises silicon monoxide (SiO);   a cathode, wherein the cathode comprises lithium cobalt oxide (LCO);   a separator, wherein the separator comprises an electrically-insulating material;   a solid electrolyte i\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "united parcel service, inc.",
+        "tccw inc",
+        "apple inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 312
+    },
+    {
+      "patent_id": "US-10339934-B2",
+      "vertical": "software",
+      "claims_excerpt": "What is claimed is:               1. A method performed by one or more processing devices of a server system, the method comprising:  storing, by the one or more processing devices of the server system, predetermined assignment data that specifies, for each of multiple different action types, whethe\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "united parcel service, inc.",
+        "tccw inc",
+        "apple inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 2684
+    },
+    {
+      "patent_id": "US-10673996-B2",
+      "vertical": "consumer_electronics",
+      "claims_excerpt": "What is claimed is:               1. A modular electronic device, comprising:  a plurality of electronic modules;   at least one input sensor that provides data indicative of a location of a touch of the modular electronic device by a user; and   a frame adapted to respectively receive the plurality\u2026",
+      "true_company": "valtrus innovations ltd.",
+      "true_rank": null,
+      "top3_returned": [
+        "united parcel service, inc.",
+        "tccw inc",
+        "apple inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 1688
+    },
+    {
+      "patent_id": "US-10769923-B2",
+      "vertical": "consumer_electronics",
+      "claims_excerpt": "What is claimed is:               1. A system for automatically providing instant voice alerts to remote electronic devices, the system comprising:  a processor;   a data bus coupled to said processor; and   a computer-usable medium embodying computer code, said computer-usable medium being coupled\u2026",
+      "true_company": "clearly ip inc",
+      "true_rank": null,
+      "top3_returned": [
+        "united parcel service, inc.",
+        "tccw inc",
+        "apple inc."
+      ],
+      "root_cause": "vocabulary_mismatch",
+      "mitigation": "Expand product corpus with domain synonyms; train on more vertical-diverse pairs.",
+      "true_product_words": 0,
+      "claims_words": 652
+    },
+    {
+      "patent_id": "US-10842131-B2",
+      "vertical": "industrial",
+      "claims_excerpt": "The invention claimed is:               1. A method for applying an agrochemical to an agricultural area of interest, the method comprising:  performing a remote sensing survey within or adjacent to an agricultural area of interest wherein the remote sensing survey generates remotely sensed data;\u2026",
+      "true_company": "johnson & johnson inc.",
+      "true_rank": null,
+      "top3_returned": [
+        "united parcel service, inc.",
+        "tccw inc",
+        "apple inc."
+      ],
+      "root_cause": "truncated_claims",
+      "mitigation": "Increase MAX_SEQ_LEN or summarize claims before encoding.",
+      "true_product_words": 663,
+      "claims_words": 907
+    }
+  ]
+}

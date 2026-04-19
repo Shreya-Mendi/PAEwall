@@ -28,20 +28,32 @@ Thumbs.db
 .env
 .env.local
 
-# Data (large files — download via setup.py)
+# Data (large files — commit only small processed files)
 data/raw/*
 data/processed/*
 data/outputs/*
 !data/raw/.gitkeep
+!data/raw/patents_bench.json
 !data/processed/.gitkeep
+!data/processed/pae_bench.parquet
 !data/outputs/.gitkeep
+!data/outputs/naive_bm25_results.json
+!data/outputs/classical_tfidf_logreg_results.json
+!data/outputs/error_analysis.json
 
-# Models (large files — download or train via setup.py)
+# Models — exclude large root-level blobs; subdirectory checkpoints are committed
 models/*.pt
 models/*.pkl
 models/*.joblib
 models/*.bin
 models/*.onnx
+# Exclude large/redundant dual-encoder files
+models/dual_encoder/best_model.pt
+models/dual_encoder/product_embeddings.npy
+models/dual_encoder/dual_encoder_inference.tar.gz
+
+# Misc build artifacts
+bundle.b64
 
 # Jupyter
 .ipynb_checkpoints/

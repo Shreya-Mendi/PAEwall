@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PAEwall — Patent Infringement Discovery</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>PAEwall</h1>
+    <p class="subtitle">Patent Infringement Discovery System</p>
+  </header>
+
+  <main>
+    <section class="input-card">
+      <form id="analyze-form">
+        <div class="field">
+          <label for="patent-number">USPTO Patent Number</label>
+          <input id="patent-number" name="patent_number" type="text" placeholder="e.g. US-11436892-B2" />
+          <div class="example-hint">
+            Try a sample:
+            <a href="#" class="example-link" data-patent="US-11436892-B2">US-11436892-B2</a> (mobile gaming / DraftKings) &nbsp;|&nbsp;
+            <a href="#" class="example-link" data-patent="US-9449941-B2">US-9449941-B2</a> (semiconductor / Apex Tool) &nbsp;|&nbsp;
+            <a href="#" class="example-link" data-patent="US-8715279-B2">US-8715279-B2</a> (medical catheter)
+          </div>
+        </div>
+        <div class="or">— or upload a PDF —</div>
+        <div class="field">
+          <label for="patent-pdf">Patent PDF</label>
+          <input id="patent-pdf" name="patent_pdf" type="file" accept=".pdf" />
+        </div>
+        <button type="submit" id="submit-btn">Analyze Patent</button>
+      </form>
+    </section>
+
+    <div id="status" class="hidden"></div>
+    <div id="results" class="hidden"></div>
+  </main>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>

@@ -100,34 +100,57 @@ uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 
 Then open http://localhost:8000 in your browser.
 
-## Evaluation
+## Evaluation Results
 
-Run the unified evaluation script to compare all three models on PAE-Bench:
+All models evaluated on **PAE-Bench** — 522 patent–defendant pairs from CourtListener litigation records spanning five verticals (software, consumer electronics, medical devices, industrial, other).
+
+| Model | Recall@10 | Recall@50 | MRR | nDCG@10 | n_queries |
+|-------|-----------|-----------|-----|---------|-----------|
+| BM25 Baseline | 0.130 | 0.468 | 0.168 | 0.108 | 483 |
+| TF-IDF + LogReg | 0.241 | 0.485 | 0.332 | 0.229 | 97 |
+| Dual-Encoder (fine-tuned) | — | — | — | — | GPU required |
+
+Classical ML improves Recall@10 by **+85%** and MRR by **+97%** over BM25. Dual-encoder results require A100 GPU (see `notebooks/train_dual_encoder.ipynb`).
+
+Per-vertical breakdown and failure analysis: `data/outputs/`
 
 ```bash
-python scripts/evaluate.py
+python scripts/evaluate.py      # runs all available models
+python scripts/error_analysis.py  # BM25 vs classical failure analysis
 ```
 
-Results are saved to `data/outputs/`.
+## Deployment
+
+The app is deployed on [Railway](https://railway.app) from the `deploy` branch.
+
+Required environment variables:
+```
+DUKE_LLM_API_KEY=<key>
+DUKE_LLM_BASE_URL=https://litellm.oit.duke.edu/v1
+DUKE_LLM_MODEL=GPT 4.1 Mini
+```
+
+To run locally:
+```bash
+source .venv/bin/activate
+uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+```
 
 ## Data Sources
 
 All data is from public sources:
 
-- [USPTO PatentsView](https://patentsview.org) — Patent full text, claims, CPC codes
-- [Google Patents Public Datasets](https://cloud.google.com/bigquery/public-data) — BigQuery patent data
-- [CourtListener RECAP](https://courtlistener.com/recap) — Litigation records and claim charts
-- [PTAB Open Data](https://developer.uspto.gov) — Inter Partes Review outcomes
-- [SEC EDGAR](https://sec.gov/edgar) — Company 10-K filings with product descriptions
+- [CourtListener RECAP](https://courtlistener.com/recap) — Litigation dockets (nature of suit 830 = patent)
+- [Google Patents BigQuery](https://cloud.google.com/bigquery/public-data) — Patent full text and claims
+- [SEC EDGAR](https://sec.gov/edgar) — Company 10-K filings (Item 1 product descriptions)
 
-## Experiment
+## Experiment: Fine-Tuning Impact (RQ1)
 
-**Text-only vs. Multimodal Retrieval (RQ2)**
+Ablation study comparing four retrieval conditions:
+1. **BM25** — keyword baseline, no learning
+2. **TF-IDF + LogReg** — classical ML with learned feature weights
+3. **PatentSBERTa zero-shot** — pre-trained bi-encoder, no fine-tuning
+4. **Dual-encoder fine-tuned** — PatentSBERTa + all-mpnet, InfoNCE loss on litigation pairs
 
-Ablation study comparing:
-1. Text-only dual-encoder (claims + product descriptions)
-2. Full multimodal dual-encoder (claims + figures + descriptions + screenshots)
-
-Per-vertical sub-splits reveal where visual grounding helps most (e.g., UI-heavy software patents vs. method patents).
-
-See `scripts/evaluate.py` and `notebooks/` for experiment details.
+Hypothesis: fine-tuning on litigation-derived positive pairs outperforms zero-shot PatentSBERTa.
+Results saved to `data/outputs/ablation_results.json`.

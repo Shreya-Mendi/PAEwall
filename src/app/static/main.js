@@ -1,36 +1,76 @@
-const form = document.getElementById('analyze-form');
-const statusEl = document.getElementById('status');
-const resultsEl = document.getElementById('results');
-const submitBtn = document.getElementById('submit-btn');
+// ── State ────────────────────────────────────────────────────────────
+let currentFlow = null; // 'protect' | 'fto'
 
-// Example patent quick-fill links
+// ── Flow selection ───────────────────────────────────────────────────
+function selectFlow(flow) {
+  currentFlow = flow;
+
+  const toolSection = document.getElementById('tool');
+  const titleEl     = document.getElementById('tool-title');
+  const descEl      = document.getElementById('tool-desc');
+
+  if (flow === 'protect') {
+    titleEl.textContent = 'Find Infringers';
+    descEl.textContent  = 'Enter your granted patent number or upload the PDF. We will identify companies likely infringing it and score each one for enforcement probability.';
+  } else {
+    titleEl.textContent = 'Prior Art & Design-Around';
+    descEl.textContent  = 'Enter a patent similar to your idea. We will surface invalidity challenges (prior art) and non-infringement arguments you can use to differentiate.';
+  }
+
+  toolSection.classList.remove('hidden');
+  setTimeout(() => toolSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function resetFlow() {
+  currentFlow = null;
+  document.getElementById('tool').classList.add('hidden');
+  document.getElementById('results-section').classList.add('hidden');
+  document.getElementById('status').classList.add('hidden');
+  document.getElementById('analyze-form').reset();
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Example links ────────────────────────────────────────────────────
 document.querySelectorAll('.example-link').forEach(a => {
-  a.addEventListener('click', (e) => {
+  a.addEventListener('click', e => {
     e.preventDefault();
     document.getElementById('patent-number').value = a.dataset.patent;
-    form.dispatchEvent(new Event('submit'));
+    document.getElementById('analyze-form').dispatchEvent(new Event('submit'));
   });
 });
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  resultsEl.innerHTML = '';
-  resultsEl.classList.add('hidden');
-  showStatus('Analyzing patent…', false);
-  submitBtn.disabled = true;
+// ── Nav: also trigger flow select if Analyze link clicked ────────────
+document.getElementById('nav-analyze').addEventListener('click', e => {
+  if (!currentFlow) {
+    e.preventDefault();
+    selectFlow('protect'); // default to infringement flow
+  }
+});
 
-  const fd = new FormData(form);
-  // Remove empty file field — browser includes it even when no file chosen,
-  // which causes FastAPI to return 422 Unprocessable Content.
-  const pdfFile = fd.get('patent_pdf');
-  if (!pdfFile || pdfFile.size === 0) fd.delete('patent_pdf');
+// ── Form submit ──────────────────────────────────────────────────────
+document.getElementById('analyze-form').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const statusEl  = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  const btn       = document.getElementById('submit-btn');
+
+  resultsEl.innerHTML = '';
+  document.getElementById('results-section').classList.add('hidden');
+  showStatus('Analyzing patent — this may take 15–30 seconds…', false);
+  btn.disabled = true;
+
+  const fd = new FormData(e.target);
+  const pdf = fd.get('patent_pdf');
+  if (!pdf || pdf.size === 0) fd.delete('patent_pdf');
 
   try {
-    const res = await fetch('/api/analyze', { method: 'POST', body: fd });
+    const res  = await fetch('/api/analyze', { method: 'POST', body: fd });
     const data = await res.json();
 
     if (!res.ok || data.error) {
-      showStatus(data.error || 'Server error.', true);
+      showStatus(data.error || 'Server error — check the patent number and try again.', true);
       return;
     }
 
@@ -39,84 +79,117 @@ form.addEventListener('submit', async (e) => {
   } catch (err) {
     showStatus('Network error: ' + err.message, true);
   } finally {
-    submitBtn.disabled = false;
+    btn.disabled = false;
   }
 });
 
+// ── Status helpers ───────────────────────────────────────────────────
 function showStatus(msg, isError) {
-  statusEl.textContent = msg;
-  statusEl.className = isError ? 'error-msg' : '';
-  statusEl.classList.remove('hidden');
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className   = isError ? 'error-msg' : '';
+  el.classList.remove('hidden');
 }
-function hideStatus() { statusEl.classList.add('hidden'); }
+function hideStatus() { document.getElementById('status').classList.add('hidden'); }
 
+// ── Render results ───────────────────────────────────────────────────
 function renderResults(data) {
+  const section   = document.getElementById('results-section');
+  const headerEl  = document.getElementById('results-header');
+  const resultsEl = document.getElementById('results');
+
   if (!data.candidates || data.candidates.length === 0) {
-    resultsEl.innerHTML = '<p>No candidates found.</p>';
-    resultsEl.classList.remove('hidden');
+    resultsEl.innerHTML = '<p style="color:#64748b;font-size:.9rem">No candidates found. Try a different patent number.</p>';
+    section.classList.remove('hidden');
+    section.scrollIntoView({ behavior: 'smooth' });
     return;
   }
 
-  const h = document.createElement('h2');
-  h.textContent = `Results for patent ${data.patent_id} — ${data.num_claims_parsed} independent claim(s) parsed`;
-  h.style.cssText = 'font-size:1rem;margin-bottom:16px;color:#334155';
-  resultsEl.appendChild(h);
+  const flow = currentFlow || 'protect';
+  const label = flow === 'fto'
+    ? `Prior art & design-around analysis for <strong>${esc(data.patent_id)}</strong> — ${data.num_claims_parsed} independent claim(s) parsed`
+    : `Infringement analysis for <strong>${esc(data.patent_id)}</strong> — ${data.num_claims_parsed} independent claim(s) parsed`;
+
+  headerEl.innerHTML = label;
 
   data.candidates.forEach(c => {
-    resultsEl.appendChild(buildCard(c));
+    resultsEl.appendChild(buildCard(c, flow));
   });
-  resultsEl.classList.remove('hidden');
+
+  section.classList.remove('hidden');
+  section.scrollIntoView({ behavior: 'smooth' });
 }
 
-function buildCard(c) {
+function buildCard(c, flow) {
   const card = document.createElement('div');
   card.className = 'candidate-card';
 
-  const prob = c.enforcement_probability;
+  const prob       = c.enforcement_probability;
   const badgeClass = prob >= 0.6 ? 'enf-high' : prob >= 0.35 ? 'enf-mid' : 'enf-low';
-  const badgeLabel = prob >= 0.6 ? 'High risk' : prob >= 0.35 ? 'Medium risk' : 'Low risk';
+  const badgeLabel = prob >= 0.6 ? 'High enforcement risk'
+                   : prob >= 0.35 ? 'Medium enforcement risk'
+                   : 'Low enforcement risk';
+
+  // In FTO mode we emphasise invalidity + design-around over the claim chart
+  const primarySection = flow === 'fto'
+    ? `<div class="card-section-title">Prior Art Challenges (Invalidity Arguments)</div>
+       ${buildArgList(c.invalidity_args)}
+       <div class="card-section-title">Design-Around Options (Non-Infringement Arguments)</div>
+       ${buildArgList(c.non_infringement_args)}
+       <div class="card-section-title">Claim Chart (faithfulness: ${(c.claim_chart.overall_confidence * 100).toFixed(0)}%)</div>
+       ${buildChartTable(c.claim_chart.mappings)}`
+    : `<div class="card-section-title">Claim Chart (confidence: ${(c.claim_chart.overall_confidence * 100).toFixed(0)}%)</div>
+       ${buildChartTable(c.claim_chart.mappings)}
+       <div class="card-section-title">Non-Infringement Arguments</div>
+       ${buildArgList(c.non_infringement_args)}
+       <div class="card-section-title">Invalidity Risks</div>
+       ${buildArgList(c.invalidity_args)}`;
 
   card.innerHTML = `
-    <div class="candidate-header">
-      <span class="company-name">#${c.rank} ${esc(c.company_name)}</span>
-      <span class="enf-badge ${badgeClass}">${badgeLabel} — ${(prob * 100).toFixed(0)}% enforcement probability</span>
+    <div class="card-top">
+      <div>
+        <span class="rank-badge">#${c.rank}</span>
+        <span class="company-name">${esc(c.company_name)}</span>
+      </div>
+      <span class="enf-badge ${badgeClass}">${badgeLabel} — ${(prob * 100).toFixed(0)}%</span>
     </div>
-
-    <div class="section-title">Claim Chart (confidence: ${(c.claim_chart.overall_confidence * 100).toFixed(0)}%)</div>
-    ${buildChartTable(c.claim_chart.mappings)}
-
-    <div class="section-title">Non-Infringement Arguments</div>
-    ${buildArgList(c.non_infringement_args)}
-
-    <div class="section-title">Invalidity Arguments</div>
-    ${buildArgList(c.invalidity_args)}
+    <div class="card-body">${primarySection}</div>
   `;
   return card;
 }
 
 function buildChartTable(mappings) {
-  if (!mappings || mappings.length === 0) return '<p style="font-size:.85rem;color:#999">No mappings generated.</p>';
+  if (!mappings || mappings.length === 0)
+    return '<p style="font-size:.83rem;color:#94a3b8">No claim mappings generated.</p>';
+
   const rows = mappings.map(m => {
-    const cls = m.faithfulness_label === 'supports' ? 'label-supports'
-              : m.faithfulness_label === 'partially_supports' ? 'label-partial'
-              : 'label-does-not';
+    const cls = m.faithfulness_label === 'supports'           ? 'verdict-supports'
+              : m.faithfulness_label === 'partially_supports' ? 'verdict-partial'
+              : 'verdict-no';
+    const label = m.faithfulness_label.replace(/_/g, ' ');
     return `<tr>
       <td>${esc(m.limitation)}</td>
       <td>${esc(m.evidence || '—')}</td>
-      <td class="${cls}">${m.faithfulness_label.replace(/_/g, ' ')}</td>
+      <td class="${cls}">${label}</td>
     </tr>`;
   }).join('');
-  return `<table><thead><tr><th>Limitation</th><th>Evidence</th><th>Verdict</th></tr></thead><tbody>${rows}</tbody></table>`;
+
+  return `<table>
+    <thead><tr><th>Claim Limitation</th><th>Product Evidence</th><th>Verdict</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
 }
 
 function buildArgList(args) {
-  if (!args || args.length === 0) return '<p style="font-size:.85rem;color:#999">None generated.</p>';
+  if (!args || args.length === 0)
+    return '<p style="font-size:.83rem;color:#94a3b8">None generated.</p>';
+
   const items = args.map(a =>
-    `<li>${esc(a.summary)} <span class="arg-basis">[${esc(a.legal_basis)}]</span></li>`
+    `<li>${esc(a.summary)}<span class="arg-basis">${esc(a.legal_basis)}</span></li>`
   ).join('');
   return `<ul class="arg-list">${items}</ul>`;
 }
 
 function esc(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }

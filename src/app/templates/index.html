@@ -3,41 +3,277 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PAEwall — Patent Infringement Discovery</title>
+  <title>PAEwall — Patent Intelligence</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <header>
-    <h1>PAEwall</h1>
-    <p class="subtitle">Patent Infringement Discovery System</p>
-  </header>
 
-  <main>
-    <section class="input-card">
+<!-- ── NAV ─────────────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">PAEwall</a>
+    <div class="nav-links">
+      <a href="#tool" id="nav-analyze" class="nav-link">Analyze</a>
+      <a href="#research" class="nav-link">Research</a>
+      <a href="#about" class="nav-link">About</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Duke MEng AIPI · Deep Learning</p>
+    <h1>Know the Value<br>of Your Patent</h1>
+    <p class="hero-sub">PAEwall closes the gap between your patent and the market — retrieving likely infringers, scoring enforcement probability, and surfacing prior art challenges with confidence.</p>
+    <div class="flow-cards">
+
+      <div class="flow-card" id="card-protect" onclick="selectFlow('protect')">
+        <div class="flow-icon-wrap protect-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h2>Protect My Patent</h2>
+        <p>Enter your granted patent. We rank companies most likely infringing it, generate a faithfulness-scored claim chart for each, and estimate enforcement probability.</p>
+        <ul class="flow-bullets">
+          <li>Ranked candidate infringers</li>
+          <li>Claim-by-claim evidence mapping</li>
+          <li>Enforcement probability score</li>
+        </ul>
+        <span class="flow-cta">Start infringement analysis →</span>
+      </div>
+
+      <div class="flow-card" id="card-fto" onclick="selectFlow('fto')">
+        <div class="flow-icon-wrap fto-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <h2>Prior Art &amp; Design-Around</h2>
+        <p>Enter a patent similar to your idea. We identify prior art that could challenge its validity and generate design-around arguments so you can differentiate your invention.</p>
+        <ul class="flow-bullets">
+          <li>Prior art invalidity arguments</li>
+          <li>§101 / §102 / §103 / §112 analysis</li>
+          <li>Design-around suggestions</li>
+        </ul>
+        <span class="flow-cta">Check validity &amp; design-around →</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOL ─────────────────────────────────────────────────────────── -->
+<section id="tool" class="hidden">
+  <div class="section-inner">
+    <div class="tool-header">
+      <button class="back-btn" onclick="resetFlow()">← Back</button>
+      <div>
+        <h2 id="tool-title"></h2>
+        <p id="tool-desc" class="tool-desc"></p>
+      </div>
+    </div>
+    <div class="input-card">
       <form id="analyze-form">
         <div class="field">
           <label for="patent-number">USPTO Patent Number</label>
-          <input id="patent-number" name="patent_number" type="text" placeholder="e.g. US-11436892-B2" />
+          <input id="patent-number" name="patent_number" type="text" placeholder="e.g. US-11436892-B2" autocomplete="off" />
           <div class="example-hint">
             Try a sample:
-            <a href="#" class="example-link" data-patent="US-11436892-B2">US-11436892-B2</a> (mobile gaming / DraftKings) &nbsp;|&nbsp;
-            <a href="#" class="example-link" data-patent="US-9449941-B2">US-9449941-B2</a> (semiconductor / Apex Tool) &nbsp;|&nbsp;
+            <a href="#" class="example-link" data-patent="US-11436892-B2">US-11436892-B2</a> (gaming / DraftKings) &nbsp;·&nbsp;
+            <a href="#" class="example-link" data-patent="US-9449941-B2">US-9449941-B2</a> (semiconductor) &nbsp;·&nbsp;
             <a href="#" class="example-link" data-patent="US-8715279-B2">US-8715279-B2</a> (medical catheter)
           </div>
         </div>
-        <div class="or">— or upload a PDF —</div>
+        <div class="or-divider"><span>or upload a PDF</span></div>
         <div class="field">
           <label for="patent-pdf">Patent PDF</label>
           <input id="patent-pdf" name="patent_pdf" type="file" accept=".pdf" />
         </div>
         <button type="submit" id="submit-btn">Analyze Patent</button>
       </form>
-    </section>
-
+    </div>
     <div id="status" class="hidden"></div>
-    <div id="results" class="hidden"></div>
-  </main>
+  </div>
+</section>
 
-  <script src="/static/main.js"></script>
+<!-- ── RESULTS ───────────────────────────────────────────────────────── -->
+<section id="results-section" class="hidden">
+  <div class="section-inner">
+    <div id="results-header" class="results-meta"></div>
+    <div id="results"></div>
+  </div>
+</section>
+
+<!-- ── RESEARCH ──────────────────────────────────────────────────────── -->
+<section id="research">
+  <div class="section-inner">
+    <p class="section-eyebrow">Evaluation</p>
+    <h2 class="section-heading">Research Results</h2>
+    <p class="section-sub">Evaluated on <strong>PAE-Bench</strong> — 522 patent–defendant pairs from real federal litigation, spanning 5 technology verticals.</p>
+
+    <h3 class="subsection-heading">Model Comparison</h3>
+    <div class="table-wrap">
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Approach</th>
+            <th>Recall@10</th>
+            <th>Recall@50</th>
+            <th>MRR</th>
+            <th>nDCG@10</th>
+            <th>Test n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model-name">BM25</td>
+            <td>Keyword baseline</td>
+            <td>13.0%</td><td>46.8%</td><td>0.168</td><td>0.108</td><td>483</td>
+          </tr>
+          <tr>
+            <td class="model-name">TF-IDF + LogReg</td>
+            <td>Classical ML</td>
+            <td>24.1%</td><td>48.5%</td>
+            <td class="best-cell">0.332</td>
+            <td class="best-cell">0.229</td>
+            <td>97</td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="model-name">Dual-Encoder <span class="tag-dl">DL</span></td>
+            <td>Fine-tuned (text-only)</td>
+            <td class="best-cell">32.8%</td>
+            <td class="best-cell">58.0%</td>
+            <td>0.075</td><td>0.119</td><td>49</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Bold = best per column. Dual encoder: PatentSBERTa (patent) + all-mpnet-base-v2 (product), InfoNCE contrastive loss, 5 epochs on A100.</p>
+
+    <h3 class="subsection-heading">Per-Vertical Recall@10</h3>
+    <div class="table-wrap">
+      <table class="eval-table">
+        <thead>
+          <tr><th>Vertical</th><th>BM25</th><th>Classical</th><th>Dual-Encoder</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Software</td><td>11.9%</td><td>25.2%</td><td class="best-cell">53.4%</td></tr>
+          <tr><td>Consumer Electronics</td><td>19.6%</td><td class="best-cell">37.8%</td><td>31.3%</td></tr>
+          <tr><td>Medical Devices</td><td>2.6%</td><td class="best-cell">12.5%</td><td class="na-cell">—</td></tr>
+          <tr><td>Industrial</td><td>8.7%</td><td>0.0%</td><td>0.0%</td></tr>
+          <tr><td>Other</td><td>7.4%</td><td>13.9%</td><td class="best-cell">22.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subsection-heading">Key Findings</h3>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="finding-num">+36%</div>
+        <p>Dual encoder improves Recall@10 over classical, finding more true defendants in the top 10.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">+97%</div>
+        <p>Classical ML improves MRR over BM25 — learning feature weights dramatically improves ranking precision.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">53%</div>
+        <p>Software patent Recall@10 under the fine-tuned dual encoder — the strongest vertical by a large margin.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">5 ep.</div>
+        <p>Dual encoder trained only 5 epochs; val loss still decreasing. More training expected to close the MRR gap vs. classical.</p>
+      </div>
+    </div>
+
+    <h3 class="subsection-heading">Training Convergence</h3>
+    <div class="loss-table-wrap">
+      <table class="eval-table loss-table">
+        <thead>
+          <tr><th>Epoch</th><th>Train Loss (InfoNCE)</th><th>Val Loss</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>2.831</td><td>2.825</td></tr>
+          <tr><td>2</td><td>2.630</td><td>2.832</td></tr>
+          <tr><td>3</td><td>2.526</td><td class="best-cell">2.661</td></tr>
+          <tr><td>4</td><td>2.485</td><td>2.704</td></tr>
+          <tr><td>5</td><td class="best-cell">2.490</td><td>2.700</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Best val loss at epoch 3; model not yet converged — an undertrained signal consistent with the MRR deficit.</p>
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-eyebrow">System</p>
+    <h2 class="section-heading">How It Works</h2>
+
+    <h3 class="subsection-heading">Four-Module Pipeline</h3>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-badge">A</div>
+        <strong>Patent Intake</strong>
+        <span>Parse claims, extract independent limitations</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-badge">B</div>
+        <strong>Retrieval Engine</strong>
+        <span>BM25 / TF-IDF+LR / Dual-Encoder + FAISS · ranks 522 companies</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-badge">C</div>
+        <strong>Claim Chart</strong>
+        <span>LLM maps each limitation to product evidence, scored for faithfulness</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-badge">D</div>
+        <strong>Red Team</strong>
+        <span>Non-infringement arguments, invalidity (§101/102/103/112), enforcement probability</span>
+      </div>
+    </div>
+
+    <h3 class="subsection-heading">PAE-Bench Dataset</h3>
+    <div class="dataset-stats">
+      <div class="stat-card"><span class="stat-num">522</span><span class="stat-label">patent–defendant pairs</span></div>
+      <div class="stat-card"><span class="stat-num">5</span><span class="stat-label">technology verticals</span></div>
+      <div class="stat-card"><span class="stat-num">483</span><span class="stat-label">unique patents</span></div>
+      <div class="stat-card"><span class="stat-num">3</span><span class="stat-label">public data sources</span></div>
+    </div>
+    <ul class="source-list">
+      <li>
+        <strong>CourtListener RECAP</strong>
+        Federal litigation dockets (nature of suit 830 = patent). Ground-truth labels: actual defendants named in court.
+      </li>
+      <li>
+        <strong>Google Patents BigQuery</strong>
+        Full patent text, independent claims, CPC classification codes — matched by patent number.
+      </li>
+      <li>
+        <strong>SEC EDGAR 10-K</strong>
+        Item 1 product descriptions for defendant companies, retrieved via company_tickers.json CIK lookup.
+      </li>
+    </ul>
+    <p class="table-note" style="margin-top:16px">Train/test split by <code>patent_id</code> to prevent leakage. Positives = named defendants; negatives = other companies in the corpus.</p>
+
+    <div class="link-row">
+      <a href="https://github.com/Shreya-Mendi/PAEwall" target="_blank" class="pill-link">GitHub</a>
+      <a href="/api/health" target="_blank" class="pill-link">API Health</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <span>PAEwall · Duke MEng AIPI 540 · 2025</span>
+    <a href="https://github.com/Shreya-Mendi/PAEwall" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script src="/static/main.js"></script>
 </body>
 </html>

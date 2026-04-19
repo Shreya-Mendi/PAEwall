@@ -1,0 +1,56 @@
+{
+  "experiment": "ablation_finetuning_impact",
+  "hypothesis": "Fine-tuning on litigation-derived pairs outperforms zero-shot PatentSBERTa (RQ1)",
+  "conditions": {
+    "bm25_baseline": {
+      "description": "BM25 keyword retrieval, no learning",
+      "overall": {
+        "Recall@10": 0.1302622498274672,
+        "Recall@50": 0.4675387414517849,
+        "MRR": 0.1684775232932884,
+        "nDCG@10": 0.10805190598284664,
+        "n_queries": 483
+      },
+      "per_vertical": {
+        "medical_devices": {"Recall@10": 0.026, "Recall@50": 0.596, "MRR": 0.033, "nDCG@10": 0.008, "n_queries": 38},
+        "consumer_electronics": {"Recall@10": 0.196, "Recall@50": 0.566, "MRR": 0.262, "nDCG@10": 0.163, "n_queries": 165},
+        "software": {"Recall@10": 0.119, "Recall@50": 0.399, "MRR": 0.151, "nDCG@10": 0.099, "n_queries": 189},
+        "industrial": {"Recall@10": 0.087, "Recall@50": 0.348, "MRR": 0.096, "nDCG@10": 0.087, "n_queries": 23},
+        "other": {"Recall@10": 0.074, "Recall@50": 0.387, "MRR": 0.089, "nDCG@10": 0.063, "n_queries": 68}
+      }
+    },
+    "classical_tfidf_logreg": {
+      "description": "TF-IDF features + Logistic Regression classifier",
+      "overall": {
+        "Recall@10": 0.24140893470790378,
+        "Recall@50": 0.4845360824742268,
+        "MRR": 0.33185208585663867,
+        "nDCG@10": 0.22909999263596148,
+        "n_queries": 97
+      },
+      "per_vertical": {
+        "medical_devices": {"Recall@10": 0.125, "Recall@50": 0.75, "MRR": 0.061, "nDCG@10": 0.059, "n_queries": 4},
+        "consumer_electronics": {"Recall@10": 0.378, "Recall@50": 0.633, "MRR": 0.568, "nDCG@10": 0.380, "n_queries": 30},
+        "software": {"Recall@10": 0.252, "Recall@50": 0.444, "MRR": 0.322, "nDCG@10": 0.232, "n_queries": 36},
+        "industrial": {"Recall@10": 0.0, "Recall@50": 0.111, "MRR": 0.003, "nDCG@10": 0.0, "n_queries": 9},
+        "other": {"Recall@10": 0.139, "Recall@50": 0.444, "MRR": 0.182, "nDCG@10": 0.124, "n_queries": 18}
+      }
+    },
+    "zeroshot_patentsbert": {
+      "description": "PatentSBERTa zero-shot (pre-trained, no fine-tuning) — requires GPU; run on A100",
+      "status": "pending_gpu",
+      "note": "Run: python scripts/experiment_ablation.py --skip-classical on A100 then copy results here"
+    },
+    "dual_encoder_finetuned": {
+      "description": "Fine-tuned dual-encoder: PatentSBERTa (patent) + all-mpnet-base-v2 (product), InfoNCE loss",
+      "status": "pending_gpu",
+      "note": "Results at /data/outputs/dual_encoder_text_only_results.json on A100; copy here",
+      "checkpoint": "models/dual_encoder/proj_only.pt (projection heads) + FAISS index committed"
+    }
+  },
+  "summary": {
+    "completed": ["bm25_baseline", "classical_tfidf_logreg"],
+    "pending": ["zeroshot_patentsbert", "dual_encoder_finetuned"],
+    "key_finding_so_far": "Classical TF-IDF+LR improves Recall@10 from 13.0% to 24.1% (+85%) over BM25, and MRR from 0.168 to 0.332 (+97%), confirming that learned feature weighting adds value over keyword matching."
+  }
+}

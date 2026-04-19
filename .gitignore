@@ -40,6 +40,7 @@ data/outputs/*
 !data/outputs/naive_bm25_results.json
 !data/outputs/classical_tfidf_logreg_results.json
 !data/outputs/error_analysis.json
+!data/outputs/ablation_results.json
 
 # Models — exclude large root-level blobs; subdirectory checkpoints are committed
 models/*.pt

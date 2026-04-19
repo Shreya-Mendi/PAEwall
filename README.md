@@ -64,37 +64,72 @@ Model training is done on **Google Colab** (A100 GPU). Training notebooks are in
 ### Installation
 
 ```bash
-git clone https://github.com/<your-username>/paewall.git
-cd paewall
+git clone https://github.com/Shreya-Mendi/PAEwall.git
+cd PAEwall
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate        # macOS/Linux
+# .venv\Scripts\activate         # Windows
 pip install -r requirements.txt
 ```
 
-### Data & Training
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in your credentials:
 
 ```bash
-# Download raw data
-python setup.py --data
+cp .env.example .env
+```
 
-# Build features and benchmarks
-python setup.py --features
+Required keys (see `.env.example`):
+- `COURTLISTENER_TOKEN` — CourtListener API token
+- `GCP_PROJECT_ID` — Google Cloud project for BigQuery
+- `EDGAR_USER_AGENT` — SEC EDGAR user agent string (e.g. `PAEwall you@example.com`)
+- `DUKE_LLM_API_KEY` — Duke OIT LLM proxy key (for the web app)
 
-# Train all three models
-python setup.py --train
+### Data Pipeline
 
-# Or train individually
-python setup.py --train-naive
-python setup.py --train-classical
-python setup.py --train-dl
+**Always run scripts from the repo root with the venv active.**
 
-# Or run the full pipeline
-python setup.py --all
+```bash
+source .venv/bin/activate
+
+# Step 1 — litigation records from CourtListener (patent suit dockets)
+python scripts/make_dataset.py --litigation
+
+# Step 2 — patent full text + claims from Google Patents BigQuery
+python scripts/make_dataset.py --patents
+
+# Step 3 — product descriptions from SEC EDGAR 10-K filings
+python scripts/make_dataset.py --products
+
+# Step 4 — assemble PAE-Bench parquet (train/test split by patent_id)
+python scripts/make_dataset.py --assemble
+```
+
+BigQuery auth (one-time, use system Python not venv):
+```bash
+gcloud auth application-default login
+```
+
+### Training
+
+```bash
+source .venv/bin/activate
+
+# BM25 naive baseline
+python scripts/train_naive.py
+
+# TF-IDF + Logistic Regression
+python scripts/train_classical.py
+
+# Dual-encoder (requires GPU — open in VSCode Remote SSH on A100)
+# notebooks/train_dual_encoder.ipynb
 ```
 
 ### Running the App
 
 ```bash
+source .venv/bin/activate
 uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 ```
 

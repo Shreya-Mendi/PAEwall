@@ -42,15 +42,46 @@
       "note": "Run: python scripts/experiment_ablation.py --skip-classical on A100 then copy results here"
     },
     "dual_encoder_finetuned": {
-      "description": "Fine-tuned dual-encoder: PatentSBERTa (patent) + all-mpnet-base-v2 (product), InfoNCE loss",
-      "status": "pending_gpu",
-      "note": "Results at /data/outputs/dual_encoder_text_only_results.json on A100; copy here",
-      "checkpoint": "models/dual_encoder/proj_only.pt (projection heads) + FAISS index committed"
+      "description": "Fine-tuned text-only dual-encoder: PatentSBERTa (patent) + all-mpnet-base-v2 (product), InfoNCE loss, 5 epochs on PAE-Bench",
+      "config": {
+        "patent_model": "AI-Growth-Lab/PatentSBERTa",
+        "product_model": "sentence-transformers/all-mpnet-base-v2",
+        "batch_size": 16,
+        "lr": 2e-05,
+        "hard_neg_k": 3,
+        "proj_dim": 256
+      },
+      "overall": {
+        "Recall@10": 0.3282312925170068,
+        "Recall@50": 0.5799319727891156,
+        "MRR": 0.0754912094708013,
+        "nDCG@10": 0.11855838524239583,
+        "n_queries": 49
+      },
+      "per_vertical": {
+        "software": {"Recall@10": 0.534, "Recall@50": 0.740, "MRR": 0.120, "nDCG@10": 0.195, "n_queries": 17},
+        "consumer_electronics": {"Recall@10": 0.313, "Recall@50": 0.542, "MRR": 0.068, "nDCG@10": 0.111, "n_queries": 16},
+        "other": {"Recall@10": 0.222, "Recall@50": 0.574, "MRR": 0.056, "nDCG@10": 0.079, "n_queries": 9},
+        "industrial": {"Recall@10": 0.0, "Recall@50": 0.0, "MRR": 0.0, "nDCG@10": 0.0, "n_queries": 5}
+      },
+      "training_history": [
+        {"epoch": 1, "train_loss": 2.831, "val_loss": 2.825},
+        {"epoch": 2, "train_loss": 2.630, "val_loss": 2.832},
+        {"epoch": 3, "train_loss": 2.526, "val_loss": 2.661},
+        {"epoch": 4, "train_loss": 2.485, "val_loss": 2.704},
+        {"epoch": 5, "train_loss": 2.490, "val_loss": 2.700}
+      ]
     }
   },
   "summary": {
-    "completed": ["bm25_baseline", "classical_tfidf_logreg"],
-    "pending": ["zeroshot_patentsbert", "dual_encoder_finetuned"],
-    "key_finding_so_far": "Classical TF-IDF+LR improves Recall@10 from 13.0% to 24.1% (+85%) over BM25, and MRR from 0.168 to 0.332 (+97%), confirming that learned feature weighting adds value over keyword matching."
+    "completed": ["bm25_baseline", "classical_tfidf_logreg", "dual_encoder_finetuned"],
+    "pending": ["zeroshot_patentsbert"],
+    "key_findings": [
+      "Classical TF-IDF+LR improves Recall@10 from 13.0% to 24.1% (+85%) over BM25, and MRR from 0.168 to 0.332 (+97%)",
+      "Fine-tuned dual encoder improves Recall@10 to 32.8% (+36% over classical), showing dense retrieval finds more candidates",
+      "Classical outperforms dual encoder on MRR (0.332 vs 0.075) and nDCG@10 (0.229 vs 0.119), suggesting 5 epochs insufficient for precise ranking with small training set",
+      "Software vertical benefits most from fine-tuning (Recall@10=0.534); industrial fails entirely (sparse training pairs)",
+      "Text-only ablation: multimodal extension (adding SigLIP for patent figures) is future work"
+    ]
   }
 }

@@ -107,10 +107,10 @@ All models evaluated on **PAE-Bench** — 522 patent–defendant pairs from Cour
 | Model | Recall@10 | Recall@50 | MRR | nDCG@10 | n_queries |
 |-------|-----------|-----------|-----|---------|-----------|
 | BM25 Baseline | 0.130 | 0.468 | 0.168 | 0.108 | 483 |
-| TF-IDF + LogReg | 0.241 | 0.485 | 0.332 | 0.229 | 97 |
-| Dual-Encoder (fine-tuned) | — | — | — | — | GPU required |
+| TF-IDF + LogReg | 0.241 | 0.485 | **0.332** | **0.229** | 97 |
+| Dual-Encoder (text-only, fine-tuned) | **0.328** | **0.580** | 0.075 | 0.119 | 49 |
 
-Classical ML improves Recall@10 by **+85%** and MRR by **+97%** over BM25. Dual-encoder results require A100 GPU (see `notebooks/train_dual_encoder.ipynb`).
+The dual encoder achieves the best **Recall@10** (+36% over classical), finding more true defendants in the top 10. Classical ML wins on **MRR/nDCG** — it ranks correctly when it finds the answer. The gap suggests more training epochs and a larger training set would close the ranking precision deficit.
 
 Per-vertical breakdown and failure analysis: `data/outputs/`
 

@@ -1,118 +1,124 @@
-# PAEwall — Demo Day Slides
-<!-- 5 slides · Marp-compatible markdown (use Marp CLI or VS Code Marp extension to render) -->
-<!-- marp: true, theme: default, paginate: true -->
-
+---
+marp: true
+theme: default
+paginate: true
+size: 16:9
 ---
 
-## Slide 1 — Title
+<!-- PAEwall — Demo Day Slides
+     5-minute hard stop. Render with: marp slides/demo_day_slides.md --pdf
+     Figures live in ../paper/figures/ relative to this file. -->
+
+<!-- _class: lead -->
 
 # PAEwall
 ### Automated Patent Infringement Discovery
 
 **Shreya Mendi** · Duke MEng AIPI · April 2026
 
-> *Given a patent, find who is infringing it — and prove it.*
+> *Given a patent, find who's infringing it — and prove it.*
 
-**Problem:** Patent holders spend weeks manually identifying potential infringers.  
-Manual search misses defendants. Legal review is $500+/hour.
-
-**PAEwall automates the full pipeline:**  
-Patent in → Defendants ranked → Claim charts generated → Counter-arguments ready
+`github.com/Shreya-Mendi/PAEwall`
 
 ---
 
-## Slide 2 — Dataset: PAE-Bench
+## The Problem
 
-# PAE-Bench: A New Retrieval Benchmark
+> **U.S. patent licensing & litigation is a $3B+/year market.**
+> The core search task is still done by hand.
 
-**522 patent–defendant pairs** from real US litigation (2015–2024)
+A patent attorney today does this manually:
 
-| Source | What We Collected |
-|---|---|
-| CourtListener RECAP | Patent numbers + defendant companies from suit filings |
-| Google Patents BigQuery | Full claim text + CPC classifications |
-| SEC EDGAR 10-K | Item 1 product descriptions per defendant company |
+1. Read the claims.
+2. Guess which companies might infringe.
+3. Search product pages, 10-Ks, marketing copy.
+4. Build a claim chart, line by line.
 
-**5 verticals:** Software · Consumer Electronics · Medical Devices · Industrial · Other
+**Cost:** $500+/hour · weeks per patent · low recall (the right defendant is often missed)
 
-**Why it's hard:** Patent claims use legal language ("wherein said processor...").  
-Product descriptions use marketing language ("industry-leading solution...").  
-No lexical overlap → keyword search fails.
+**Who loses:** Individual inventors, small PAE funds, university tech-transfer offices, and corporate counsel doing early enforcement triage — anyone priced out of $50k+/year tools like Patlytics or IP.com.
 
 ---
 
-## Slide 3 — Three Models, One Benchmark
+## Our Approach: Three Models, One Benchmark
 
-# Retrieval Results on PAE-Bench
-
-| Model | Recall@10 | MRR | nDCG@10 |
-|---|---|---|---|
-| BM25 (keyword baseline) | 13.0% | 0.168 | 0.108 |
-| TF-IDF + LogReg | 24.1% | **0.332** | **0.229** |
-| **Dual-Encoder (fine-tuned)** | **32.8%** | 0.075 | 0.119 |
-
-**+152% Recall@10 gain** from BM25 → fine-tuned dense retrieval
-
-**How the dual encoder works:**
-- Patent tower: PatentSBERTa (pre-trained on 3.1M patent abstracts)
-- Product tower: all-mpnet-base-v2
-- Trained with InfoNCE loss + hard negatives on litigation pairs
-- FAISS index for sub-second inference at 189 companies
-
-**Key finding:** Dense retrieval finds more defendants (+36% vs. classical).  
-Classical is more precise when it finds them (higher MRR/nDCG).
-
----
-
-## Slide 4 — The Full Pipeline
-
-# PAEwall System: 4 Modules
+**PAE-Bench** — 522 patent–defendant pairs from real US litigation (2015–2024), built from CourtListener + Google Patents BigQuery + SEC EDGAR 10-Ks. *First public cross-vertical benchmark of its kind.*
 
 ```
-Patent Number / PDF
-        │
-  ┌─────▼──────┐   Claim parsing, CPC classification
-  │  Intake    │   → extract independent claims
-  └─────┬──────┘
-        │
-  ┌─────▼──────┐   TF-IDF+LR retrieval (live)
-  │ Retrieval  │   Dual-encoder + FAISS (GPU, fallback)
-  └─────┬──────┘   → ranked list of companies
-        │
-  ┌─────▼──────┐   GPT-4.1 Mini via Duke LLM proxy
-  │Claim Charts│   → per-limitation evidence mapping
-  │            │   → faithfulness score [0–1] per row
-  └─────┬──────┘
-        │
-  ┌─────▼──────┐   Non-infringement arguments
-  │  Red Team  │   Invalidity risks
-  └────────────┘   Enforcement probability estimate
+Patent in → [Intake] → [Retrieval] → [Claim Chart + Faithfulness] → [Red Team]
 ```
 
-**Live demo:** [paewall.railway.app](https://paewall.railway.app)  
-Results in < 10 seconds · FastAPI + Jinja2 · Deployed on Railway
+We trained three retrievers and benchmarked them head-to-head:
+
+| Model | Recall@10 | What it shows |
+|---|---|---|
+| BM25 (naive) | 13.0% | Keyword search alone fails — claim language ≠ marketing copy |
+| TF-IDF + LR (classical) | 24.1% | Learned weights help, but no semantic understanding |
+| **Dual-Encoder (fine-tuned)** | **32.8%** | **+152% over BM25, +36% over classical** |
+
+Patent tower: PatentSBERTa · Product tower: all-mpnet-base-v2 · InfoNCE loss + hard negatives
 
 ---
 
-## Slide 5 — Results & Next Steps
+## Live Demo
 
-# What We Learned + What's Next
+# 🎤 Live Demo
 
-**Main findings:**
-- Fine-tuning on litigation pairs gives the largest R@10 gains (+36% over classical)
-- Software vertical benefits most (R@10 = 53.4%); industrial fails — sparse training data
-- Primary failure mode: vocabulary mismatch (legal claim language ≠ marketing 10-K text)
-- Classical ML dominates on ranking precision → cross-encoder re-ranker is the next lever
+**`<your-railway-url>.up.railway.app`**
 
-**Ablation hypothesis confirmed (3 of 4 conditions):**  
-BM25 (13%) → Classical (24.1%) → Fine-tuned DE (32.8%)  
-Zero-shot PatentSBERTa pending — expected to land between classical and fine-tuned
+What you'll see in 60 seconds:
 
-**Future work:**
-- Multimodal: add SigLIP patent figure embeddings to product tower
-- Cross-encoder re-ranker on top-20 dual-encoder candidates (target: close MRR gap)
-- Expand PAE-Bench to 2,000+ pairs (ITC proceedings + PTAB records)
-- Jurisdiction-aware enforcement probability with case outcome data
+1. Paste a real US patent number → claims auto-parsed.
+2. Top-10 candidate infringers ranked, with vertical labels.
+3. **Faithfulness-scored claim chart** — every limitation mapped to product evidence with a [0,1] confidence score.
+4. **Red-team output** — non-infringement arguments + invalidity risks + enforcement probability.
 
-**Thank you!**  
-Code: github.com/Shreya-Mendi/PAEwall
+End-to-end inference: **< 10 seconds.** FastAPI + FAISS + Duke LLM proxy.
+
+---
+
+## Results & Insights
+
+![bg right:42% width:95%](../paper/figures/overall_metrics.png)
+
+**Headline:** Fine-tuned dense retrieval is the right primitive for patent → product matching.
+
+**Software vertical wins biggest:** R@10 = 53% with the dual encoder — semantic match works when both sides are text-rich.
+
+**Industrial vertical fails everywhere:** highly specialized mechanical claim language has no overlap with company-level descriptions. Future work needs patent-figure embeddings (SigLIP).
+
+**Classical wins on MRR/nDCG:** dual encoder finds more answers; classical ranks them more precisely. → cross-encoder re-ranker is the next lever.
+
+**Failure analysis** surfaced an upstream pathology: 4 of top-5 BM25 misses are IP-holding entities (Valtrus, Clearly IP) with empty 10-K product sections. **Data-coverage problem**, not a model problem.
+
+---
+
+## What's Next + The Commercial Wedge
+
+**Future work** (unchanged-architecture, biggest leverage first):
+
+- **Expand PAE-Bench → 2,000+ pairs** via USITC §337 + PTAB IPR records
+- **Multimodal** — SigLIP patent-figure tower feeding the product encoder
+- **Cross-encoder re-rank** on top-20 candidates → close MRR gap
+- **Jurisdiction-aware enforcement model** trained on PACER outcomes
+
+**Why this is fundable:**
+
+- Public benchmark + faithfulness scoring + red-team module is **unoccupied** in the market — Patlytics, IP.com, ClaimChart LLM publish nothing.
+- Per-query cost ~$0.04 (LLM-bound) · clean $5–$10 SaaS price point · 10–20× gross margin.
+- **Honest framing:** triage tool for human attorneys, not a replacement.
+
+**Ethics built-in:** every claim chart ships with a faithfulness score; every retrieval result ships with the strongest defense argument. The tool *raises* the cost of frivolous assertion.
+
+---
+
+<!-- _class: lead -->
+
+# Thank you
+
+**Shreya Mendi** · `shreya.mendi@duke.edu`
+
+`github.com/Shreya-Mendi/PAEwall`
+
+*Live demo: `<your-railway-url>.up.railway.app`*
+*Paper: `paper/paewall_paper.md` · `paper/paewall_paper.tex`*

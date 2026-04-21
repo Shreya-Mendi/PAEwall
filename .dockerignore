@@ -5,8 +5,34 @@ __pycache__/
 .env
 .git/
 notebooks/
-data/raw/
-data/processed/
-data/outputs/
-models/
 *.log
+
+# Exclude large raw data, but keep the bench subset the app needs
+data/raw/*
+!data/raw/patents_bench.json
+!data/raw/.gitkeep
+
+# Exclude bulky processed/outputs, but keep the serving corpus and result JSONs
+data/processed/*
+!data/processed/pae_bench.parquet
+!data/processed/.gitkeep
+
+data/outputs/*
+!data/outputs/*.json
+!data/outputs/.gitkeep
+
+# Exclude heavy model blobs; keep the small serving artifacts
+models/*.pt
+models/*.pkl
+models/*.joblib
+models/*.bin
+models/*.onnx
+models/dual_encoder/best_model.pt
+models/dual_encoder/product_embeddings.npy
+models/dual_encoder/dual_encoder_inference.tar.gz
+# NOTE: models/naive/*, models/classical/*, and the small dual_encoder files
+# are kept by default (the patterns above only match files directly under models/).
+
+# Proposal docs and build artifacts
+bundle.b64
+*.docx

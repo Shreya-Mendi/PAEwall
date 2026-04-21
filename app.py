@@ -49,7 +49,19 @@ _state: dict = {}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load models and corpus once at startup."""
-    # Retrieval engine
+    print(f"[PAEwall] cwd: {os.getcwd()}")
+    print(f"[PAEwall] ROOT: {ROOT}")
+    print(f"[PAEwall] MODELS_DIR={MODELS_DIR} exists={MODELS_DIR.exists()}")
+    if MODELS_DIR.exists():
+        for p in sorted(MODELS_DIR.rglob("*")):
+            if p.is_file():
+                print(f"[PAEwall]   model file: {p.relative_to(ROOT)} ({p.stat().st_size} bytes)")
+    print(f"[PAEwall] PROCESSED_DIR={PROCESSED_DIR} exists={PROCESSED_DIR.exists()}")
+    if PROCESSED_DIR.exists():
+        for p in sorted(PROCESSED_DIR.iterdir()):
+            if p.is_file():
+                print(f"[PAEwall]   data file: {p.relative_to(ROOT)} ({p.stat().st_size} bytes)")
+
     engine = RetrievalEngine(MODELS_DIR)
     try:
         model_type = engine.load()

@@ -256,6 +256,8 @@ function renderWorkbench() {
   // Header
   $("wb-patent-id").textContent = data.patent_id;
   $("wb-patent-meta").textContent = `${data.num_claims_parsed} independent claim(s) · mode: ${state.mode}`;
+  const chip = $("wb-mode-chip");
+  if (chip) chip.textContent = state.mode || "protect";
 
   renderCandidateList();
   renderDetail();

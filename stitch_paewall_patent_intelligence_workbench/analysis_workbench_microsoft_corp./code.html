@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PAEwall Intelligence | Claim Chart Workbench</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary": "#c6c6cb",
+                        "on-tertiary-fixed": "#001e2c",
+                        "on-background": "#e3e2e5",
+                        "on-secondary-container": "#b7b8bd",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "inverse-on-surface": "#303033",
+                        "surface-container-lowest": "#0d0e10",
+                        "on-primary-fixed": "#291800",
+                        "on-primary-container": "#644000",
+                        "primary-container": "#f5a623",
+                        "surface-variant": "#343537",
+                        "background": "#121315",
+                        "on-tertiary": "#00344a",
+                        "surface-container": "#1f2022",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#9f8e7a",
+                        "primary": "#ffc880",
+                        "secondary-container": "#47494d",
+                        "on-surface-variant": "#d7c3ae",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2e3034",
+                        "on-error": "#690005",
+                        "surface-dim": "#121315",
+                        "surface-bright": "#38393b",
+                        "on-secondary-fixed-variant": "#45474b",
+                        "primary-fixed-dim": "#ffb955",
+                        "surface-container-highest": "#343537",
+                        "inverse-surface": "#e3e2e5",
+                        "secondary-fixed": "#e2e2e7",
+                        "on-secondary-fixed": "#1a1c1f",
+                        "outline-variant": "#524534",
+                        "inverse-primary": "#835500",
+                        "on-tertiary-container": "#004d6a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#7cd0ff",
+                        "surface-tint": "#ffb955",
+                        "surface": "#121315",
+                        "on-primary-fixed-variant": "#633f00",
+                        "on-primary": "#452b00",
+                        "on-surface": "#e3e2e5",
+                        "surface-container-low": "#1b1c1e",
+                        "tertiary": "#9bd9ff",
+                        "tertiary-container": "#3ac2ff",
+                        "primary-fixed": "#ffddb4",
+                        "surface-container-high": "#292a2c",
+                        "secondary-fixed-dim": "#c6c6cb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 1.25rem;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #121315; }
+        ::-webkit-scrollbar-thumb { background: #343537; }
+        .etched-border { border: 1px solid rgba(82, 69, 52, 0.3); }
+        .ghost-divider { border-bottom: 1px solid rgba(82, 69, 52, 0.2); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-[#1b1c1e] dark:bg-slate-900 border-r border-amber-900/20 w-64 flex flex-col h-full py-4 gap-2">
+<div class="px-6 mb-8">
+<div class="text-[#F5A623] font-serif uppercase tracking-widest text-xs mb-1">PAEwall Intelligence</div>
+<div class="text-slate-500 font-label text-[10px] tracking-tighter uppercase">Sovereign Archive v2.4</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#1f2022] text-[#F5A623] border-l-4 border-[#F5A623] group transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body font-bold text-sm">Candidates</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#292a2c] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="font-body font-bold text-sm">Claim Charts</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#292a2c] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-body font-bold text-sm">Red Team View</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary py-2 font-bold text-sm rounded shadow-sm hover:bg-primary transition-colors">
+                    New Analysis
+                </button>
+</div>
+<div class="px-2 pt-4 border-t border-amber-900/10">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-300 text-xs font-label uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                    Documentation
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-300 text-xs font-label uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="contact_support">contact_support</span>
+                    Support
+                </a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopAppBar -->
+<header class="bg-[#121315] dark:bg-slate-950 border-b border-amber-900/20 flex justify-between items-center w-full px-6 h-14 shrink-0">
+<div class="flex items-center gap-8">
+<div class="font-serif text-xl font-bold tracking-tight text-[#F5A623]">PAEwall</div>
+<nav class="hidden md:flex items-center gap-6 text-sm">
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150" href="#">Portfolio</a>
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150" href="#">Archive</a>
+<a class="text-[#F5A623] border-b-2 border-[#F5A623] pb-1" href="#">Technical Analysis</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 mr-4">
+<span class="material-symbols-outlined text-slate-500 hover:text-amber-400 cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-amber-400 cursor-pointer" data-icon="settings">settings</span>
+</div>
+<button class="bg-surface-container-high border border-outline-variant/30 text-on-surface px-4 py-1.5 text-xs font-bold rounded hover:bg-surface-variant transition-colors">
+                        Generate Report
+                    </button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Close-up portrait of a professional male executive in a dark environment with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfTabVFFJBBU9tFc8Eips_2WHQ-RUVcTRlPVZjDj3YVWx26YMuqBZoVB8zooFNV-uvxaT3NsiNh6A8ZVVND68nrj98p8t19qfcxXiQAWwuEPUWIvIckAwlKNAWcWdO7gVTAcym6Q8oCRhlIiXiwvUybJkOHTybCY7KU-wqz-x_EdzstmWNjzaPGF2OeVKppoOhjEfKVBLAiqeScmZYXHHfPL9UxqFQlNTPPWD-BN0Pxv7GCD1tImBcZ9nessYdxuK14OpQPfmvjww"/>
+</div>
+</header>
+<!-- Workbench Content Area -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Content: Ranked Candidates -->
+<section class="w-80 flex flex-col border-r border-outline-variant/20 bg-surface-container-low overflow-hidden">
+<div class="p-4 flex flex-col gap-2 border-b border-outline-variant/20">
+<h2 class="text-xs font-label font-bold uppercase tracking-widest text-secondary">Target Analysis</h2>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-outline font-label uppercase">Top 10 Infringing Entities</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="filter_list">filter_list</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Rank Items -->
+<div class="divide-y divide-outline-variant/10">
+<!-- Candidate Row -->
+<div class="p-4 bg-surface-container hover:bg-surface-container-high cursor-pointer transition-colors border-l-4 border-primary">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-2xl text-primary opacity-50">01</span>
+<div>
+<div class="font-body font-bold text-sm tracking-tight">Celerity Core Tech</div>
+<div class="text-[10px] font-label text-outline uppercase tracking-tight">NASDAQ: CCT</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs font-label font-bold text-primary">89%</div>
+<div class="text-[8px] text-outline uppercase font-label">Prob.</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[9px] font-label uppercase text-on-surface-variant">
+<span>Retrieval Score</span>
+<span>0.94</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 94%"></div>
+</div>
+</div>
+</div>
+<!-- Candidate Row 2 -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors border-l-4 border-transparent">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-2xl text-secondary opacity-30">02</span>
+<div>
+<div class="font-body font-bold text-sm tracking-tight text-secondary">Aether Systems</div>
+<div class="text-[10px] font-label text-outline uppercase tracking-tight">NYSE: AETH</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs font-label font-bold text-amber-600/70">72%</div>
+<div class="text-[8px] text-outline uppercase font-label">Prob.</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[9px] font-label uppercase text-on-surface-variant">
+<span>Retrieval Score</span>
+<span>0.81</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-amber-600/70" style="width: 81%"></div>
+</div>
+</div>
+</div>
+<!-- Repeated rows for density -->
+<div class="p-4 hover:bg-surface-container-high cursor-pointer transition-colors border-l-4 border-transparent">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-2xl text-secondary opacity-30">03</span>
+<div>
+<div class="font-body font-bold text-sm tracking-tight text-secondary">Nebula Logistics</div>
+<div class="text-[10px] font-label text-outline uppercase tracking-tight">Private</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs font-label font-bold text-amber-700/50">48%</div>
+<div class="text-[8px] text-outline uppercase font-label">Prob.</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[9px] font-label uppercase text-on-surface-variant">
+<span>Retrieval Score</span>
+<span>0.67</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-amber-700/50" style="width: 67%"></div>
+</div>
+</div>
+</div>
+<!-- Dummy rows for scale -->
+<div class="p-4 text-outline font-label text-[10px] uppercase text-center py-8">
+                                Loading remaining 7 candidates...
+                            </div>
+</div>
+</div>
+</section>
+<!-- Main Area: Split Viewer -->
+<div class="flex-1 flex flex-col min-w-0 bg-surface">
+<!-- Overall Confidence Bar -->
+<div class="px-6 py-3 flex items-center justify-between border-b border-outline-variant/20 bg-surface-container">
+<div class="flex items-center gap-4">
+<h1 class="font-headline text-lg tracking-wide text-on-surface">Analysis: US-11,234,567-B2</h1>
+<div class="flex items-center gap-2 px-3 py-0.5 bg-surface-container-highest rounded-full border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-primary">High Confidence Map</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-2">
+<span class="font-label text-[10px] text-outline uppercase tracking-tighter">Aggregate Confidence</span>
+<span class="font-body font-bold text-primary">84.2%</span>
+</div>
+<div class="w-48 h-1.5 bg-surface-container-lowest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-primary" style="width: 84.2%"></div>
+</div>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-surface-variant rounded transition-colors text-outline">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+<button class="p-1.5 hover:bg-surface-variant rounded transition-colors text-outline">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Split View Canvas -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Patent Limitations -->
+<div class="w-1/2 flex flex-col border-r border-outline-variant/20 overflow-hidden">
+<div class="p-3 border-b border-outline-variant/10 bg-surface-container-low flex justify-between items-center">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline">Claim 1 Limitations</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="expand_all">expand_all</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Limitation Card -->
+<div class="p-4 bg-surface-container-low etched-border rounded border-l-4 border-primary">
+<div class="flex gap-3">
+<span class="font-label font-bold text-primary">1[a]</span>
+<p class="font-headline leading-relaxed text-on-surface italic">
+                                            A computer-implemented method for distributed ledger synchronization, comprising: detecting a latency threshold overflow in a primary shard...
+                                        </p>
+</div>
+<div class="mt-3 flex justify-end">
+<div class="flex gap-2 items-center px-2 py-1 bg-surface-container rounded text-[10px] font-label text-outline">
+<span class="material-symbols-outlined text-xs" data-icon="link">link</span>
+                                            Col. 4, Line 12-18
+                                        </div>
+</div>
+</div>
+<!-- Limitation Card 2 -->
+<div class="p-4 bg-surface-container-low etched-border rounded border-l-4 border-amber-500">
+<div class="flex gap-3">
+<span class="font-label font-bold text-amber-500">1[b]</span>
+<p class="font-headline leading-relaxed text-on-surface-variant italic">
+                                            ...routing transaction packets via an ephemeral sidechain protocol, wherein said sidechain maintains a cryptographic witness of the shard state...
+                                        </p>
+</div>
+<div class="mt-3 flex justify-end">
+<div class="flex gap-2 items-center px-2 py-1 bg-surface-container rounded text-[10px] font-label text-outline">
+<span class="material-symbols-outlined text-xs" data-icon="link">link</span>
+                                            Col. 4, Line 22-31
+                                        </div>
+</div>
+</div>
+<!-- Limitation Card 3 (Unmapped/Low confidence) -->
+<div class="p-4 bg-surface-container-low etched-border rounded border-l-4 border-secondary opacity-60">
+<div class="flex gap-3">
+<span class="font-label font-bold text-secondary">1[c]</span>
+<p class="font-headline leading-relaxed text-on-surface-variant italic">
+                                            ...executing a recursive validation loop upon receipt of the witness by the secondary node cluster...
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Pane: Evidence Cards -->
+<div class="w-1/2 flex flex-col bg-surface-container-lowest overflow-hidden">
+<div class="p-3 border-b border-outline-variant/10 bg-surface-container-low flex justify-between items-center">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline">Evidence: Celerity Core 10-K</span>
+<div class="flex gap-3">
+<span class="font-label text-[10px] text-primary uppercase">8 Sources Found</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="search">search</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-6">
+<!-- Evidence Card 1 (Supporting) -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-green-900/30 text-green-400 font-label text-[9px] font-bold uppercase rounded border border-green-800/30">Supports</span>
+<span class="text-xs font-bold text-green-400">0.96</span>
+</div>
+<span class="font-label text-[9px] text-outline uppercase">Limitation 1[a]</span>
+</div>
+<div class="p-4 bg-surface-container-high rounded etched-border shadow-2xl">
+<div class="text-[10px] font-label text-outline uppercase mb-2">SEC Filing | Item 7. Management Discussion</div>
+<p class="font-body text-sm leading-relaxed text-on-surface-variant">
+                                            "Our proprietary <span class="bg-primary/20 text-primary border-b border-primary/40">Core-Sync architecture</span> automatically monitors latency across validator shards. When network congestion exceeds 400ms, the system triggers an asynchronous backup layer to preserve throughput."
+                                        </p>
+<div class="mt-4 pt-3 border-t border-outline-variant/10 flex justify-between items-center">
+<div class="flex -space-x-2">
+<img alt="Verification icon" class="w-6 h-6 rounded-full border border-surface" data-alt="Technical schematic diagram of a blockchain shard architecture in dark blueprint style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjPdHlcbaFoElZN26ih6pHgxSl3MPZ5WFDvdFv5GHy5RdsqWfzZFdopL7mnKTpJnm1mgGbFVUoZQszIXyPA_qzchvP3XTl54fIOGs8vXaHCMTK-ezIidouj_1AuxakhQBe73h0AdVp6zrtvdjJ0WYyIKSWaGxa6NQjntWMokedCAYwBdE7fI0fhzAhfI2yFEbiOPTv8uN0uZ0botn2v2QDgELD_StQUkUc0GAI9EsguGsHMqBZFv0vyp-RqWmw2emNl_zouS6Woqs"/>
+</div>
+<span class="text-[9px] font-label text-outline italic">Analyzed via DeepRead Engine</span>
+</div>
+</div>
+</div>
+<!-- Evidence Card 2 (Partial/Amber) -->
+<div class="flex flex-col gap-3 opacity-90">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-amber-900/30 text-amber-400 font-label text-[9px] font-bold uppercase rounded border border-amber-800/30">Partial</span>
+<span class="text-xs font-bold text-amber-400">0.52</span>
+</div>
+<span class="font-label text-[9px] text-outline uppercase">Limitation 1[b]</span>
+</div>
+<div class="p-4 bg-surface-container-high rounded etched-border">
+<div class="text-[10px] font-label text-outline uppercase mb-2">Product Spec Sheet v4.1</div>
+<p class="font-body text-sm leading-relaxed text-on-surface-variant">
+                                            "Aether nodes utilize a <span class="bg-amber-500/20 text-amber-200 border-b border-amber-500/40">transient state channel</span> to facilitate cross-shard communication during peak load, though cryptographic proofs are handled by the Root Chain rather than the channel itself."
+                                        </p>
+</div>
+</div>
+<!-- Evidence Card 3 (Contradicts/Red) -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-red-900/30 text-red-400 font-label text-[9px] font-bold uppercase rounded border border-red-800/30">Contradicts</span>
+<span class="text-xs font-bold text-red-400">-0.12</span>
+</div>
+<span class="font-label text-[9px] text-outline uppercase">Limitation 1[c]</span>
+</div>
+<div class="p-4 bg-surface-container-high rounded etched-border border-red-900/40">
+<p class="font-body text-sm italic text-on-surface/40 leading-relaxed">
+                                            Source text specifically states validation is "non-recursive" and relies on linear verification by a single master node.
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Data High-Density Metrics Bar -->
+<footer class="h-10 bg-surface-container-lowest border-t border-outline-variant/10 px-6 flex items-center justify-between">
+<div class="flex gap-6">
+<div class="flex gap-2 items-center">
+<span class="font-label text-[9px] text-outline uppercase tracking-widest">Processing Node</span>
+<span class="text-[10px] font-label text-primary">US-EAST-ALPHA-09</span>
+</div>
+<div class="flex gap-2 items-center">
+<span class="font-label text-[9px] text-outline uppercase tracking-widest">Models</span>
+<span class="text-[10px] font-label text-on-surface">LEGAL-GPT-4o | ARCHIVE-RAG-v3</span>
+</div>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+<span class="text-[10px] font-label text-outline uppercase">Vault Connected</span>
+</div>
+<div class="text-[10px] font-label text-on-surface-variant font-bold">14:02:18 UTC</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

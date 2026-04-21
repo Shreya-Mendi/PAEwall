@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PAEwall | Patent Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary": "#c6c6cb",
+                        "on-tertiary-fixed": "#001e2c",
+                        "on-background": "#e3e2e5",
+                        "on-secondary-container": "#b7b8bd",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "inverse-on-surface": "#303033",
+                        "surface-container-lowest": "#0d0e10",
+                        "on-primary-fixed": "#291800",
+                        "on-primary-container": "#644000",
+                        "primary-container": "#f5a623",
+                        "surface-variant": "#343537",
+                        "background": "#121315",
+                        "on-tertiary": "#00344a",
+                        "surface-container": "#1f2022",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#9f8e7a",
+                        "primary": "#ffc880",
+                        "secondary-container": "#47494d",
+                        "on-surface-variant": "#d7c3ae",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2e3034",
+                        "on-error": "#690005",
+                        "surface-dim": "#121315",
+                        "surface-bright": "#38393b",
+                        "on-secondary-fixed-variant": "#45474b",
+                        "primary-fixed-dim": "#ffb955",
+                        "surface-container-highest": "#343537",
+                        "inverse-surface": "#e3e2e5",
+                        "secondary-fixed": "#e2e2e7",
+                        "on-secondary-fixed": "#1a1c1f",
+                        "outline-variant": "#524534",
+                        "inverse-primary": "#835500",
+                        "on-tertiary-container": "#004d6a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#7cd0ff",
+                        "surface-tint": "#ffb955",
+                        "surface": "#121315",
+                        "on-primary-fixed-variant": "#633f00",
+                        "on-primary": "#452b00",
+                        "on-surface": "#e3e2e5",
+                        "surface-container-low": "#1b1c1e",
+                        "tertiary": "#9bd9ff",
+                        "tertiary-container": "#3ac2ff",
+                        "primary-fixed": "#ffddb4",
+                        "surface-container-high": "#292a2c",
+                        "secondary-fixed-dim": "#c6c6cb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Inter", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            border: 1px solid rgba(82, 69, 52, 0.3);
+        }
+        .active-glow {
+            box-shadow: 0 0 15px rgba(245, 166, 35, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar Shared Component -->
+<aside class="hidden md:flex flex-col h-full py-4 gap-2 w-64 bg-[#1b1c1e] dark:bg-slate-900 border-r border-amber-900/20">
+<div class="px-6 mb-8">
+<div class="text-[#F5A623] font-serif uppercase tracking-widest text-xs mb-1">Organization Vault</div>
+<div class="font-headline text-xl font-bold text-on-surface">PAEwall Intelligence</div>
+<div class="font-label text-[10px] text-slate-500 uppercase tracking-tighter">Sovereign Archive v2.4</div>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">analytics</span>
+<span class="font-label text-xs font-bold uppercase tracking-wider">Candidates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">query_stats</span>
+<span class="font-label text-xs font-bold uppercase tracking-wider">Claim Charts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">security</span>
+<span class="font-label text-xs font-bold uppercase tracking-wider">Red Team View</span>
+</a>
+</nav>
+<div class="px-3 mt-auto border-t border-amber-900/10 pt-4">
+<button class="w-full bg-primary-container text-on-primary px-4 py-2.5 rounded-sm font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Analysis
+                </button>
+<div class="mt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">help</span>
+<span class="font-label text-xs font-bold uppercase tracking-wider">Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">contact_support</span>
+<span class="font-label text-xs font-bold uppercase tracking-wider">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-y-auto relative">
+<!-- TopAppBar Shared Component -->
+<header class="flex justify-between items-center w-full px-6 h-14 bg-[#121315] dark:bg-slate-950 border-b border-amber-900/20 z-20">
+<div class="flex items-center gap-8">
+<div class="font-serif text-xl font-bold tracking-tight text-[#F5A623]">PAEwall</div>
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150 text-sm" href="#">Portfolio</a>
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150 text-sm" href="#">Archive</a>
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150 text-sm" href="#">Technical Analysis</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 pr-4 border-r border-amber-900/10">
+<span class="material-symbols-outlined text-slate-400 hover:text-amber-400 cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-slate-400 hover:text-amber-400 cursor-pointer">settings</span>
+</div>
+<button class="bg-transparent border border-amber-900/40 text-[#F5A623] px-4 py-1.5 rounded-sm text-xs font-bold uppercase tracking-tighter hover:bg-amber-900/10 transition-colors">
+                        Generate Report
+                    </button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-amber-900/30">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Portrait of a professional analyst in a dark suit against a neutral studio background with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnLiSf8KOebwhBTzsQAV2LSXEEy_3CzEtkQcXRYzU0HjkO0zaL55FKWb5x7VcWhjqHHfyuZx4jSbgXxdbrxAB-2_KqnXnWVSiUm7dQOX0ntuQXp5125RLj5OA0d0uEpHu09ePiA_3vPJ-8uegTbzg5Q1QhLLHoC10EdiNcBQYGnK579i4o0vXSYRYzdHW7LDw8IVeFiPLE4Jq_RPr0JMDusxjfrsFMLTsONV24yf2SKZn8HfNPzxS5yAisybteyAE7ZQZkR6ZFwPM"/>
+</div>
+</div>
+</header>
+<!-- Canvas Section -->
+<div class="flex-1 flex flex-col items-center justify-center px-6 py-12 bg-surface">
+<!-- Headline -->
+<div class="max-w-4xl w-full text-center mb-12">
+<h1 class="font-headline text-5xl md:text-6xl text-on-surface font-extralight tracking-tight mb-4">
+                        What do you need from <span class="italic text-primary">this patent?</span>
+</h1>
+<p class="font-body text-secondary text-lg max-w-2xl mx-auto">
+                        Identify strategic vulnerabilities or defensive strengths with clinical precision. Select an intelligence mode to begin.
+                    </p>
+</div>
+<!-- Mode Cards (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-6xl mb-12">
+<!-- Protect Mode -->
+<div class="group relative overflow-hidden bg-surface-container-low ghost-border p-6 cursor-pointer hover:bg-surface-container transition-all duration-300">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">shield</span>
+<span class="font-label text-[10px] text-outline tracking-[0.2em] uppercase">Phase 01</span>
+</div>
+<h3 class="font-headline text-2xl mb-2">Protect Mode</h3>
+<p class="font-body text-sm text-secondary leading-relaxed mb-6">
+                            Deep-scan for potential infringement targets. Map claims against product ecosystems to identify high-value encumbrances.
+                        </p>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Infringement</span>
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Targeting</span>
+</div>
+</div>
+<!-- Challenge Mode -->
+<div class="group relative overflow-hidden bg-surface-container-low ghost-border p-6 cursor-pointer border-l-primary/40 active-glow">
+<div class="absolute top-0 left-0 w-1 h-full bg-error opacity-40"></div>
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-error text-3xl">gavel</span>
+<span class="font-label text-[10px] text-outline tracking-[0.2em] uppercase">Phase 02</span>
+</div>
+<h3 class="font-headline text-2xl mb-2">Challenge Mode</h3>
+<p class="font-body text-sm text-secondary leading-relaxed mb-6">
+                            Systematic invalidity searching and design-around engineering. Stress-test patent integrity against global prior art.
+                        </p>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Invalidity</span>
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Risk Management</span>
+</div>
+</div>
+<!-- Portfolio Mode -->
+<div class="group relative overflow-hidden bg-surface-container-low ghost-border p-6 cursor-pointer hover:bg-surface-container transition-all duration-300">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-tertiary text-3xl">inventory_2</span>
+<span class="font-label text-[10px] text-outline tracking-[0.2em] uppercase">Phase 03</span>
+</div>
+<h3 class="font-headline text-2xl mb-2">Portfolio Mode</h3>
+<p class="font-body text-sm text-secondary leading-relaxed mb-6">
+                            Holistic valuation and strategic tiering. Assess patent liquidity and core technology relevance in your broader archive.
+                        </p>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Valuation</span>
+<span class="px-2 py-0.5 bg-surface-container-highest font-label text-[9px] uppercase tracking-tighter text-outline">Tiering</span>
+</div>
+</div>
+</div>
+<!-- Input Section -->
+<div class="w-full max-w-3xl space-y-6">
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full bg-surface-container-high border-b-2 border-outline-variant py-6 pl-16 pr-8 text-on-surface font-label text-sm tracking-widest uppercase focus:outline-none focus:border-primary placeholder:text-outline/50 transition-all duration-300" placeholder="ENTER USPTO PATENT NUMBER (E.G. 10,234,567) OR DROP PDF" type="text"/>
+<div class="absolute inset-y-0 right-4 flex items-center">
+<button class="bg-primary-container text-on-primary px-6 py-2 rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-primary">
+                                Analyze
+                            </button>
+</div>
+</div>
+<!-- Sample Chips -->
+<div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+<span class="font-label text-[10px] uppercase text-outline tracking-widest mr-2">Try a sample:</span>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low ghost-border hover:bg-surface-container-highest transition-colors">
+<span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span>
+<span class="font-label text-xs text-on-surface-variant tracking-tighter uppercase">US-11,294,032-B2</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low ghost-border hover:bg-surface-container-highest transition-colors">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+<span class="font-label text-xs text-on-surface-variant tracking-tighter uppercase">US-9,582,104-A1</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low ghost-border hover:bg-surface-container-highest transition-colors">
+<span class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></span>
+<span class="font-label text-xs text-on-surface-variant tracking-tighter uppercase">US-12,001,445-B1</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low ghost-border hover:bg-surface-container-highest transition-colors">
+<span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+<span class="font-label text-xs text-on-surface-variant tracking-tighter uppercase">US-8,123,999-C2</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Metrics Bar -->
+<footer class="h-10 w-full bg-surface-container-lowest border-t border-outline-variant/10 px-6 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+<span class="font-label text-[10px] text-outline uppercase">Archive Sync Active</span>
+</div>
+<div class="font-label text-[10px] text-outline uppercase border-l border-outline-variant/20 pl-6">
+                        Indexed: <span class="text-on-surface">14.2M Claims</span>
+</div>
+</div>
+<div class="font-label text-[10px] text-outline uppercase tracking-[0.2em]">
+                    Sovereign Intelligence Node: 0x4F2A
+                </div>
+</footer>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#525b8e",
+                        "surface-variant": "#e0e3e6",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#444654",
+                        "on-background": "#191c1e",
+                        "on-primary-container": "#fcf9ff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1e",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#b65900",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#bac3fd",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#bac3fd",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-bright": "#f7f9fc",
+                        "surface-container": "#eceef1",
+                        "primary": "#324cce",
+                        "on-secondary-fixed": "#0d1647",
+                        "primary-container": "#4e67e8",
+                        "on-tertiary-fixed": "#311300",
+                        "on-error": "#ffffff",
+                        "surface": "#f7f9fc",
+                        "on-primary-fixed": "#00105a",
+                        "outline-variant": "#c5c5d6",
+                        "on-tertiary-container": "#fff9f6",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "surface-dim": "#d8dadd",
+                        "inverse-primary": "#bac3ff",
+                        "on-secondary-container": "#464f81",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#3651d2",
+                        "background": "#f7f9fc",
+                        "secondary-fixed": "#dee0ff",
+                        "outline": "#757686",
+                        "tertiary": "#914500",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary-fixed-variant": "#733600",
+                        "on-secondary-fixed-variant": "#3a4375",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1535ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #324cce 0%, #4e67e8 100%);
+        }
+        .ghost-border {
+            border: 1px solid rgba(197, 197, 214, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-opacity-80 backdrop-blur-md sticky top-0 z-50 bg-[#f7f9fc] dark:bg-slate-900">
+<div class="flex items-center gap-8">
+<span class="font-serif text-2xl font-bold text-[#324cce] dark:text-[#4e67e8] tracking-tight">PAEwall</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] dark:hover:bg-slate-700 transition-colors px-3 py-1 rounded" href="#">Dashboard</a>
+<a class="text-[#324cce] font-bold border-b-2 border-[#324cce] px-3 py-1" href="#">New Analysis</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] dark:hover:bg-slate-700 transition-colors px-3 py-1 rounded" href="#">Repository</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-[#e0e3e6] p-2 rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-[#e0e3e6] p-2 rounded-full transition-colors">account_circle</button>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 space-y-2 bg-[#f2f4f7] dark:bg-slate-900 h-screen w-64 border-r-0 pt-20 hidden md:flex">
+<div class="mb-8 px-2">
+<p class="font-sans font-['Manrope'] text-sm tracking-wide font-bold text-[#324cce]">Workbench</p>
+<p class="text-xs text-on-surface-variant opacity-70">Patent Intelligence</p>
+</div>
+<a class="flex items-center gap-3 p-3 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-sans font-['Manrope'] text-sm tracking-wide">Candidates</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined">table_chart</span>
+<span class="font-sans font-['Manrope'] text-sm tracking-wide">Claim Charts</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-sans font-['Manrope'] text-sm tracking-wide">Red Team</span>
+</a>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-8 lg:p-16 max-w-6xl mx-auto">
+<div class="space-y-12">
+<!-- Headline Section -->
+<div class="max-w-2xl">
+<h1 class="font-headline text-5xl md:text-6xl text-on-surface font-bold tracking-tight leading-tight">
+                        What do you need from this patent?
+                    </h1>
+<p class="mt-4 text-on-surface-variant text-lg font-body leading-relaxed">
+                        Define your strategic objective to tailor the intelligence engine's logic and data extraction priorities.
+                    </p>
+</div>
+<!-- Mode Selection: Asymmetric Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Mode 1: Protect -->
+<button class="group relative flex flex-col items-start p-8 bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-xl shadow-sm text-left">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Protect Mode</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">I own this asset and suspect infringement. Prepare claim construction and evidence of use maps.</p>
+<div class="mt-6 flex items-center text-primary text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                            Select Objective <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</div>
+</button>
+<!-- Mode 2: Challenge -->
+<button class="group relative flex flex-col items-start p-8 bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-xl shadow-sm text-left">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/10 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">gavel</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Challenge Mode</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">I want to challenge validity or design around. Identify prior art gaps and enablement weaknesses.</p>
+<div class="mt-6 flex items-center text-primary text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                            Select Objective <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</div>
+</button>
+<!-- Mode 3: Portfolio -->
+<button class="group relative flex flex-col items-start p-8 bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-xl shadow-sm text-left">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assessment</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Portfolio Mode</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Evaluating enforcement value or acquisition potential. Rank against market benchmarks.</p>
+<div class="mt-6 flex items-center text-primary text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                            Select Objective <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</div>
+</button>
+</div>
+<!-- Input Section -->
+<div class="bg-surface-container-low rounded-xl p-8 md:p-12 space-y-8">
+<div class="relative max-w-4xl mx-auto">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest uppercase mb-3 px-1">Patent Identifier or Document</label>
+<div class="relative flex items-center bg-surface-container-lowest rounded-xl shadow-sm ghost-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<span class="material-symbols-outlined absolute left-6 text-outline">search</span>
+<input class="w-full bg-transparent border-none py-6 pl-16 pr-32 focus:ring-0 text-lg font-medium placeholder:text-outline/60" placeholder="Enter USPTO Patent Number (e.g., US10234567B2) or drag PDF here" type="text"/>
+<div class="absolute right-4 flex items-center gap-2">
+<button class="primary-gradient text-on-primary px-6 py-3 rounded-lg font-bold text-sm hover:scale-[0.98] transition-transform">
+                                    Analyze
+                                </button>
+</div>
+</div>
+</div>
+<!-- Sample Chips -->
+<div class="flex flex-wrap items-center justify-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mr-2">Try a sample:</span>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest rounded-full ghost-border hover:bg-surface-container-high transition-colors text-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            Software: US 9,123,456
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest rounded-full ghost-border hover:bg-surface-container-high transition-colors text-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            Consumer Electronics: US 8,888,888
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest rounded-full ghost-border hover:bg-surface-container-high transition-colors text-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                            Biotech: US 11,001,002
+                        </button>
+</div>
+</div>
+<!-- Footer Context / Decoration -->
+<div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-outline-variant/10">
+<div class="flex gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
+<img alt="" class="h-6 object-contain" data-alt="simplified monochrome logo of a federal government agency with scales and eagle elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzNpBOtX2cbVqYgcQvVOXWzQETdVxxYHJpKirO4CjMsFFVsgQRogc2kzynY-731VZmfxJHPPF641_OM9fmahtInYrrUz2f0vtfSyzIn0dsWScQ8OViSKArQ3A7JseZozQ9p7MS7WLEfHTlgWfk-T37R6-itpqs3JE_QuHHvHFyu4KVpWW44GnQ7Z7p4nzXmvpGrsWNpHjm_rfvRCM6TyD7ESJT3xeaRFkFvjfJBfd_llyTkXUjmBfoZ3E5m1uEugu8ps-V8NB_kiQ"/>
+<img alt="" class="h-6 object-contain" data-alt="monochrome geometric logo of the European Patent Office representing a stylized hand print" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARcg0cwF_cO86MkkGl-G7c5Yx3qOesj3ue6-SDJ39T23ZS7FZIS01q-Lfe-jqrDJlGCT6kMgPYFiieux-IwU0rtRlvKwdwVAiuKJolsIMtYXgEHIQVtOZZI61aPtD5A6493LV8SGYtmN14TqgvAKeJs8vH6DD5sZqRLQLfX6iq3vApvtIEs9r2Mtmg51BZDmi8Jt3lAINVuDQS6DTwOHvNtMYDVgGFtan_5PskqCy-L5n3KOYGC-O1zYw3WNsSwVEYPnJ_pIcZD5s"/>
+<img alt="" class="h-6 object-contain" data-alt="minimalist typographic logo for world intellectual property organization in a clean sans serif font" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT25twkJTxQEs_6VleYjlG2lpQme3b6Iw6ZdVAD4LE2nEP1GQn7fBZOPnUaz5yCWUdwvt92ZoUEjQB3hot087AZ4ahcJEIkqWn5nnhxJbFGd4Zx8PzxQxxiqRNtgwkMaF775_CkdUXwbrwcx1Hi_tRhx6EbF3WCVTrMRMH6rpJPF9CE4BFNSKpfhifn8-U3sQSmYH2xt8JRlAn5oIuVYNwKqI0uUE62FQJ_5oYL3texjsInJ9OUdtJZQK9vUz2--8P5rsVj2wYong"/>
+</div>
+<div class="text-on-surface-variant/60 text-xs font-label mt-6 md:mt-0">
+                        Enterprise-grade encryption active. Data processed according to legal privilege standards.
+                    </div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant/10 px-6 py-4 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">person_search</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Candidates</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined">table_chart</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Charts</span>
+</button>
+<div class="relative -top-8">
+<button class="primary-gradient w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Red Team</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</button>
+</nav>
+</body></html>

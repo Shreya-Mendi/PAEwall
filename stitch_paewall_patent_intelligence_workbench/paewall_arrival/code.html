@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PAEwall Intelligence | Patent Valuation AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary": "#c6c6cb",
+                        "on-tertiary-fixed": "#001e2c",
+                        "on-background": "#e3e2e5",
+                        "on-secondary-container": "#b7b8bd",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "inverse-on-surface": "#303033",
+                        "surface-container-lowest": "#0d0e10",
+                        "on-primary-fixed": "#291800",
+                        "on-primary-container": "#644000",
+                        "primary-container": "#f5a623",
+                        "surface-variant": "#343537",
+                        "background": "#121315",
+                        "on-tertiary": "#00344a",
+                        "surface-container": "#1f2022",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#9f8e7a",
+                        "primary": "#ffc880",
+                        "secondary-container": "#47494d",
+                        "on-surface-variant": "#d7c3ae",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2e3034",
+                        "on-error": "#690005",
+                        "surface-dim": "#121315",
+                        "surface-bright": "#38393b",
+                        "on-secondary-fixed-variant": "#45474b",
+                        "primary-fixed-dim": "#ffb955",
+                        "surface-container-highest": "#343537",
+                        "inverse-surface": "#e3e2e5",
+                        "secondary-fixed": "#e2e2e7",
+                        "on-secondary-fixed": "#1a1c1f",
+                        "outline-variant": "#524534",
+                        "inverse-primary": "#835500",
+                        "on-tertiary-container": "#004d6a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#7cd0ff",
+                        "surface-tint": "#ffb955",
+                        "surface": "#121315",
+                        "on-primary-fixed-variant": "#633f00",
+                        "on-primary": "#452b00",
+                        "on-surface": "#e3e2e5",
+                        "surface-container-low": "#1b1c1e",
+                        "tertiary": "#9bd9ff",
+                        "tertiary-container": "#3ac2ff",
+                        "primary-fixed": "#ffddb4",
+                        "surface-container-high": "#292a2c",
+                        "secondary-fixed-dim": "#c6c6cb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Inter", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .etched-border {
+            border: 1px solid rgba(82, 69, 52, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-50 w-full px-6 h-14 flex justify-between items-center bg-[#121315] dark:bg-slate-950 border-b border-amber-900/20 dark:border-amber-900/30">
+<div class="flex items-center gap-8">
+<span class="font-serif text-xl font-bold tracking-tight text-[#F5A623]">PAEwall</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#F5A623] border-b-2 border-[#F5A623] pb-1 hover:text-amber-400 transition-colors duration-150" href="#">Portfolio</a>
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150" href="#">Archive</a>
+<a class="text-slate-400 font-medium hover:text-amber-400 transition-colors duration-150" href="#">Technical Analysis</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-lg etched-border">
+<span class="material-symbols-outlined text-sm text-outline">search</span>
+<span class="text-xs font-label text-outline tracking-wider">SEARCH_VAULT</span>
+</div>
+<button class="bg-primary-container text-on-primary px-4 py-1.5 text-sm font-bold rounded-sm transition-colors duration-150 hover:bg-primary">
+                Generate Report
+            </button>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white transition-colors">notifications</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white transition-colors">settings</span>
+</div>
+</div>
+</header>
+<main class="pt-14">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col items-center justify-center px-6 overflow-hidden">
+<!-- Background Texture -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6VIVjYRW8TUjPTEnCn1N92RUNWDrjwtNPan8an4VmQuDAoX62fD8bQ6-HLqvJZCRd3zyuI5vo7thAD3iRvUMqE5F5aNvKaNEUlO-SPFvgCtLgDOBh5oVuDo3P8oz0gIT-PbySrScLF41e0Z6EXH0ifzR1uRabqKwTOyKbV6ug1kSFjpzMrD6qfLRfCk2P0T-6IMyL6LmN6qlFIOVGpdoJfmEsEG9ZJU_RiMZrRLJdvK_w_407GMcygmAGthZTBRYLF7s88zMOjxY');"></div>
+<div class="relative z-10 max-w-5xl w-full text-center mt-12">
+<div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-surface-container etched-border">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-label font-bold tracking-widest text-secondary uppercase">Sovereign Archive v2.4 Live</span>
+</div>
+<h1 class="font-headline text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-on-background mb-8">
+                    Know what your patent is worth — <span class="text-primary italic">before you file suit.</span>
+</h1>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+<button class="bg-primary-container text-on-primary text-lg font-bold px-8 py-4 rounded-sm flex items-center gap-3 transition-all duration-150 hover:bg-primary group">
+                        Analyze a patent
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="bg-transparent text-secondary border border-outline-variant px-8 py-4 rounded-sm font-bold hover:bg-surface-container-high transition-colors">
+                        View Technical Specs
+                    </button>
+</div>
+<!-- Main Visual: Video Placeholder -->
+<div class="relative w-full aspect-video bg-surface-container-lowest rounded-xl overflow-hidden etched-border shadow-2xl group">
+<div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all">
+<span class="material-symbols-outlined text-6xl text-primary opacity-50 group-hover:scale-110 group-hover:opacity-100 transition-all" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<img alt="Patent Analysis Tool Interface" class="w-full h-full object-cover mix-blend-luminosity opacity-60" data-alt="Technical dashboard showing complex patent litigation network graphs and AI risk scoring in a dark interface style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjmqebgWL4WdZ4tJdazIuEowR7aw9NQxoxjEWwzxEC5Ij1WUntuq6bwZQUMP2vMTpBxK_7bEWo9sE0zivJqiZ0eJqBuKwsBzyxlN_7nhUAp3n2Iz0_dDFx_cZ7WUOqGhEmWhYvwmDCfltSb89J5tLluIrXvr5XLmkXqG2yjE3axJK2utAM0WhnR0-46ZCoAncU62sO_brJR4QoqEsXkTG_Cq2v3gplYVHBleMPPf1Z4MAtffYmK0Ej1dSfdyQ4XNQ9FfUQrH7BX3U"/>
+<!-- Interface Overlay Elements -->
+<div class="absolute top-4 left-4 bg-surface-container/90 p-3 rounded etched-border backdrop-blur-sm hidden md:block">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] font-label font-bold text-secondary tracking-tighter">RISK_VECTORS_IDENTIFIED</span>
+</div>
+<div class="h-1 w-32 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full w-[82%] bg-primary"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Signals / Metric Bar -->
+<section class="bg-surface-container-low border-y border-outline-variant/20 py-12 px-6">
+<div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-12">
+<div class="flex-1 min-w-[200px]">
+<p class="text-xs font-label text-outline uppercase tracking-[0.2em] mb-2">Dataset Integrity</p>
+<h3 class="text-3xl font-bold text-on-background">522 <span class="text-sm font-body font-normal text-secondary">litigation pairs trained</span></h3>
+</div>
+<div class="flex-1 min-w-[200px] border-l border-outline-variant/30 pl-8">
+<p class="text-xs font-label text-outline uppercase tracking-[0.2em] mb-2">Search Precision</p>
+<h3 class="text-3xl font-bold text-on-background">36% <span class="text-sm font-body font-normal text-secondary">Recall@10 improvement</span></h3>
+</div>
+<div class="flex-1 min-w-[200px] border-l border-outline-variant/30 pl-8">
+<p class="text-xs font-label text-outline uppercase tracking-[0.2em] mb-2">Institutional Research</p>
+<h3 class="text-3xl font-bold text-on-background">Duke MEng <span class="text-sm font-body font-normal text-secondary">AIPI research foundation</span></h3>
+</div>
+</div>
+</section>
+<!-- Bento Grid Feature Section -->
+<section class="py-24 px-6 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Large Feature Card -->
+<div class="md:col-span-8 bg-surface-container rounded-xl p-8 etched-border flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary text-3xl mb-4">analytics</span>
+<h4 class="font-headline text-3xl mb-4">Sovereign Claim Charting</h4>
+<p class="text-secondary max-w-md leading-relaxed">Automated comparison of patent claims against accused products with high-density mapping of infringement vectors.</p>
+</div>
+<div class="mt-12 overflow-hidden rounded bg-surface-container-lowest etched-border">
+<img alt="Server data visualization" class="w-full h-48 object-cover opacity-40 hover:scale-105 transition-transform duration-700" data-alt="Stylized network of interconnected nodes representing technical claims and prior art citations in amber and grey" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYE3BDwI4X17qUdjV4k0DwqaKWHhF5mewj9VhZEZueXTfm_Ml9HqUv2CsdoN_6Ki9KSk0Wa5WjsAq0Zmig1gzyB1psOqQKsXs_cbilIxeUIEEGZ8wbftGo4ineLDAQz12gGqoSyTQSfdUn-ctwuNfuNbdnMf89OtW3WAnKcZQ76TElXQ7UmFKUgfClSO14HpF1bAhzji1kjvDuWS03UuPq79UclaDIl-v0zMJWzJ-W8kn01JU0NNCagIxcH_Ivdsls_u9LT53LgEE"/>
+</div>
+</div>
+<!-- Small Vertical Card -->
+<div class="md:col-span-4 bg-[#1b1c1e] rounded-xl p-8 etched-border flex flex-col items-start justify-center gap-6">
+<div class="p-4 bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<h4 class="font-headline text-2xl">Red Team Analysis</h4>
+<p class="text-secondary text-sm leading-relaxed">Simulate adversarial prior art searches to stress-test your patent's validity before engaging counsel.</p>
+<a class="text-primary font-label text-xs tracking-widest uppercase hover:underline" href="#">ACCESS_VAULT</a>
+</div>
+<!-- Wide Horizontal Card -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-8 etched-border border-l-4 border-l-primary">
+<h5 class="font-label text-[10px] tracking-widest uppercase text-outline mb-6">INTELLIGENCE_LAYER</h5>
+<div class="space-y-4">
+<div class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-xs text-secondary">Litigation Probability</span>
+<span class="font-label text-primary">88.4%</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-xs text-secondary">Mean Settlement Val.</span>
+<span class="font-label text-primary">$2.4M</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-xs text-secondary">Validity Confidence</span>
+<span class="font-label text-primary text-error">Low</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-8 bg-surface-container rounded-xl overflow-hidden etched-border group relative">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10"></div>
+<img alt="Technical Background" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-1000" data-alt="Digital representation of complex data structures with glowing amber highlights on a deep slate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgHGxcNZMz_FS4Qmr6F2_9OdE5_hfnQ1ZCEMUP9yam6eec61FgVBww_xFUoZg0-3GpLDgcU7F_TrdGH9p-1DVh0GQ1yWc2A1zZMvqDLVyoplzThrGpGVqA_uGNNcKSLMEK9MYmoFqothcj6s7h9UP15kWqfOIi-RPhYWhSLk8oJIjbrqZbWOcCIC4cwkkp6XFQpEBJTSobSEhaY3zTLSuvtJsJKG0Lli8amNUHX4uSPCMwDPwAukg77qbdA8lPCli533sCa2szCZc"/>
+<div class="relative z-20 p-8 h-full flex flex-col justify-end">
+<h4 class="font-headline text-3xl mb-2">Technical Archeology</h4>
+<p class="text-secondary text-sm max-w-sm">Deep-scan 40+ years of USPTO archives to identify forgotten dependencies and strategic leverage points.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA Section -->
+<section class="py-32 px-6 text-center bg-surface-container-lowest">
+<h2 class="font-headline text-4xl md:text-5xl mb-12 max-w-3xl mx-auto">Build your legal strategy on <span class="italic">quantifiable intelligence</span>, not intuition.</h2>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="bg-primary-container text-on-primary text-xl font-bold px-12 py-5 rounded-sm transition-all hover:bg-primary shadow-lg shadow-primary/10">
+                    Analyze a patent
+                </button>
+<div class="flex items-center gap-4 text-outline font-label text-xs tracking-widest uppercase">
+<span class="w-12 h-[1px] bg-outline-variant"></span>
+                    OR REQUEST A DEMO
+                    <span class="w-12 h-[1px] bg-outline-variant"></span>
+</div>
+</div>
+</section>
+</main>
+<!-- SideNavBar (Mobile Toggle/Reference from JSON) -->
+<div class="hidden md:flex fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-16 hover:w-64 bg-[#1b1c1e] dark:bg-slate-900 border-r border-amber-900/10 flex-col items-center py-4 gap-6 transition-all duration-300 group z-40">
+<div class="flex flex-col w-full px-2 gap-4">
+<div class="flex items-center gap-4 px-2 py-3 rounded bg-[#1f2022] text-[#F5A623] border-l-4 border-[#F5A623]">
+<span class="material-symbols-outlined shrink-0" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">CANDIDATES</span>
+</div>
+<div class="flex items-center gap-4 px-2 py-3 rounded text-slate-500 hover:bg-[#292a2c] hover:text-white transition-all">
+<span class="material-symbols-outlined shrink-0">query_stats</span>
+<span class="font-label text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">CLAIM_CHARTS</span>
+</div>
+<div class="flex items-center gap-4 px-2 py-3 rounded text-slate-500 hover:bg-[#292a2c] hover:text-white transition-all">
+<span class="material-symbols-outlined shrink-0">security</span>
+<span class="font-label text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">RED_TEAM_VIEW</span>
+</div>
+</div>
+<div class="mt-auto w-full px-2 space-y-2">
+<div class="flex items-center gap-4 px-2 py-2 text-slate-500 hover:text-slate-300 cursor-pointer">
+<span class="material-symbols-outlined shrink-0">help</span>
+<span class="font-label text-[10px] uppercase opacity-0 group-hover:opacity-100 transition-opacity">DOCUMENTATION</span>
+</div>
+<div class="flex items-center gap-4 px-2 py-2 text-slate-500 hover:text-slate-300 cursor-pointer">
+<span class="material-symbols-outlined shrink-0">contact_support</span>
+<span class="font-label text-[10px] uppercase opacity-0 group-hover:opacity-100 transition-opacity">SUPPORT</span>
+</div>
+</div>
+</div>
+<footer class="bg-[#121315] border-t border-outline-variant/10 py-8 px-6 text-center">
+<p class="font-label text-[10px] text-outline tracking-[0.3em] uppercase mb-4">© 2024 PAEwall Intelligence • Sovereign Archive v2.4</p>
+<div class="flex justify-center gap-6 text-slate-500 text-[10px] font-label uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Privacy_Protocol</a>
+<a class="hover:text-primary transition-colors" href="#">Usage_Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Legal_Notice</a>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PAEwall | Patent Intelligence</title>
+<!-- Fonts: Newsreader (Editorial), Manrope (Functional), Inter (Metadata) -->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#525b8e",
+                    "surface-variant": "#e0e3e6",
+                    "primary-fixed-dim": "#bac3ff",
+                    "on-surface-variant": "#444654",
+                    "on-background": "#191c1e",
+                    "on-primary-container": "#fcf9ff",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#191c1e",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#b65900",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#bac3fd",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#bac3fd",
+                    "inverse-surface": "#2d3133",
+                    "tertiary-fixed": "#ffdbc7",
+                    "surface-container-high": "#e6e8eb",
+                    "surface-bright": "#f7f9fc",
+                    "surface-container": "#eceef1",
+                    "primary": "#324cce",
+                    "on-secondary-fixed": "#0d1647",
+                    "primary-container": "#4e67e8",
+                    "on-tertiary-fixed": "#311300",
+                    "on-error": "#ffffff",
+                    "surface": "#f7f9fc",
+                    "on-primary-fixed": "#00105a",
+                    "outline-variant": "#c5c5d6",
+                    "on-tertiary-container": "#fff9f6",
+                    "tertiary-fixed-dim": "#ffb688",
+                    "surface-dim": "#d8dadd",
+                    "inverse-primary": "#bac3ff",
+                    "on-secondary-container": "#464f81",
+                    "inverse-on-surface": "#eff1f4",
+                    "surface-container-highest": "#e0e3e6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#3651d2",
+                    "background": "#f7f9fc",
+                    "secondary-fixed": "#dee0ff",
+                    "outline": "#757686",
+                    "tertiary": "#914500",
+                    "primary-fixed": "#dee0ff",
+                    "on-tertiary-fixed-variant": "#733600",
+                    "on-secondary-fixed-variant": "#3a4375",
+                    "on-secondary": "#ffffff",
+                    "surface-container-low": "#f2f4f7",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#1535ba"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Newsreader", "serif"],
+                    "body": ["Manrope", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .editorial-shadow {
+            box-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #324cce 0%, #4e67e8 100%);
+        }
+        .glass-nav {
+            background: rgba(247, 249, 252, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-fixed-dim">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-opacity-80 backdrop-blur-md sticky top-0 z-50 bg-[#f7f9fc] dark:bg-slate-900">
+<div class="flex items-center gap-8">
+<span class="font-serif text-2xl font-bold text-[#324cce] dark:text-[#4e67e8] tracking-tight">PAEwall</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#324cce] font-bold border-b-2 border-[#324cce] font-body text-sm py-1" href="#">Home</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] px-3 py-1 rounded transition-colors font-body text-sm" href="#">Technology</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] px-3 py-1 rounded transition-colors font-body text-sm" href="#">Case Studies</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 font-body text-sm font-semibold text-primary hover:bg-surface-container transition-colors">Log In</button>
+<button class="primary-gradient text-on-primary px-5 py-2 rounded-lg font-body text-sm font-bold shadow-sm hover:opacity-90 transition-transform active:scale-95">New Analysis</button>
+<div class="flex items-center gap-2 ml-2 border-l border-outline-variant pl-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">account_circle</span>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-12 pb-24">
+<!-- Hero Section: Asymmetric Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-32">
+<div class="lg:col-span-7 space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-fixed rounded-full">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+<span class="text-[10px] font-label font-bold tracking-widest text-on-secondary-fixed uppercase">Intellectual Property Intelligence</span>
+</div>
+<h1 class="font-headline text-6xl md:text-7xl leading-[1.1] tracking-tight text-on-surface">
+                    Know what your patent is worth — <span class="text-primary italic">before you file suit.</span>
+</h1>
+<p class="font-body text-xl text-on-surface-variant max-w-xl leading-relaxed">
+                    A authoritative entry point for IP attorneys. Leverage high-density litigation data and neural-search models to assess infringement risk and claim value with academic rigor.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="primary-gradient text-on-primary px-8 py-4 rounded-lg font-body text-lg font-bold editorial-shadow hover:scale-[1.02] transition-transform flex items-center gap-3">
+                        Analyze a patent
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="px-8 py-4 rounded-lg font-body text-lg font-bold text-primary bg-surface-container-low hover:bg-surface-container-high transition-colors">
+                        View Demo
+                    </button>
+</div>
+<!-- Trust Signals -->
+<div class="grid grid-cols-3 gap-8 pt-12 border-t border-outline-variant/20">
+<div>
+<div class="text-2xl font-headline font-bold text-primary">522</div>
+<div class="text-xs font-label font-medium text-on-surface-variant uppercase tracking-wider">litigation pairs trained</div>
+</div>
+<div>
+<div class="text-2xl font-headline font-bold text-primary">+36%</div>
+<div class="text-xs font-label font-medium text-on-surface-variant uppercase tracking-wider">Recall@10 improvement</div>
+</div>
+<div>
+<div class="text-2xl font-headline font-bold text-primary">Duke</div>
+<div class="text-xs font-label font-medium text-on-surface-variant uppercase tracking-wider">MEng AIPI research</div>
+</div>
+</div>
+</div>
+<!-- Video/Visual Anchor -->
+<div class="lg:col-span-5 relative group">
+<div class="absolute -inset-4 bg-primary/5 rounded-[2rem] blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow border border-outline-variant/10 aspect-[4/5] flex items-center justify-center">
+<!-- Placeholder for 40-second silent autoplay video loop -->
+<div class="absolute inset-0 bg-slate-900/5 flex flex-col items-center justify-center p-8 text-center">
+<img alt="Patent data visualization" class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay" data-alt="Abstract data visualization of patent claim charts and neural network nodes connecting in a sophisticated 3D space with soft indigo lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzWPqXqJjuLRAaFiBBXfALziQap6VifTLqYTy7XyvTA1QZZtlH2RZgx9awwyFuBgB58VdcKVTGRVutg4XeS5J9ubOTYPFFPtjkIHtrobPjXNOGUjJSVp_JPrAm3B2SVakkGQgZpvtA5yZtvOuv6Cv2uWIz3rrgiJd9ecrleL_Wi2d85irz8yBTEeyfVOS1E_CmxYqppem19GiaSA7w05gma5u-pIciJlVaT1VRERC_AGj_D8zs6M367DUvOsQbdBOglar-o_Tfg6o"/>
+<div class="z-10 bg-surface-container-lowest/90 backdrop-blur-md p-6 rounded-xl border border-white/20 max-w-xs">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-weight="fill">play_circle</span>
+<p class="font-body text-sm font-semibold text-on-surface">Product Visualization</p>
+<p class="font-label text-xs text-on-surface-variant mt-2">Neural Claim Mapping in real-time. 0:40 Loop.</p>
+</div>
+</div>
+</div>
+<!-- Metadata floating tag -->
+<div class="absolute -bottom-6 -left-6 bg-surface-container-highest p-4 rounded-lg editorial-shadow border border-white/50 hidden md:block">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-white flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<p class="text-[10px] font-label font-bold text-on-surface-variant uppercase tracking-tighter">Current Latency</p>
+<p class="text-sm font-headline font-bold text-on-surface">142ms / analysis</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Bento Grid Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Feature Card 1 -->
+<div class="md:col-span-2 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between min-h-[320px]">
+<div class="max-w-md">
+<span class="material-symbols-outlined text-primary mb-4">search_insights</span>
+<h3 class="font-headline text-2xl mb-4">Advanced BM25+ Neural Hybrid</h3>
+<p class="font-body text-on-surface-variant">Our proprietary retrieval model out-performs standard keyword searches by mapping semantic intent across 12 million USPTO filings.</p>
+</div>
+<div class="flex items-center gap-4 mt-8">
+<div class="px-4 py-2 bg-surface-container-highest rounded-full text-xs font-label font-bold uppercase tracking-widest text-on-surface-variant">Technical Layer</div>
+<div class="px-4 py-2 bg-surface-container-highest rounded-full text-xs font-label font-bold uppercase tracking-widest text-on-surface-variant">IPC Classification</div>
+</div>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-primary text-on-primary rounded-xl p-8 flex flex-col justify-between primary-gradient">
+<h3 class="font-headline text-2xl">Litigation-Grade Precision.</h3>
+<div>
+<p class="font-body text-on-primary/80 mb-6 italic">"The first tool that thinks like a patent litigator, not just a search engine."</p>
+<p class="font-label text-xs font-bold uppercase tracking-widest">Duke AIPI Lab Partner</p>
+</div>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-8 editorial-shadow border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary mb-4">security_update_good</span>
+<h3 class="font-headline text-xl mb-3">Red Team Analysis</h3>
+<p class="font-body text-sm text-on-surface-variant">Automated stress-testing of your claims against known prior art and 'killer' references.</p>
+</div>
+<!-- Feature Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-8 editorial-shadow border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary mb-4">account_tree</span>
+<h3 class="font-headline text-xl mb-3">Claim Hierarchy</h3>
+<p class="font-body text-sm text-on-surface-variant">Visualizing dependency trees to find the most resilient nodes in your intellectual property portfolio.</p>
+</div>
+<!-- Feature Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-8 editorial-shadow border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary mb-4">table_chart</span>
+<h3 class="font-headline text-xl mb-3">Dynamic Charts</h3>
+<p class="font-body text-sm text-on-surface-variant">Exportable claim charts pre-formatted for courtroom exhibits and technical briefings.</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant/10 py-16">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="space-y-4">
+<span class="font-serif text-xl font-bold text-primary tracking-tight">PAEwall</span>
+<p class="text-sm font-body text-on-surface-variant">Precision intelligence for the modern patent attorney. Built at the intersection of law and AI.</p>
+</div>
+<div>
+<h4 class="font-label font-bold text-xs uppercase tracking-widest mb-6">Product</h4>
+<ul class="space-y-3 text-sm font-body text-on-surface-variant">
+<li class="hover:text-primary cursor-pointer">Analysis Engine</li>
+<li class="hover:text-primary cursor-pointer">Claim Mapping</li>
+<li class="hover:text-primary cursor-pointer">Prior Art Search</li>
+</ul>
+</div>
+<div>
+<h4 class="font-label font-bold text-xs uppercase tracking-widest mb-6">Company</h4>
+<ul class="space-y-3 text-sm font-body text-on-surface-variant">
+<li class="hover:text-primary cursor-pointer">Research Paper</li>
+<li class="hover:text-primary cursor-pointer">Security</li>
+<li class="hover:text-primary cursor-pointer">Privacy</li>
+</ul>
+</div>
+<div>
+<h4 class="font-label font-bold text-xs uppercase tracking-widest mb-6">Subscribe</h4>
+<div class="flex gap-2">
+<input class="bg-surface-container-lowest border border-outline-variant/20 rounded px-3 py-2 text-sm w-full focus:ring-1 focus:ring-primary focus:outline-none" placeholder="Email address" type="email"/>
+<button class="bg-primary text-on-primary p-2 rounded">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#525b8e",
+                        "surface-variant": "#e0e3e6",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#444654",
+                        "on-background": "#191c1e",
+                        "on-primary-container": "#fcf9ff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1e",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#b65900",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#bac3fd",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#bac3fd",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-bright": "#f7f9fc",
+                        "surface-container": "#eceef1",
+                        "primary": "#324cce",
+                        "on-secondary-fixed": "#0d1647",
+                        "primary-container": "#4e67e8",
+                        "on-tertiary-fixed": "#311300",
+                        "on-error": "#ffffff",
+                        "surface": "#f7f9fc",
+                        "on-primary-fixed": "#00105a",
+                        "outline-variant": "#c5c5d6",
+                        "on-tertiary-container": "#fff9f6",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "surface-dim": "#d8dadd",
+                        "inverse-primary": "#bac3ff",
+                        "on-secondary-container": "#464f81",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#3651d2",
+                        "background": "#f7f9fc",
+                        "secondary-fixed": "#dee0ff",
+                        "outline": "#757686",
+                        "tertiary": "#914500",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary-fixed-variant": "#733600",
+                        "on-secondary-fixed-variant": "#3a4375",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1535ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .pipeline-gradient {
+            background: linear-gradient(135deg, #324cce 0%, #4e67e8 100%);
+        }
+        .ghost-border {
+            outline: 1px solid rgba(197, 197, 214, 0.2);
+        }
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 space-y-2 bg-[#f2f4f7] dark:bg-slate-900 h-screen w-64 border-r-0 z-50">
+<div class="mb-8 px-2">
+<h2 class="font-headline text-xl text-primary font-bold">Workbench</h2>
+<p class="font-label text-[10px] uppercase tracking-widest text-outline">Patent Intelligence</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label text-sm">Candidates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="table_chart">table_chart</span>
+<span class="font-label text-sm">Claim Charts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#324cce] dark:text-white font-bold bg-[#e0e3e6] dark:bg-slate-800 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label text-sm">Red Team</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container text-xs font-bold">JD</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">John Doe</span>
+<span class="text-[10px] text-outline">Principal Counsel</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-opacity-80 backdrop-blur-md sticky top-0 z-40 bg-[#f7f9fc] dark:bg-slate-900 docked full-width top-0">
+<div class="flex items-center gap-8">
+<h1 class="font-serif text-2xl font-bold text-[#324cce] dark:text-[#4e67e8] tracking-tight">PAEwall</h1>
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</span>
+<input class="bg-surface-container-low ghost-border rounded-md pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search patents..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="pipeline-gradient text-on-primary px-4 py-1.5 rounded-md font-label text-sm font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+                        New Analysis
+                    </button>
+<div class="flex items-center gap-2 text-outline">
+<button class="p-2 hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Intelligence Pipeline Dashboard -->
+<div class="p-8 max-w-6xl mx-auto w-full">
+<div class="mb-10">
+<h2 class="font-headline text-4xl text-on-surface mb-2">Intelligence Pipeline</h2>
+<p class="font-body text-on-surface-variant max-w-2xl">Visualizing the synthesis of patent intelligence. The red-teaming engine is currently processing high-risk claims for the active litigation portfolio.</p>
+</div>
+<!-- Pipeline Modules: Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+<!-- Module A: Data Extraction -->
+<div class="col-span-12 md:col-span-3 group">
+<div class="bg-surface-container-lowest p-6 rounded-xl relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-primary/20 text-4xl" data-icon="database">database</span>
+</div>
+<div class="mb-8">
+<span class="font-label text-[10px] uppercase tracking-widest text-outline block mb-1">Module A</span>
+<h3 class="font-headline text-xl">Data Extraction</h3>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="font-label text-xs font-bold text-emerald-600">DONE</span>
+</div>
+<div class="space-y-4">
+<p class="text-xs text-on-surface-variant font-body leading-relaxed">Parsing 1,402 patent PDFs and claim sets from USPTO bulk data.</p>
+<div class="flex justify-between items-center pt-4 border-t border-surface-variant">
+<span class="text-[10px] font-mono text-outline">ELAPSED</span>
+<span class="text-xs font-mono font-bold">04:12.8s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module B: Entity Ranking -->
+<div class="col-span-12 md:col-span-3 group">
+<div class="bg-surface-container-lowest p-6 rounded-xl relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-primary/20 text-4xl" data-icon="analytics">analytics</span>
+</div>
+<div class="mb-8">
+<span class="font-label text-[10px] uppercase tracking-widest text-outline block mb-1">Module B</span>
+<h3 class="font-headline text-xl">Entity Ranking</h3>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="font-label text-xs font-bold text-emerald-600">DONE</span>
+</div>
+<div class="space-y-4">
+<p class="text-xs text-on-surface-variant font-body leading-relaxed">Calculating semantic similarity between claim 1 and 42 potential targets.</p>
+<div class="flex justify-between items-center pt-4 border-t border-surface-variant">
+<span class="text-[10px] font-mono text-outline">ELAPSED</span>
+<span class="text-xs font-mono font-bold">12:45.1s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module C: Chart Synthesis (ACTIVE) -->
+<div class="col-span-12 md:col-span-6 group relative">
+<div class="bg-surface-container-lowest p-8 rounded-xl relative overflow-hidden border-2 border-primary/10 shadow-[0px_12px_32px_rgba(50,76,206,0.08)]">
+<div class="absolute top-0 right-0 p-6">
+<span class="material-symbols-outlined text-primary text-5xl animate-pulse" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="mb-10">
+<span class="font-label text-[10px] uppercase tracking-widest text-primary block mb-1 font-bold">Module C • ACTIVE</span>
+<h3 class="font-headline text-3xl">Chart Synthesis</h3>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-4">
+<p class="text-sm text-on-surface-variant font-body leading-relaxed">Mapping element-by-element evidence for <span class="font-mono text-primary bg-primary-fixed/30 px-1">US-9,283,411-B2</span> against Target Alpha source code.</p>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[68%]" style="transition: width 2s ease-in-out"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-mono">
+<span class="text-outline">PROGRESS</span>
+<span class="text-primary font-bold">68.2%</span>
+</div>
+</div>
+<div class="flex flex-col justify-end items-end space-y-2">
+<span class="text-[10px] font-mono text-outline uppercase">Live Stream</span>
+<div class="text-xs font-mono bg-surface-container-low p-3 rounded-lg w-full">
+<div class="text-primary/70 mb-1">&gt; Matching Clause 4.b</div>
+<div class="text-on-surface-variant">&gt; Evidence found in line 442</div>
+</div>
+<span class="text-2xl font-mono font-bold text-primary">02:55.4s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Module D: Verification -->
+<div class="col-span-12 md:col-span-12">
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between ghost-border">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="fact_check">fact_check</span>
+</div>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest text-outline block">Module D</span>
+<h3 class="font-headline text-lg">Cross-Examination Verification</h3>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<span class="text-[10px] font-mono text-outline uppercase block">Status</span>
+<span class="text-xs font-bold text-outline">QUEUED</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="text-right">
+<span class="text-[10px] font-mono text-outline uppercase block">Est. Time</span>
+<span class="text-xs font-mono">~ 01:20.0s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Trace Log -->
+<div class="bg-inverse-surface rounded-xl overflow-hidden shadow-2xl">
+<div class="bg-on-surface-variant/20 px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim text-sm" data-icon="terminal">terminal</span>
+<span class="font-mono text-xs text-surface-container-low font-bold">Technical Trace Log</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+<span class="font-mono text-[10px] text-emerald-400">KERNEL_READY</span>
+</div>
+<span class="font-mono text-[10px] text-outline">v4.2.0-STABLE</span>
+</div>
+</div>
+<div class="p-6 font-mono text-xs leading-relaxed text-surface-variant/80 max-h-[300px] overflow-y-auto space-y-1">
+<p><span class="text-outline">[14:22:01]</span> <span class="text-primary-fixed-dim">INFO:</span> Initializing Synthesis Engine (A-66)...</p>
+<p><span class="text-outline">[14:22:03]</span> <span class="text-primary-fixed-dim">INFO:</span> Loading training weights: Legal-BERT-v2</p>
+<p><span class="text-outline">[14:22:05]</span> <span class="text-emerald-400">SUCCESS:</span> Claim set US-9283411-B2 parsed (22 independent, 4 dependent)</p>
+<p><span class="text-outline">[14:22:08]</span> <span class="text-primary-fixed-dim">INFO:</span> Mapping entity dependencies for "Target Alpha Cloud SDK"...</p>
+<p><span class="text-outline">[14:22:12]</span> <span class="text-tertiary-fixed-dim">WARN:</span> Ambiguous phrasing detected in Claim 14, applying heuristic 4...</p>
+<p><span class="text-outline">[14:23:44]</span> <span class="text-primary-fixed-dim">INFO:</span> Synthesis thread 0x44A started execution</p>
+<p><span class="text-outline">[14:23:45]</span> <span class="text-surface-container-low">&gt; Mapping element [Processor Interface] to source/com/alpha/kernel/bridge.java:214</span></p>
+<p><span class="text-outline">[14:23:46]</span> <span class="text-surface-container-low">&gt; Mapping element [Encryption Module] to source/com/alpha/security/aes_wrap.java:88</span></p>
+<p><span class="text-outline">[14:23:48]</span> <span class="text-surface-container-low">&gt; Mapping element [Buffer Overflow Protection] to source/com/alpha/mem/alloc.c:12</span></p>
+<p class="animate-pulse"><span class="text-outline">[14:23:49]</span> <span class="text-primary-fixed-dim">INFO:</span> Deep search initiated on Element 4 (Persistent Storage)...</p>
+</div>
+</div>
+</div>
+<!-- Bottom Metric Bar -->
+<footer class="mt-auto bg-surface-container-low px-8 py-4 flex items-center justify-between ghost-border">
+<div class="flex gap-8">
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-outline uppercase tracking-tighter">System Health</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-emerald-500 text-xs" data-icon="bolt">bolt</span>
+<span class="text-xs font-bold font-mono">99.8%</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-outline uppercase tracking-tighter">Throughput</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="speed">speed</span>
+<span class="text-xs font-bold font-mono">1.4 GB/s</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-24 h-8 object-cover rounded opacity-40 grayscale" data-alt="minimal abstract wave pattern in soft indigo tones representing data flow and system stability" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbG5bL2kytV94Dv0aARq0q020IZZyPEaCelvsBSthGNSew2Ja7WczNey9d0p17f4_POGXYutGHHB4j1zzyrF_WTmLUIp0IERHGP4n6MGoSw57IupSH-SBsxsMluHQxL9JfwxdfldN5bsd87z5FG3-xIFOPFmT0Vtq0llAIPHQOCj5bzVQFuxd0dD2Fs0eY7mJJ4YsCp7GEFLyie3-MQKXWDUceblxosZ235vJLvqZdwI0U_ipNRpwKpiw5VAflGd1IM5VkFtTNf0Y"/>
+<span class="text-[10px] text-outline font-mono">ENCRYPTED TUNNEL: PRIMARY-U-8</span>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

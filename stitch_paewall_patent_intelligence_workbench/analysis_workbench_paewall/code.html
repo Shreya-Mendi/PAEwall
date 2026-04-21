@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analysis Workbench - PAEwall</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&amp;family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#525b8e",
+                        "surface-variant": "#e0e3e6",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#444654",
+                        "on-background": "#191c1e",
+                        "on-primary-container": "#fcf9ff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1e",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#b65900",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#bac3fd",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#bac3fd",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-bright": "#f7f9fc",
+                        "surface-container": "#eceef1",
+                        "primary": "#324cce",
+                        "on-secondary-fixed": "#0d1647",
+                        "primary-container": "#4e67e8",
+                        "on-tertiary-fixed": "#311300",
+                        "on-error": "#ffffff",
+                        "surface": "#f7f9fc",
+                        "on-primary-fixed": "#00105a",
+                        "outline-variant": "#c5c5d6",
+                        "on-tertiary-container": "#fff9f6",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "surface-dim": "#d8dadd",
+                        "inverse-primary": "#bac3ff",
+                        "on-secondary-container": "#464f81",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#3651d2",
+                        "background": "#f7f9fc",
+                        "secondary-fixed": "#dee0ff",
+                        "outline": "#757686",
+                        "tertiary": "#914500",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary-fixed-variant": "#733600",
+                        "on-secondary-fixed-variant": "#3a4375",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1535ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #f7f9fc; }
+        .headline-md { font-family: 'Newsreader', serif; font-size: 1.5rem; line-height: 2rem; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0e3e6; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-opacity-80 backdrop-blur-md sticky top-0 z-50 bg-[#f7f9fc] dark:bg-slate-900">
+<div class="flex items-center gap-8">
+<span class="font-serif text-2xl font-bold text-[#324cce] dark:text-[#4e67e8] tracking-tight">PAEwall</span>
+<div class="hidden md:flex gap-6 items-center">
+<span class="text-[#324cce] font-bold border-b-2 border-[#324cce] py-1 cursor-pointer">Analysis</span>
+<span class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] dark:hover:bg-slate-700 transition-colors px-2 py-1 rounded cursor-pointer">Portfolio</span>
+<span class="text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e0e3e6] dark:hover:bg-slate-700 transition-colors px-2 py-1 rounded cursor-pointer">Reports</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-container px-3 py-1.5 rounded flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 font-label" placeholder="Search patent ID..." type="text"/>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-1.5 rounded text-sm font-medium shadow-sm hover:scale-95 transition-transform">
+                New Analysis
+            </button>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">account_circle</span>
+</div>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- SideNavBar (Workbench) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 space-y-2 bg-[#f2f4f7] dark:bg-slate-900 h-screen w-64 border-r-0 z-40 mt-16">
+<div class="mb-6 px-2">
+<h2 class="font-headline text-lg font-bold text-on-surface">Workbench</h2>
+<p class="font-label text-[10px] uppercase tracking-widest text-outline">Patent Intelligence</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#324cce] dark:text-white font-bold bg-[#e0e3e6] dark:bg-slate-800 rounded-md translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_search</span>
+<span class="font-label text-sm">Candidates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 transition-colors" href="#">
+<span class="material-symbols-outlined">table_chart</span>
+<span class="font-label text-sm">Claim Charts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 font-medium hover:text-[#324cce] dark:hover:text-[#4e67e8] hover:bg-slate-200/50 transition-colors" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label text-sm">Red Team</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-lowest rounded-xl shadow-sm">
+<p class="text-xs font-bold mb-2">Usage Credit</p>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary w-3/4 h-full"></div>
+</div>
+<p class="text-[10px] mt-1 text-on-surface-variant">750/1000 queries used</p>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col bg-background overflow-hidden">
+<!-- Workbench Header (Confidence Bar) -->
+<div class="px-8 py-4 bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-surface-container-highest rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<h1 class="font-headline text-xl font-bold">Analysis: US-10423941-B2</h1>
+<p class="text-xs text-on-surface-variant font-label">Project: Wireless Infrastructure Q3</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase font-bold text-outline tracking-wider">Overall Confidence</span>
+<div class="flex items-center gap-3 mt-1">
+<span class="text-lg font-mono font-bold text-primary">87.4%</span>
+<div class="w-48 bg-surface-container-high h-2 rounded-full overflow-hidden flex">
+<div class="bg-primary w-[87.4%] h-full"></div>
+</div>
+</div>
+</div>
+<div class="h-10 w-px bg-outline-variant opacity-20"></div>
+<button class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+<span class="material-symbols-outlined text-sm">download</span> Export PDF
+                    </button>
+</div>
+</div>
+<!-- Workbench Grid -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Candidate Ranking -->
+<section class="w-[380px] border-r-0 bg-surface flex flex-col">
+<div class="p-4 border-b-0 bg-surface-container-low flex justify-between items-center">
+<h3 class="font-bold text-sm uppercase tracking-tight text-on-surface">Target Candidates</h3>
+<span class="text-xs font-mono bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">12 Total</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-2">
+<!-- Selected Candidate -->
+<div class="bg-surface-container-lowest p-3 rounded-xl shadow-sm border-l-4 border-primary">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-mono text-xs font-bold text-primary">#01</span>
+<img alt="Microsoft Logo" class="w-6 h-6 rounded" data-alt="Official Microsoft logo icon in a clean white square container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDht3sTflvkOZPxWS2Mx8sCU_UWBwajSVvdXaWh4Unob08l-rt3U5v8eR6BKceeVVipWJjhtVwf_xATQBZ4_xUrFiuKdQtatyjlQWzWY-IgCZSkqaNE80L53ySbpJieDli9ISglf9a6aXxDhxoYOD2kT0ZTm905Tq6H1-U1HAG3hKBnRhPZXaG7JwLAyadhLVG_WIgndbTNLTVRkd4HrPsOZizKxP5BDYtj3yLZNjveZuGu7y6Sp4p1IAF2Ixnw3Ebg85Jd4W3FZ7A"/>
+<span class="font-bold text-sm">Microsoft Corp.</span>
+</div>
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-3">
+<div class="bg-surface-container-low p-2 rounded-lg text-center">
+<p class="text-[10px] text-on-surface-variant font-label uppercase">Enforcement</p>
+<p class="text-lg font-mono font-bold text-primary">92%</p>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg text-center">
+<p class="text-[10px] text-on-surface-variant font-label uppercase">Retrieval</p>
+<p class="text-lg font-mono font-bold">0.982</p>
+</div>
+</div>
+</div>
+<!-- Other Candidates -->
+<div class="bg-surface-container p-3 rounded-xl hover:bg-surface-container-high cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-mono text-xs font-bold text-outline">#02</span>
+<img alt="Amazon Logo" class="w-6 h-6 rounded grayscale" data-alt="Amazon corporate logo on simple white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6_MZL7KlueqbfrEcZRg-IIthWsl6byUC4jNXNj4QM-Hw04kuKS8fwBCip-dF6bb0QhDfOFIe-_93YLiZ73xhshunl7Blr_sxskjDIvMX1h3xD6g1hRoHccGPCKmMg9z_dAKhF0vQtugXfvDc7Gm0aG5jrk6wE31phhyvwx5qwMN0k9O8vg3VcuX8RYDcB4EROJ3BmLfgFfjdvLNIvRI_6MxmjhrhhwZMzRbHexNBY3-Ptt-BTuD2y3hPYxP2D59P-607GTvAfmCo"/>
+<span class="font-bold text-sm text-on-surface-variant">Amazon.com, Inc.</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-3 px-1">
+<div class="flex items-center gap-2">
+<div class="w-16 bg-outline-variant h-1 rounded-full"><div class="bg-secondary w-[78%] h-full"></div></div>
+<span class="font-mono text-[10px] text-secondary">78% Prob.</span>
+</div>
+<span class="font-mono text-[10px] text-on-surface-variant">0.841 score</span>
+</div>
+</div>
+<div class="bg-surface-container p-3 rounded-xl hover:bg-surface-container-high cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-mono text-xs font-bold text-outline">#03</span>
+<img alt="Google Logo" class="w-6 h-6 rounded grayscale" data-alt="Google colorful logo letter G on white square background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcUtnvTusyYq_6OEteH-krZGELDnTp6Bl3-xoEbS9CtsIzseJ9qFFCeUoMt51A0KJu7yOB4fHnI7rmMx-tVTn8WvRbxocAKe1cuxgsOizl7JJJ344ibf8OIvAfRTrDhdQwK-908_m-JCmsihHC0onQgWmaj23pzgooBvXem952shnGeXPxeC8piFOXgNJQ8poazPXFzQ4-I4AV42Wp_OfCLSyv43taqZMbUm44MKTXLMceOebXGN8_APJYlwo7mW38uQLqDdJq6nc"/>
+<span class="font-bold text-sm text-on-surface-variant">Alphabet Inc.</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-3 px-1">
+<div class="flex items-center gap-2">
+<div class="w-16 bg-outline-variant h-1 rounded-full"><div class="bg-secondary w-[64%] h-full"></div></div>
+<span class="font-mono text-[10px] text-secondary">64% Prob.</span>
+</div>
+<span class="font-mono text-[10px] text-on-surface-variant">0.765 score</span>
+</div>
+</div>
+<div class="bg-surface-container p-3 rounded-xl hover:bg-surface-container-high cursor-pointer transition-colors opacity-70">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="font-mono text-xs font-bold text-outline">#04</span>
+<img alt="Oracle Logo" class="w-6 h-6 rounded grayscale" data-alt="Oracle red logo wordmark on white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5B4OEv_ntTlTHKNWwtGC4Do5AWkn_GNp6XgpOlH7axYdo5NDSgHE6slmnlcUPzfP6Ope_aQ_3pGz2BueedN2f2Y3CD_S-BrjexFeV9fGQBGx7HotsBcWzAlZqkTY8TpjDnro_vbFYA7aMuD56tZgwXVWQMrMFAbygHQOUO29xj6OFcg3cUKzdU8g7sKrzN3pvdvmxNLOG2v5nfFx0wLi1ZbNRNBa_dLHZBt8V-ETeQ8y5LueylvX6-PqL-vraJWLvjYKsmkXA-eQ"/>
+<span class="font-bold text-sm text-on-surface-variant">Oracle Corp.</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-3 px-1">
+<div class="flex items-center gap-2">
+<div class="w-16 bg-outline-variant h-1 rounded-full"><div class="bg-secondary w-[42%] h-full"></div></div>
+<span class="font-mono text-[10px] text-secondary">42% Prob.</span>
+</div>
+<span class="font-mono text-[10px] text-on-surface-variant">0.612 score</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Claim Chart View -->
+<section class="flex-1 flex flex-col bg-surface-container-low">
+<div class="px-6 py-4 bg-surface-container-lowest flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-primary-container px-2 py-1 bg-primary/10 rounded">CLAIM 01</span>
+<h2 class="font-headline text-lg font-bold">Independent: Content Distribution System</h2>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-outline-variant transition-colors">
+                                View Full Text
+                            </button>
+<button class="bg-primary text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold">
+                                Cite Document
+                            </button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6">
+<div class="max-w-5xl mx-auto space-y-6">
+<!-- Limitation Entry 1 -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-5 bg-surface-container-lowest p-4 rounded-xl border-l-2 border-primary-fixed-dim">
+<p class="text-[10px] font-bold text-outline mb-2 uppercase tracking-widest">Patent Limitation 1.a</p>
+<p class="font-body text-sm leading-relaxed italic text-on-surface-variant">
+                                        "...a plurality of edge nodes configured to cache localized content segments based on historical user request latency..."
+                                    </p>
+</div>
+<div class="col-span-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+<div class="col-span-6 bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-bold border border-green-200">SUPPORTS</span>
+<span class="font-mono text-[10px] bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">0.94 Score</span>
+</div>
+<span class="material-symbols-outlined text-outline text-sm cursor-pointer">open_in_new</span>
+</div>
+<p class="text-sm font-body leading-relaxed mb-4">
+<mark class="bg-primary/10 text-on-surface">Azure Content Delivery Network (CDN) uses edge caching locations</mark> to reduce latency by storing copy of static content closer to users... optimized based on RTT (Round Trip Time) metrics from global request monitoring.
+                                    </p>
+<div class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-sm text-secondary">description</span>
+<span class="text-[10px] font-mono text-secondary">SOURCE: Microsoft Corp 10-K (2023), Page 14, Line 22</span>
+</div>
+</div>
+</div>
+<!-- Limitation Entry 2 -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-5 bg-surface-container-lowest p-4 rounded-xl border-l-2 border-primary-fixed-dim">
+<p class="text-[10px] font-bold text-outline mb-2 uppercase tracking-widest">Patent Limitation 1.b</p>
+<p class="font-body text-sm leading-relaxed italic text-on-surface-variant">
+                                        "...automatically reconfiguring the distribution topology upon detection of a node failure event..."
+                                    </p>
+</div>
+<div class="col-span-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+<div class="col-span-6 bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold border border-amber-200 uppercase">Partial Match</span>
+<span class="font-mono text-[10px] bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">0.68 Score</span>
+</div>
+<span class="material-symbols-outlined text-outline text-sm cursor-pointer">open_in_new</span>
+</div>
+<p class="text-sm font-body leading-relaxed mb-4">
+                                        The system features <mark class="bg-amber-50">redundant traffic manager profiles</mark> that route around unhealthy endpoints. Evidence of "automatic topology reconfiguration" is implied but not explicitly documented in the public disclosure.
+                                    </p>
+<div class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-sm text-secondary">description</span>
+<span class="text-[10px] font-mono text-secondary">SOURCE: Azure Traffic Manager Docs, Resilience Sec. 4</span>
+</div>
+</div>
+</div>
+<!-- Limitation Entry 3 -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-5 bg-surface-container-lowest p-4 rounded-xl border-l-2 border-primary-fixed-dim opacity-50">
+<p class="text-[10px] font-bold text-outline mb-2 uppercase tracking-widest">Patent Limitation 1.c</p>
+<p class="font-body text-sm leading-relaxed italic text-on-surface-variant">
+                                        "...wherein the localized content is encrypted using a rolling hardware-bound key..."
+                                    </p>
+</div>
+<div class="col-span-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">block</span>
+</div>
+<div class="col-span-6 bg-surface-container-low/50 border border-dashed border-outline-variant p-4 rounded-xl flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-on-surface-variant mb-2">search_off</span>
+<p class="text-[10px] font-bold text-outline uppercase">No Evidence Found</p>
+<p class="text-xs text-on-surface-variant max-w-[200px] mt-1">AI search across 14,000 pages found no matches for "hardware-bound key" in this context.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action Bar -->
+<div class="p-4 bg-surface-container-highest border-t-0 flex justify-between items-center">
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-green-500"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">Supports: 4</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-amber-500"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">Partial: 2</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">Not Found: 1</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<p class="text-xs font-bold text-primary">Candidate Summary:</p>
+<span class="bg-primary text-on-primary px-3 py-1 rounded text-[10px] font-mono">STRONG MATCH</span>
+</div>
+</div>
+</section>
+<!-- Micro Side Toolbar (Asymmetric Layout) -->
+<aside class="w-16 bg-surface-container-lowest flex flex-col items-center py-6 gap-8 border-l-0">
+<button class="w-10 h-10 rounded-full hover:bg-primary-container hover:text-white transition-colors flex items-center justify-center group relative">
+<span class="material-symbols-outlined">edit_note</span>
+<div class="absolute left-[-110px] bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none">Annotations</div>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-primary-container hover:text-white transition-colors flex items-center justify-center group relative">
+<span class="material-symbols-outlined">compare</span>
+<div class="absolute left-[-110px] bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none">Compare View</div>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-primary-container hover:text-white transition-colors flex items-center justify-center group relative">
+<span class="material-symbols-outlined">share</span>
+<div class="absolute left-[-110px] bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none">Share Report</div>
+</button>
+<div class="mt-auto flex flex-col items-center gap-6">
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-highest transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-highest transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</body></html>

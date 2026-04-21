@@ -32,11 +32,22 @@ function resetFlow() {
 }
 
 // ── Example links ────────────────────────────────────────────────────
+// .example-link  → fills input and runs analysis (primary demo action).
+// .view-patent   → opens the patent on Google Patents in a new tab.
+// Kept as separate affordances so the presenter controls what the audience sees.
 document.querySelectorAll('.example-link').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     document.getElementById('patent-number').value = a.dataset.patent;
     document.getElementById('analyze-form').dispatchEvent(new Event('submit'));
+  });
+});
+
+document.querySelectorAll('.view-patent').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const key = a.dataset.patent.replace(/-/g, '').toUpperCase();
+    window.open(`https://patents.google.com/patent/${key}/en`, '_blank', 'noopener,noreferrer');
   });
 });
 

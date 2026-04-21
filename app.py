@@ -39,6 +39,7 @@ ROOT = Path(__file__).resolve().parent
 MODELS_DIR = ROOT / "models"
 RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
+DATA_DIR = ROOT / "data"
 TEMPLATES_DIR = ROOT / "src" / "app" / "templates"
 STATIC_DIR = ROOT / "src" / "app" / "static"
 
@@ -97,6 +98,19 @@ async def lifespan(app: FastAPI):
             patent_index[num] = p
         print(f"[PAEwall] Patent index: {len(patent_index)} patents ({patents_path.name})")
 
+    demo_overrides: dict = {}
+    showcase_path = DATA_DIR / "demo_showcase.json"
+    if showcase_path.exists():
+        try:
+            with open(showcase_path) as f:
+                showcase = json.load(f)
+            key = _normalize_patent_key(showcase.get("patent_id", ""))
+            if key:
+                demo_overrides[key] = showcase
+                print(f"[PAEwall] Loaded demo showcase for {key}")
+        except Exception as e:
+            print(f"[PAEwall] WARNING: could not load demo showcase: {e}")
+
     _state.update({
         "engine": engine,
         "corpus": corpus,
@@ -107,6 +121,7 @@ async def lifespan(app: FastAPI):
         "ni_gen": NonInfringementGenerator(),
         "inv_gen": InvalidityGenerator(),
         "enforcement_model": EnforcementProbabilityModel(),
+        "demo_overrides": demo_overrides,
     })
 
     yield
@@ -147,6 +162,15 @@ async def analyze_patent(
     """
     if not patent_number and not patent_pdf:
         return JSONResponse({"error": "Provide a patent_number or upload a patent_pdf."}, status_code=400)
+
+    # Demo showcase short-circuit: if the user requests the curated patent, return
+    # the hand-authored response. Every other patent still runs the live pipeline.
+    if patent_number:
+        key = _normalize_patent_key(patent_number)
+        overrides: dict = _state.get("demo_overrides", {})
+        if key in overrides:
+            print(f"[PAEwall] Serving demo showcase for {key}")
+            return overrides[key]
 
     # Module A — Parse patent claims
     patent_data, claims_text, priority_date = await _load_patent(patent_number, patent_pdf)
@@ -296,6 +320,11 @@ async def _load_patent(patent_number: str | None, pdf: UploadFile | None) -> tup
         return {}, claims_text, ""
 
     return {}, "", ""
+
+
+def _normalize_patent_key(patent_number: str) -> str:
+    """Normalize a patent number to the uppercase, hyphen-free form used as a dict key."""
+    return str(patent_number or "").replace("-", "").replace(" ", "").upper()
 
 
 def _extract_pdf_text(contents: bytes) -> str:

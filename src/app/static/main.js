@@ -123,48 +123,140 @@ function renderResults(data) {
 
   headerEl.innerHTML = label;
 
+  if (data.patent_claim) {
+    resultsEl.appendChild(buildClaimPanel(data.patent_claim));
+  }
+
   data.candidates.forEach(c => {
     resultsEl.appendChild(buildCard(c, flow));
   });
+
+  attachClaimHighlighting();
 
   section.classList.remove('hidden');
   section.scrollIntoView({ behavior: 'smooth' });
 }
 
+// ── Claim panel + highlighter interaction ─────────────────────────────
+function buildClaimPanel(claim) {
+  const panel = document.createElement('div');
+  panel.className = 'claim-panel';
+  panel.id = 'claim-panel';
+
+  const parts = (claim.parts || []).map(p => `
+    <li class="claim-part" data-claim-ref="${esc(p.ref)}">
+      <span class="claim-ref-badge">${esc(p.ref)}</span>
+      <span class="claim-part-text" data-claim-ref="${esc(p.ref)}">${esc(p.text)}</span>
+    </li>`).join('');
+
+  panel.innerHTML = `
+    <div class="claim-panel-head">
+      <span class="claim-panel-eyebrow">The Patent Claim</span>
+      <span class="claim-panel-note">Hover a row below to see which part of the claim it matches.</span>
+    </div>
+    <div class="claim-panel-body">
+      <p class="claim-preamble">Claim ${claim.claim_number}. ${esc(claim.preamble || '')}</p>
+      <ol class="claim-parts">${parts}</ol>
+    </div>`;
+
+  return panel;
+}
+
+function attachClaimHighlighting() {
+  const panel = document.getElementById('claim-panel');
+  if (!panel) return;
+
+  const parts = panel.querySelectorAll('.claim-part-text, .claim-part');
+  const rows  = document.querySelectorAll('#results tr[data-claim-ref]');
+
+  const setActive = (ref) => {
+    parts.forEach(el => {
+      el.classList.toggle('highlighted', el.dataset.claimRef === ref);
+    });
+    rows.forEach(r => {
+      r.classList.toggle('row-active', r.dataset.claimRef === ref);
+    });
+  };
+  const clearActive = () => {
+    parts.forEach(el => el.classList.remove('highlighted'));
+    rows.forEach(r => r.classList.remove('row-active'));
+  };
+
+  rows.forEach(row => {
+    const ref = row.dataset.claimRef;
+    row.addEventListener('mouseenter', () => setActive(ref));
+    row.addEventListener('mouseleave', clearActive);
+    row.addEventListener('click', () => {
+      setActive(ref);
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+
+  panel.querySelectorAll('.claim-part').forEach(p => {
+    const ref = p.dataset.claimRef;
+    p.addEventListener('mouseenter', () => setActive(ref));
+    p.addEventListener('mouseleave', clearActive);
+  });
+}
+
 function buildCard(c, flow) {
   const card = document.createElement('div');
-  card.className = 'candidate-card';
 
-  const prob       = c.enforcement_probability;
-  const badgeClass = prob >= 0.6 ? 'enf-high' : prob >= 0.35 ? 'enf-mid' : 'enf-low';
-  const badgeLabel = prob >= 0.6 ? 'High enforcement risk'
-                   : prob >= 0.35 ? 'Medium enforcement risk'
-                   : 'Low enforcement risk';
+  const prob      = c.enforcement_probability;
+  const riskClass = prob >= 0.6 ? 'risk-high' : prob >= 0.35 ? 'risk-mid' : 'risk-low';
+  const riskLabel = prob >= 0.6 ? 'High risk' : prob >= 0.35 ? 'Medium risk' : 'Low risk';
+  card.className  = `candidate-card ${riskClass}`;
 
-  // In FTO mode we emphasise invalidity + design-around over the claim chart
-  const primarySection = flow === 'fto'
-    ? `<div class="card-section-title">Prior Art Challenges (Invalidity Arguments)</div>
-       ${buildArgList(c.invalidity_args)}
-       <div class="card-section-title">Design-Around Options (Non-Infringement Arguments)</div>
-       ${buildArgList(c.non_infringement_args)}
-       <div class="card-section-title">Claim Chart (faithfulness: ${(c.claim_chart.overall_confidence * 100).toFixed(0)}%)</div>
-       ${buildChartTable(c.claim_chart.mappings)}`
-    : `<div class="card-section-title">Claim Chart (confidence: ${(c.claim_chart.overall_confidence * 100).toFixed(0)}%)</div>
-       ${buildChartTable(c.claim_chart.mappings)}
-       <div class="card-section-title">Non-Infringement Arguments</div>
-       ${buildArgList(c.non_infringement_args)}
-       <div class="card-section-title">Invalidity Risks</div>
-       ${buildArgList(c.invalidity_args)}`;
+  const retrievalPct = ((c.retrieval_score || 0) * 100).toFixed(0);
+  const confidencePct = ((c.claim_chart.overall_confidence || 0) * 100).toFixed(0);
+
+  // Claim chart section — always present
+  const claimChartSection = `
+    <div class="card-section-title">Claim Chart · Faithfulness</div>
+    <div class="confidence-bar-wrap">
+      <span class="confidence-bar-label">Overall Confidence</span>
+      <div class="confidence-bar">
+        <div class="confidence-bar-fill" style="width:${confidencePct}%"></div>
+      </div>
+      <span class="confidence-bar-val">${confidencePct}%</span>
+    </div>
+    <div class="chart-wrap">${buildChartTable(c.claim_chart.mappings)}</div>`;
+
+  const nonInfringementSection = `
+    <div class="card-section-title">Non-Infringement Arguments</div>
+    ${buildArgList(c.non_infringement_args)}`;
+
+  const invaliditySection = `
+    <div class="card-section-title card-section-invalidity">Invalidity Risks</div>
+    ${buildArgList(c.invalidity_args)}`;
+
+  // FTO mode leads with invalidity + design-around; Protect mode leads with claim chart
+  const body = flow === 'fto'
+    ? `${invaliditySection}${nonInfringementSection}${claimChartSection}`
+    : `${claimChartSection}${nonInfringementSection}${invaliditySection}`;
 
   card.innerHTML = `
     <div class="card-top">
-      <div>
-        <span class="rank-badge">#${c.rank}</span>
-        <span class="company-name">${esc(c.company_name)}</span>
+      <div class="card-top-left">
+        <div class="card-top-row">
+          <span class="rank-badge">Rank ${c.rank}</span>
+          <span class="company-name">${esc(c.company_name)}</span>
+        </div>
+        <div class="retrieval-score-wrap">
+          <span class="label">Retrieval Score</span>
+          <div class="retrieval-score-bar">
+            <div class="retrieval-score-fill" style="width:${retrievalPct}%"></div>
+          </div>
+          <span class="retrieval-score-val">${(c.retrieval_score || 0).toFixed(2)}</span>
+        </div>
       </div>
-      <span class="enf-badge ${badgeClass}">${badgeLabel} — ${(prob * 100).toFixed(0)}%</span>
+      <div class="enf-gauge">
+        <span class="enf-label">Enforcement Probability</span>
+        <span class="enf-value">${(prob * 100).toFixed(0)}%</span>
+        <span class="enf-pill">${riskLabel}</span>
+      </div>
     </div>
-    <div class="card-body">${primarySection}</div>
+    <div class="card-body">${body}</div>
   `;
   return card;
 }
@@ -175,18 +267,33 @@ function buildChartTable(mappings) {
 
   const rows = mappings.map(m => {
     const cls = m.faithfulness_label === 'supports'           ? 'verdict-supports'
+              : m.faithfulness_label === 'partial'            ? 'verdict-partial'
               : m.faithfulness_label === 'partially_supports' ? 'verdict-partial'
               : 'verdict-no';
-    const label = m.faithfulness_label.replace(/_/g, ' ');
-    return `<tr>
+    const label = (m.faithfulness_label || '').replace(/_/g, ' ');
+    const scorePct = (typeof m.faithfulness_score === 'number')
+      ? ` <span class="verdict-score">${(m.faithfulness_score * 100).toFixed(0)}%</span>`
+      : '';
+    const refBadge = m.claim_ref
+      ? `<span class="claim-ref-badge">${esc(m.claim_ref)}</span>`
+      : '';
+    const rowRefAttr = m.claim_ref ? ` data-claim-ref="${esc(m.claim_ref)}"` : '';
+    const pct = typeof m.faithfulness_score === 'number' ? Math.round(m.faithfulness_score * 100) : null;
+    const barCls = cls === 'verdict-supports' ? 'supports' : cls === 'verdict-partial' ? 'partial' : 'no';
+    const miniBar = pct !== null
+      ? `<div class="row-score-bar"><div class="row-score-fill ${barCls}" style="width:${pct}%"></div></div>
+         <span class="row-score-pct">${pct}%</span>`
+      : '';
+    return `<tr${rowRefAttr}>
+      <td>${refBadge}</td>
       <td>${esc(m.limitation)}</td>
       <td>${esc(m.evidence || '—')}</td>
-      <td class="${cls}">${label}</td>
+      <td><div class="verdict-cell"><span class="verdict-pill ${cls}">${label}</span>${miniBar}</div></td>
     </tr>`;
   }).join('');
 
   return `<table>
-    <thead><tr><th>Claim Limitation</th><th>Product Evidence</th><th>Verdict</th></tr></thead>
+    <thead><tr><th>Matches</th><th>Claim Limitation</th><th>Product Evidence</th><th>Verdict</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
 }

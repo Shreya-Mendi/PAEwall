@@ -1,11 +1,41 @@
 {
   "_meta": {
     "purpose": "Hand-curated demo response used only when the user submits the showcase patent. Every other patent still hits the live retrieval pipeline. See app.py _maybe_demo_override().",
-    "why_curated": "The shipped product corpus is sparse — most SEC registrants have empty Item 1 product descriptions in PAE-Bench. This showcase uses representative 10-K / product-page language for five real email-security vendors so the demo shows the system operating as it would on a complete corpus.",
+    "why_curated": "The shipped product corpus is sparse \u2014 most SEC registrants have empty Item 1 product descriptions in PAE-Bench. This showcase uses representative 10-K / product-page language for five real email-security vendors so the demo shows the system operating as it would on a complete corpus.",
     "showcase_patent": "US-2014289857-A1"
   },
   "patent_id": "US-2014289857-A1",
   "num_claims_parsed": 1,
+  "patent_claim": {
+    "claim_number": 1,
+    "preamble": "A method comprising:",
+    "parts": [
+      {
+        "ref": "1[a]",
+        "text": "receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code;"
+      },
+      {
+        "ref": "1[b]",
+        "text": "disconnecting the computing device from communication with the email server;"
+      },
+      {
+        "ref": "1[c]",
+        "text": "opening the file containing the executable code, at the computing device, using a standard email process;"
+      },
+      {
+        "ref": "1[d]",
+        "text": "performing a check of the computing device to identify unexpected changes after opening the file;"
+      },
+      {
+        "ref": "1[e]",
+        "text": "if unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device; and"
+      },
+      {
+        "ref": "1[f]",
+        "text": "re-establishing a communication connection between the computing device and the email server."
+      }
+    ]
+  },
   "candidates": [
     {
       "rank": 1,
@@ -20,44 +50,50 @@
             "limitation": "Receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code",
             "evidence": "Microsoft Defender for Office 365 protects mailboxes by scanning inbound messages delivered through Exchange Online. Safe Attachments inspects email attachments that contain executable content before the message is delivered to the recipient's inbox.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.95
+            "faithfulness_score": 0.95,
+            "claim_ref": "1[a]"
           },
           {
             "limitation": "Disconnecting the computing device from communication with the email server",
             "evidence": "Attachments flagged as suspicious are detonated inside an isolated Safe Attachments sandbox environment that is disconnected from the production mail infrastructure during analysis.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.92
+            "faithfulness_score": 0.92,
+            "claim_ref": "1[b]"
           },
           {
             "limitation": "Opening the file containing the executable code, at the computing device, using a standard email process",
             "evidence": "Safe Attachments opens the file in a virtual environment mimicking the user's Outlook client and observes the behavior of the executable code as it would run during normal delivery.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.90
+            "faithfulness_score": 0.9,
+            "claim_ref": "1[c]"
           },
           {
             "limitation": "Performing a check of the computing device to identify unexpected changes after opening the file",
             "evidence": "Behavioral telemetry is captured post-detonation: file writes, registry modifications, process spawns, and network calls are compared to a baseline snapshot to detect unexpected changes.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.93
+            "faithfulness_score": 0.93,
+            "claim_ref": "1[d]"
           },
           {
             "limitation": "If unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device",
             "evidence": "When malicious behavior is detected, Defender raises an alert in the Microsoft 365 Defender portal and the sandboxed VM is reverted to a clean pre-detonation snapshot before the next message is processed.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.78
+            "faithfulness_score": 0.78,
+            "claim_ref": "1[e]"
           },
           {
             "limitation": "Re-establishing a communication connection between the computing device and the email server",
             "evidence": "After analysis the mailbox resumes normal flow; clean attachments are released and delivered to the user, and the detection pipeline returns to the online Exchange connector state.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.85
+            "faithfulness_score": 0.85,
+            "claim_ref": "1[f]"
           }
         ]
       },
       "non_infringement_args": [
         {
           "summary": "Microsoft's sandbox is server-side (Exchange Online) rather than at the user's computing device; the claim recites 'at a computing device' which a fact-finder may read as end-user machine.",
-          "legal_basis": "Claim construction — 'computing device' scope (§112 enablement and specification references)",
+          "legal_basis": "Claim construction \u2014 'computing device' scope (\u00a7112 enablement and specification references)",
           "strength": 0.68
         },
         {
@@ -67,19 +103,19 @@
         },
         {
           "summary": "The claim requires 'disconnecting' the device before opening; Microsoft's flow is sandbox-side and the user's device is never connected in the first place, arguably reading out the step.",
-          "legal_basis": "Literal non-infringement — missing claim element",
+          "legal_basis": "Literal non-infringement \u2014 missing claim element",
           "strength": 0.55
         }
       ],
       "invalidity_args": [
         {
-          "summary": "FireEye's MVX sandbox (published 2012, before the 2013 priority date) performs detonation-then-snapshot-revert on email attachments — potential §102(a) anticipation.",
-          "legal_basis": "35 U.S.C. §102 — anticipation by prior art",
+          "summary": "FireEye's MVX sandbox (published 2012, before the 2013 priority date) performs detonation-then-snapshot-revert on email attachments \u2014 potential \u00a7102(a) anticipation.",
+          "legal_basis": "35 U.S.C. \u00a7102 \u2014 anticipation by prior art",
           "strength": 0.72
         },
         {
           "summary": "Combined with conventional email-server MTAs, the sandbox-then-reboot sequence would have been obvious to a POSITA in 2013.",
-          "legal_basis": "35 U.S.C. §103 — obviousness",
+          "legal_basis": "35 U.S.C. \u00a7103 \u2014 obviousness",
           "strength": 0.66
         }
       ],
@@ -98,56 +134,62 @@
             "limitation": "Receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code",
             "evidence": "WildFire inspects files delivered via SMTP, including executable attachments forwarded from corporate email gateways such as Exchange and Google Workspace.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.92
+            "faithfulness_score": 0.92,
+            "claim_ref": "1[a]"
           },
           {
             "limitation": "Disconnecting the computing device from communication with the email server",
             "evidence": "Analysis occurs in air-gapped WildFire cloud sandbox VMs that have no connection to the originating mail server during execution.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.88
+            "faithfulness_score": 0.88,
+            "claim_ref": "1[b]"
           },
           {
             "limitation": "Opening the file containing the executable code, at the computing device, using a standard email process",
             "evidence": "WildFire VMs replicate common end-user environments (Windows 10/11, Office 365 installed) and open attachments via the native email client to observe realistic behavior.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.86
+            "faithfulness_score": 0.86,
+            "claim_ref": "1[c]"
           },
           {
             "limitation": "Performing a check of the computing device to identify unexpected changes after opening the file",
             "evidence": "The WildFire engine records ~1,500 behavioral indicators including memory writes, kernel-level API calls, and outbound network requests to detect anomalous post-execution state.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.91
+            "faithfulness_score": 0.91,
+            "claim_ref": "1[d]"
           },
           {
             "limitation": "If unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device",
             "evidence": "Verdict of 'malicious' triggers Cortex XDR alerts and the sandbox VM is rolled back to a pristine gold image before the next sample.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.74
+            "faithfulness_score": 0.74,
+            "claim_ref": "1[e]"
           },
           {
             "limitation": "Re-establishing a communication connection between the computing device and the email server",
             "evidence": "Post-verdict, the mail gateway resumes forwarding clean attachments; the sandbox rejoins the analysis cluster for subsequent submissions.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.80
+            "faithfulness_score": 0.8,
+            "claim_ref": "1[f]"
           }
         ]
       },
       "non_infringement_args": [
         {
           "summary": "Palo Alto's WildFire operates at the network gateway, not at the end-user 'computing device' recited in the claim.",
-          "legal_basis": "Claim construction — 'computing device' locus",
-          "strength": 0.70
+          "legal_basis": "Claim construction \u2014 'computing device' locus",
+          "strength": 0.7
         },
         {
           "summary": "Rollback is of a cloud VM snapshot, not a 'ghost copy reboot' of the user device the claim specifies.",
-          "legal_basis": "Literal non-infringement — altered claim element",
+          "legal_basis": "Literal non-infringement \u2014 altered claim element",
           "strength": 0.65
         }
       ],
       "invalidity_args": [
         {
           "summary": "Cuckoo Sandbox (open source, 2010) and FireEye MVX (2012) teach the detonate-and-revert flow; combined with any commercial email scanner of the era, obviousness is a strong defense.",
-          "legal_basis": "35 U.S.C. §103 — obviousness over prior-art combination",
+          "legal_basis": "35 U.S.C. \u00a7103 \u2014 obviousness over prior-art combination",
           "strength": 0.69
         }
       ],
@@ -166,51 +208,57 @@
             "limitation": "Receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code",
             "evidence": "Symantec Email Security.cloud ingests messages from on-prem Exchange and cloud email platforms, scanning executable attachments and embedded scripts before delivery.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.90
+            "faithfulness_score": 0.9,
+            "claim_ref": "1[a]"
           },
           {
             "limitation": "Disconnecting the computing device from communication with the email server",
             "evidence": "Skeptic sandbox executes suspicious payloads in isolated Symantec Threat Intelligence infrastructure detached from the customer's production environment.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.85
+            "faithfulness_score": 0.85,
+            "claim_ref": "1[b]"
           },
           {
             "limitation": "Opening the file containing the executable code, at the computing device, using a standard email process",
             "evidence": "Attachments are rendered in representative end-user environments and opened with standard Office/Outlook processes to surface behavior that would affect a real user.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.83
+            "faithfulness_score": 0.83,
+            "claim_ref": "1[c]"
           },
           {
             "limitation": "Performing a check of the computing device to identify unexpected changes after opening the file",
             "evidence": "Symantec Endpoint Protection SONAR engine monitors for unexpected process, registry, and filesystem changes and scores them against behavioral baselines.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.88
+            "faithfulness_score": 0.88,
+            "claim_ref": "1[d]"
           },
           {
             "limitation": "If unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device",
             "evidence": "SEP triggers an Insight alert and performs a Power Eraser-style rollback of changes on the endpoint; not identical to a 'ghost copy reboot' but structurally similar.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.70
+            "faithfulness_score": 0.7,
+            "claim_ref": "1[e]"
           },
           {
             "limitation": "Re-establishing a communication connection between the computing device and the email server",
             "evidence": "After quarantine the endpoint is re-authorized on the network and email delivery resumes through the cleaned gateway path.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.72
+            "faithfulness_score": 0.72,
+            "claim_ref": "1[f]"
           }
         ]
       },
       "non_infringement_args": [
         {
-          "summary": "Symantec's rollback is SEP Power Eraser, not a 'ghost copy reboot' — the terms were argued narrow in the specification.",
+          "summary": "Symantec's rollback is SEP Power Eraser, not a 'ghost copy reboot' \u2014 the terms were argued narrow in the specification.",
           "legal_basis": "Specification disclaimer / means-plus-function scope",
-          "strength": 0.60
+          "strength": 0.6
         }
       ],
       "invalidity_args": [
         {
           "summary": "Symantec's own pre-2013 patents (US 8,090,816) disclose sandbox-and-restore on email attachments, potentially anticipating.",
-          "legal_basis": "35 U.S.C. §102(a) — prior art from the same assignee",
+          "legal_basis": "35 U.S.C. \u00a7102(a) \u2014 prior art from the same assignee",
           "strength": 0.75
         }
       ],
@@ -229,52 +277,58 @@
             "limitation": "Receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code",
             "evidence": "Cisco Secure Email Threat Defense (formerly Ironport) inspects messages and attachments forwarded from Exchange/Gmail/Workspace, including PE executables and script files.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.88
+            "faithfulness_score": 0.88,
+            "claim_ref": "1[a]"
           },
           {
             "limitation": "Disconnecting the computing device from communication with the email server",
             "evidence": "Secure Malware Analytics (Threat Grid) detonates samples in isolated cloud VMs that do not share network with the customer's mail server during analysis.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.84
+            "faithfulness_score": 0.84,
+            "claim_ref": "1[b]"
           },
           {
             "limitation": "Opening the file containing the executable code, at the computing device, using a standard email process",
             "evidence": "Threat Grid VMs are pre-configured with standard enterprise images and open attachments via the native email client to simulate real user conditions.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.80
+            "faithfulness_score": 0.8,
+            "claim_ref": "1[c]"
           },
           {
             "limitation": "Performing a check of the computing device to identify unexpected changes after opening the file",
-            "evidence": "The platform captures over 1,200 behavioral indicators per submission and compares against a malicious-behavior corpus to produce a threat score 0–100.",
+            "evidence": "The platform captures over 1,200 behavioral indicators per submission and compares against a malicious-behavior corpus to produce a threat score 0\u2013100.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.85
+            "faithfulness_score": 0.85,
+            "claim_ref": "1[d]"
           },
           {
             "limitation": "If unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device",
             "evidence": "High-score submissions raise AMP alerts in SecureX; sandbox VMs are refreshed from template between runs.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.65
+            "faithfulness_score": 0.65,
+            "claim_ref": "1[e]"
           },
           {
             "limitation": "Re-establishing a communication connection between the computing device and the email server",
             "evidence": "Clean messages are released to recipient mailboxes and the mail flow resumes without administrator intervention.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.72
+            "faithfulness_score": 0.72,
+            "claim_ref": "1[f]"
           }
         ]
       },
       "non_infringement_args": [
         {
           "summary": "Threat Grid is a cloud analytics service; 'computing device' in the claim is more naturally read as the user's endpoint, creating a claim-construction defense.",
-          "legal_basis": "Claim construction — 'computing device' locus",
+          "legal_basis": "Claim construction \u2014 'computing device' locus",
           "strength": 0.66
         }
       ],
       "invalidity_args": [
         {
           "summary": "Cisco's own Ironport filings (pre-2013) describe isolated attachment detonation, creating an anticipation argument.",
-          "legal_basis": "35 U.S.C. §102 — prior art",
-          "strength": 0.60
+          "legal_basis": "35 U.S.C. \u00a7102 \u2014 prior art",
+          "strength": 0.6
         }
       ],
       "enforcement_probability": 0.39
@@ -292,51 +346,57 @@
             "limitation": "Receiving, at a computing device, a message from an email server, wherein the received message includes a file comprising an executable code",
             "evidence": "Proofpoint Targeted Attack Protection (TAP) scans inbound email for weaponized attachments and embedded URLs, evaluating both PE executables and macros.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.86
+            "faithfulness_score": 0.86,
+            "claim_ref": "1[a]"
           },
           {
             "limitation": "Disconnecting the computing device from communication with the email server",
             "evidence": "Attachment Defense detonates files in an isolated cloud sandbox rather than on the customer's mail server or endpoint.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.82
+            "faithfulness_score": 0.82,
+            "claim_ref": "1[b]"
           },
           {
             "limitation": "Opening the file containing the executable code, at the computing device, using a standard email process",
             "evidence": "Sandbox instances open attachments with representative client software and track user-style interaction paths to maximize behavioral coverage.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.74
+            "faithfulness_score": 0.74,
+            "claim_ref": "1[c]"
           },
           {
             "limitation": "Performing a check of the computing device to identify unexpected changes after opening the file",
             "evidence": "The sandbox engine flags anomalous process creation, command-and-control beaconing, and unexpected filesystem writes.",
             "faithfulness_label": "supports",
-            "faithfulness_score": 0.80
+            "faithfulness_score": 0.8,
+            "claim_ref": "1[d]"
           },
           {
             "limitation": "If unexpected changes are identified, activating a virus alert and executing a ghost copy reboot of the computing device",
             "evidence": "Malicious verdicts generate TAP alerts and automatically retract already-delivered messages via Threat Response Auto-Pull (TRAP); sandbox VMs revert to snapshot.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.68
+            "faithfulness_score": 0.68,
+            "claim_ref": "1[e]"
           },
           {
             "limitation": "Re-establishing a communication connection between the computing device and the email server",
             "evidence": "Post-retraction, mail flow continues via the Proofpoint gateway; no operator intervention required.",
             "faithfulness_label": "partial",
-            "faithfulness_score": 0.66
+            "faithfulness_score": 0.66,
+            "claim_ref": "1[f]"
           }
         ]
       },
       "non_infringement_args": [
         {
-          "summary": "TRAP retracts delivered messages rather than rebooting the recipient device — 'ghost copy reboot' is absent as claimed.",
-          "legal_basis": "Literal non-infringement — missing element",
+          "summary": "TRAP retracts delivered messages rather than rebooting the recipient device \u2014 'ghost copy reboot' is absent as claimed.",
+          "legal_basis": "Literal non-infringement \u2014 missing element",
           "strength": 0.71
         }
       ],
       "invalidity_args": [
         {
           "summary": "Generic industry-wide sandbox + retract pattern was published in Gartner security reports pre-priority date.",
-          "legal_basis": "35 U.S.C. §103 — obviousness",
+          "legal_basis": "35 U.S.C. \u00a7103 \u2014 obviousness",
           "strength": 0.58
         }
       ],

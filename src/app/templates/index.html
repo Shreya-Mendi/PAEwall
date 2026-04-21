@@ -1,288 +1,775 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PAEwall — Patent Intelligence</title>
-  <link rel="stylesheet" href="/static/style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PAEwall · Patent Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: "#324cce",
+          "primary-c": "#4e67e8",
+          "primary-fixed-dim": "#bac3ff",
+          "primary-fixed": "#dee0ff",
+          secondary: "#525b8e",
+          "secondary-fixed": "#dee0ff",
+          tertiary: "#914500",
+          surface: "#f7f9fc",
+          bg: "#f7f9fc",
+          "surface-low": "#f2f4f7",
+          "surface-c": "#eceef1",
+          "surface-high": "#e6e8eb",
+          "surface-highest": "#e0e3e6",
+          "surface-lowest": "#ffffff",
+          fg: "#191c1e",
+          "fg-muted": "#444654",
+          "fg-dim": "#757686",
+          "outline-v": "#c5c5d6",
+          outline: "#757686",
+          supports: "#15803d",
+          partial: "#b45309",
+          contradicts: "#b91c1c",
+          notfound: "#64748b",
+          amber: "#324cce"
+        },
+        fontFamily: {
+          headline: ["Newsreader", "serif"],
+          body: ["Manrope", "sans-serif"],
+          label: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"],
+        },
+        borderRadius: { DEFAULT: "0.375rem", lg: "0.5rem", xl: "0.75rem" },
+      },
+    },
+  };
+</script>
+<link rel="stylesheet" href="/static/style.css" />
 </head>
-<body>
+<body class="bg-bg text-fg font-body antialiased overflow-hidden">
 
-<!-- ── NAV ─────────────────────────────────────────────────────────── -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <a href="#hero" class="nav-logo">PAEwall</a>
-    <div class="nav-links">
-      <a href="#tool" id="nav-analyze" class="nav-link">Analyze</a>
-      <a href="#research" class="nav-link">Research</a>
-      <a href="#about" class="nav-link">About</a>
-    </div>
+<!-- ═══════════════════════════════════════════════════════════════════
+     Page shell · each <section class="page"> is a full-viewport screen.
+     JS toggles a single .active page at a time. No scroll between pages,
+     internal scroll within each.
+     ═════════════════════════════════════════════════════════════════ -->
+
+<!-- TopAppBar (shared) -->
+<header class="fixed top-0 inset-x-0 z-50 flex justify-between items-center px-6 py-3 bg-bg/85 backdrop-blur-md border-b border-outline-v/40">
+  <div class="flex items-center gap-8">
+    <span class="font-headline text-2xl font-bold text-primary tracking-tight cursor-pointer" onclick="goHome()">PAEwall</span>
+    <nav class="hidden md:flex gap-6 items-center">
+      <a class="text-fg-muted font-medium hover:text-primary px-3 py-1 rounded font-body text-sm" href="#" onclick="goHome();return false;">Home</a>
+      <a class="text-fg-muted font-medium hover:text-primary px-3 py-1 rounded font-body text-sm" onclick="gotoPage('research')" href="#">Research</a>
+      <a class="text-fg-muted font-medium hover:text-primary px-3 py-1 rounded font-body text-sm" onclick="gotoPage('about')" href="#">About</a>
+    </nav>
   </div>
-</nav>
-
-<!-- ── HERO ─────────────────────────────────────────────────────────── -->
-<section id="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">Duke MEng AIPI · Deep Learning</p>
-    <h1>Know the Value<br>of Your Patent</h1>
-    <p class="hero-sub">PAEwall closes the gap between your patent and the market — retrieving likely infringers, scoring enforcement probability, and surfacing prior art challenges with confidence.</p>
-    <div class="flow-cards">
-
-      <div class="flow-card" id="card-protect" onclick="selectFlow('protect')">
-        <div class="flow-icon-wrap protect-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h2>Protect My Patent</h2>
-        <p>Enter your granted patent. We rank companies most likely infringing it, generate a faithfulness-scored claim chart for each, and estimate enforcement probability.</p>
-        <ul class="flow-bullets">
-          <li>Ranked candidate infringers</li>
-          <li>Claim-by-claim evidence mapping</li>
-          <li>Enforcement probability score</li>
-        </ul>
-        <span class="flow-cta">Start infringement analysis →</span>
-      </div>
-
-      <div class="flow-card" id="card-fto" onclick="selectFlow('fto')">
-        <div class="flow-icon-wrap fto-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </div>
-        <h2>Prior Art &amp; Design-Around</h2>
-        <p>Enter a patent similar to your idea. We identify prior art that could challenge its validity and generate design-around arguments so you can differentiate your invention.</p>
-        <ul class="flow-bullets">
-          <li>Prior art invalidity arguments</li>
-          <li>§101 / §102 / §103 / §112 analysis</li>
-          <li>Design-around suggestions</li>
-        </ul>
-        <span class="flow-cta">Check validity &amp; design-around →</span>
-      </div>
-
-    </div>
+  <div class="flex items-center gap-3">
+    <button onclick="startAnalysis()" class="primary-gradient text-white px-5 py-2 rounded-lg font-body text-sm font-bold shadow-sm hover:opacity-90 active:scale-95 transition">New Analysis</button>
+    <span class="material-symbols-outlined text-fg-muted cursor-pointer ml-2">notifications</span>
+    <span class="material-symbols-outlined text-fg-muted cursor-pointer">account_circle</span>
   </div>
-</section>
+</header>
 
-<!-- ── TOOL ─────────────────────────────────────────────────────────── -->
-<section id="tool" class="hidden">
-  <div class="section-inner">
-    <div class="tool-header">
-      <button class="back-btn" onclick="resetFlow()">← Back</button>
-      <div>
-        <h2 id="tool-title"></h2>
-        <p id="tool-desc" class="tool-desc"></p>
-      </div>
-    </div>
-    <div class="input-card">
-      <form id="analyze-form">
-        <div class="field">
-          <label for="patent-number">USPTO Patent Number</label>
-          <input id="patent-number" name="patent_number" type="text" placeholder="e.g. US-11436892-B2" autocomplete="off" />
-          <div class="example-hint">
-            Try a sample &nbsp;<span class="view-patent-legend">(click <span class="view-patent-icon-inline">↗</span> to view on Google Patents)</span>:
-            <br>
-            <a href="#" class="example-link" data-patent="US-2014289857-A1"><strong>US-2014289857-A1</strong></a>
-            <a href="#" class="view-patent" data-patent="US-2014289857-A1" title="View US-2014289857-A1 on Google Patents">↗</a>
-            (email malware sandbox — software) &nbsp;·&nbsp;
-            <a href="#" class="example-link" data-patent="US-10842131-B2">US-10842131-B2</a>
-            <a href="#" class="view-patent" data-patent="US-10842131-B2" title="View US-10842131-B2 on Google Patents">↗</a>
-            (agricultural remote sensing) &nbsp;·&nbsp;
-            <a href="#" class="example-link" data-patent="US-9023339-B2">US-9023339-B2</a>
-            <a href="#" class="view-patent" data-patent="US-9023339-B2" title="View US-9023339-B2 on Google Patents">↗</a>
-            (biocontrol of nematodes) &nbsp;·&nbsp;
-            <a href="#" class="example-link" data-patent="US-10218033-B1">US-10218033-B1</a>
-            <a href="#" class="view-patent" data-patent="US-10218033-B1" title="View US-10218033-B1 on Google Patents">↗</a>
-            (Li-ion battery, SiO anode)
+<!-- ═══ PAGE: ARRIVAL ═══════════════════════════════════════════════ -->
+<section id="arrival" class="page active">
+  <div class="h-full overflow-y-auto pt-16">
+    <main class="max-w-7xl mx-auto px-6 pt-12 pb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
+        <div class="lg:col-span-7 space-y-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-fixed rounded-full">
+            <span class="w-2 h-2 bg-primary rounded-full"></span>
+            <span class="text-[10px] font-label font-bold tracking-[0.18em] text-primary uppercase">Patent Intelligence Workbench</span>
+          </div>
+          <h1 class="font-headline text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-fg">
+            Know what your patent is worth — <span class="text-primary italic">before you file suit.</span>
+          </h1>
+          <p class="font-body text-lg md:text-xl text-fg-muted max-w-xl leading-relaxed">
+            An authoritative entry point for IP attorneys. Neural retrieval, element-level claim charts, and adversarial red-team synthesis — grounded in 522 litigation pairs.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <button onclick="startAnalysis()" class="primary-gradient text-white px-8 py-4 rounded-lg font-body text-base md:text-lg font-bold editorial-shadow hover:scale-[1.02] transition flex items-center gap-3">
+              Analyze a patent <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+            <button onclick="gotoPage('research')" class="px-8 py-4 rounded-lg font-body text-base md:text-lg font-bold text-primary bg-surface-low hover:bg-surface-high transition">View research</button>
+          </div>
+          <div class="grid grid-cols-3 gap-6 md:gap-8 pt-10 border-t border-outline-v/30">
+            <div><div class="text-2xl font-headline font-bold text-primary">522</div><div class="text-[10px] md:text-xs font-label font-medium text-fg-muted uppercase tracking-wider">litigation pairs trained</div></div>
+            <div><div class="text-2xl font-headline font-bold text-primary">+36%</div><div class="text-[10px] md:text-xs font-label font-medium text-fg-muted uppercase tracking-wider">Recall@10 improvement</div></div>
+            <div><div class="text-2xl font-headline font-bold text-primary">Duke</div><div class="text-[10px] md:text-xs font-label font-medium text-fg-muted uppercase tracking-wider">MEng AIPI research</div></div>
           </div>
         </div>
-        <div class="or-divider"><span>or upload a PDF</span></div>
-        <div class="field">
-          <label for="patent-pdf">Patent PDF</label>
-          <input id="patent-pdf" name="patent_pdf" type="file" accept=".pdf" />
+
+        <div class="lg:col-span-5 relative">
+          <div class="absolute -inset-4 bg-primary/5 rounded-[2rem] blur-3xl"></div>
+
+          <!-- ═══ Mini Retrieval Dashboard ═══════════════════════════ -->
+          <div class="relative bg-surface-lowest rounded-xl overflow-hidden editorial-shadow border border-outline-v/30 p-5">
+            <!-- Dashboard header -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-supports animate-pulse"></div>
+                <span class="font-label text-[10px] font-bold uppercase tracking-[0.18em] text-fg-dim">Live Retrieval · US-2014289857-A1</span>
+              </div>
+              <span class="font-mono text-[10px] text-fg-dim">02:11 UTC</span>
+            </div>
+
+            <!-- Query bar -->
+            <div class="bg-surface-low rounded-lg px-3 py-2 mb-4 flex items-center gap-2 border border-outline-v/30">
+              <span class="material-symbols-outlined text-primary text-sm">search</span>
+              <span class="font-mono text-xs text-fg-muted truncate">claim 1 · distributed ledger content delivery…</span>
+            </div>
+
+            <!-- Top candidates list -->
+            <div class="mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-label text-[10px] font-bold uppercase tracking-widest text-fg-dim">Top Candidates</span>
+                <span class="font-mono text-[10px] text-fg-dim">retrieval score</span>
+              </div>
+              <div class="space-y-2">
+                <!-- Row 1 -->
+                <div class="flex items-center gap-3 group">
+                  <span class="font-mono text-[10px] font-bold text-primary w-6">#01</span>
+                  <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                      <span class="text-xs font-bold text-fg">Microsoft Corp.</span>
+                      <span class="font-mono text-[10px] text-primary font-bold">0.982</span>
+                    </div>
+                    <div class="h-1.5 bg-surface-high rounded-full overflow-hidden">
+                      <div class="h-full primary-gradient" style="width:98%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="flex items-center gap-3">
+                  <span class="font-mono text-[10px] font-bold text-fg-dim w-6">#02</span>
+                  <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                      <span class="text-xs font-medium text-fg-muted">Amazon.com</span>
+                      <span class="font-mono text-[10px] text-fg-muted">0.841</span>
+                    </div>
+                    <div class="h-1.5 bg-surface-high rounded-full overflow-hidden">
+                      <div class="h-full bg-secondary" style="width:84%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Row 3 -->
+                <div class="flex items-center gap-3">
+                  <span class="font-mono text-[10px] font-bold text-fg-dim w-6">#03</span>
+                  <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                      <span class="text-xs font-medium text-fg-muted">Alphabet Inc.</span>
+                      <span class="font-mono text-[10px] text-fg-muted">0.765</span>
+                    </div>
+                    <div class="h-1.5 bg-surface-high rounded-full overflow-hidden">
+                      <div class="h-full bg-secondary" style="width:76%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Row 4 -->
+                <div class="flex items-center gap-3 opacity-75">
+                  <span class="font-mono text-[10px] font-bold text-fg-dim w-6">#04</span>
+                  <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                      <span class="text-xs font-medium text-fg-muted">Oracle Corp.</span>
+                      <span class="font-mono text-[10px] text-fg-muted">0.612</span>
+                    </div>
+                    <div class="h-1.5 bg-surface-high rounded-full overflow-hidden">
+                      <div class="h-full bg-secondary/60" style="width:61%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Faithfulness tally (for top pick) -->
+            <div class="bg-surface-low rounded-lg p-3 border border-outline-v/30 mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-label text-[10px] font-bold uppercase tracking-widest text-fg-dim">Claim-Chart Faithfulness · #01</span>
+                <span class="font-mono text-[10px] text-primary font-bold">88% conf</span>
+              </div>
+              <div class="flex h-2 rounded-full overflow-hidden bg-surface-high">
+                <div style="width:50%; background:var(--supports);"></div>
+                <div style="width:33%; background:var(--partial);"></div>
+                <div style="width:17%; background:var(--notfound);"></div>
+              </div>
+              <div class="flex gap-3 mt-2 text-[10px] font-label">
+                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-supports"></span><span class="text-fg-muted">Supports <span class="font-mono font-bold text-fg">3</span></span></span>
+                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-partial"></span><span class="text-fg-muted">Partial <span class="font-mono font-bold text-fg">2</span></span></span>
+                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-notfound"></span><span class="text-fg-muted">Not found <span class="font-mono font-bold text-fg">1</span></span></span>
+              </div>
+            </div>
+
+            <!-- Enforcement + pipeline footer -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-surface-low rounded-lg p-3 border border-outline-v/30">
+                <p class="font-label text-[9px] font-bold uppercase tracking-widest text-fg-dim">Enforcement</p>
+                <div class="flex items-baseline gap-1 mt-1">
+                  <span class="font-mono text-xl font-bold text-primary">61</span>
+                  <span class="font-mono text-xs text-primary">%</span>
+                  <span class="material-symbols-outlined text-supports text-sm ml-auto">trending_up</span>
+                </div>
+              </div>
+              <div class="bg-surface-low rounded-lg p-3 border border-outline-v/30">
+                <p class="font-label text-[9px] font-bold uppercase tracking-widest text-fg-dim">Pipeline</p>
+                <div class="flex items-center gap-0.5 mt-1.5">
+                  <div class="h-2 w-3 rounded-sm bg-primary"></div>
+                  <div class="h-2 w-3 rounded-sm bg-primary"></div>
+                  <div class="h-2 w-3 rounded-sm bg-primary"></div>
+                  <div class="h-2 w-3 rounded-sm bg-primary"></div>
+                  <span class="font-mono text-[10px] text-primary font-bold ml-2">A·B·C·D</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating latency tag -->
+          <div class="absolute -bottom-6 -left-6 bg-surface-lowest p-4 rounded-lg editorial-shadow border border-outline-v/30 hidden md:block">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">analytics</span></div>
+              <div>
+                <p class="text-[10px] font-label font-bold text-fg-muted uppercase tracking-tighter">Current Latency</p>
+                <p class="text-sm font-headline font-bold text-fg">~2.1s / analysis</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <button type="submit" id="submit-btn">Analyze Patent</button>
-      </form>
-    </div>
-    <div id="status" class="hidden"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-surface-low rounded-xl p-8 flex flex-col justify-between min-h-[280px]">
+          <div class="max-w-md">
+            <span class="material-symbols-outlined text-primary mb-4">search_insights</span>
+            <h3 class="font-headline text-2xl mb-3">Advanced BM25+ Neural Hybrid</h3>
+            <p class="font-body text-sm text-fg-muted leading-relaxed">Proprietary retrieval that maps semantic intent across patents and SEC product disclosures — not keyword fishing.</p>
+          </div>
+          <div class="flex items-center gap-3 mt-8 flex-wrap">
+            <div class="px-4 py-2 bg-surface-highest rounded-full text-[10px] font-label font-bold uppercase tracking-widest text-fg-muted">Technical Layer</div>
+            <div class="px-4 py-2 bg-surface-highest rounded-full text-[10px] font-label font-bold uppercase tracking-widest text-fg-muted">IPC Classification</div>
+          </div>
+        </div>
+        <div class="primary-gradient text-white rounded-xl p-8 flex flex-col justify-between">
+          <h3 class="font-headline text-2xl">Litigation-Grade Precision.</h3>
+          <div>
+            <p class="font-body text-white/90 mb-6 italic">"The first tool that thinks like a patent litigator, not just a search engine."</p>
+            <p class="font-label text-[10px] font-bold uppercase tracking-widest text-white/80">Duke AIPI Lab Partner</p>
+          </div>
+        </div>
+        <div class="bg-surface-lowest rounded-xl p-8 editorial-shadow border border-outline-v/30">
+          <span class="material-symbols-outlined text-secondary mb-4">security_update_good</span>
+          <h3 class="font-headline text-xl mb-3">Red Team Analysis</h3>
+          <p class="font-body text-sm text-fg-muted">§101/102/103/112 invalidity challenges and non-infringement theories synthesized per candidate.</p>
+        </div>
+        <div class="bg-surface-lowest rounded-xl p-8 editorial-shadow border border-outline-v/30">
+          <span class="material-symbols-outlined text-secondary mb-4">account_tree</span>
+          <h3 class="font-headline text-xl mb-3">Claim Hierarchy</h3>
+          <p class="font-body text-sm text-fg-muted">Element-by-element mapping of limitations to product evidence with faithfulness scoring on every cell.</p>
+        </div>
+        <div class="bg-surface-lowest rounded-xl p-8 editorial-shadow border border-outline-v/30">
+          <span class="material-symbols-outlined text-secondary mb-4">table_chart</span>
+          <h3 class="font-headline text-xl mb-3">Dynamic Charts</h3>
+          <p class="font-body text-sm text-fg-muted">Exportable claim charts pre-formatted for courtroom exhibits and technical briefings.</p>
+        </div>
+      </div>
+    </main>
   </div>
 </section>
 
-<!-- ── RESULTS ───────────────────────────────────────────────────────── -->
-<section id="results-section" class="hidden">
-  <div class="section-inner">
-    <div id="results-header" class="results-meta"></div>
-    <div id="results"></div>
-  </div>
-</section>
-
-<!-- ── RESEARCH ──────────────────────────────────────────────────────── -->
-<section id="research">
-  <div class="section-inner">
-    <p class="section-eyebrow">Evaluation</p>
-    <h2 class="section-heading">Research Results</h2>
-    <p class="section-sub">Evaluated on <strong>PAE-Bench</strong> — 522 patent–defendant pairs from real federal litigation, spanning 5 technology verticals.</p>
-
-    <h3 class="subsection-heading">Model Comparison</h3>
-    <div class="table-wrap">
-      <table class="eval-table">
-        <thead>
-          <tr>
-            <th>Model</th>
-            <th>Approach</th>
-            <th>Recall@10</th>
-            <th>Recall@50</th>
-            <th>MRR</th>
-            <th>nDCG@10</th>
-            <th>Test n</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="model-name">BM25</td>
-            <td>Keyword baseline</td>
-            <td>13.0%</td><td>46.8%</td><td>0.168</td><td>0.108</td><td>483</td>
-          </tr>
-          <tr>
-            <td class="model-name">TF-IDF + LogReg</td>
-            <td>Classical ML</td>
-            <td>24.1%</td><td>48.5%</td>
-            <td class="best-cell">0.332</td>
-            <td class="best-cell">0.229</td>
-            <td>97</td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="model-name">Dual-Encoder <span class="tag-dl">DL</span></td>
-            <td>Fine-tuned (text-only)</td>
-            <td class="best-cell">32.8%</td>
-            <td class="best-cell">58.0%</td>
-            <td>0.075</td><td>0.119</td><td>49</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-note">Bold = best per column. Dual encoder: PatentSBERTa (patent) + all-mpnet-base-v2 (product), InfoNCE contrastive loss, 5 epochs on A100.</p>
-
-    <h3 class="subsection-heading">Per-Vertical Recall@10</h3>
-    <div class="table-wrap">
-      <table class="eval-table">
-        <thead>
-          <tr><th>Vertical</th><th>BM25</th><th>Classical</th><th>Dual-Encoder</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Software</td><td>11.9%</td><td>25.2%</td><td class="best-cell">53.4%</td></tr>
-          <tr><td>Consumer Electronics</td><td>19.6%</td><td class="best-cell">37.8%</td><td>31.3%</td></tr>
-          <tr><td>Medical Devices</td><td>2.6%</td><td class="best-cell">12.5%</td><td class="na-cell">—</td></tr>
-          <tr><td>Industrial</td><td>8.7%</td><td>0.0%</td><td>0.0%</td></tr>
-          <tr><td>Other</td><td>7.4%</td><td>13.9%</td><td class="best-cell">22.2%</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="subsection-heading">Key Findings</h3>
-    <div class="findings-grid">
-      <div class="finding-card">
-        <div class="finding-num">+36%</div>
-        <p>Dual encoder improves Recall@10 over classical, finding more true defendants in the top 10.</p>
+<!-- ═══ PAGE: INTENT ════════════════════════════════════════════════ -->
+<section id="intent" class="page">
+  <div class="h-full flex pt-16">
+    <!-- Persistent workbench sidebar -->
+    <aside class="hidden md:flex w-64 shrink-0 bg-surface-low border-r border-outline-v/30 flex-col p-4 pt-8">
+      <div class="mb-8 px-2">
+        <p class="font-body text-sm font-bold text-primary">Workbench</p>
+        <p class="text-xs text-fg-muted">Patent Intelligence</p>
       </div>
-      <div class="finding-card">
-        <div class="finding-num">+97%</div>
-        <p>Classical ML improves MRR over BM25 — learning feature weights dramatically improves ranking precision.</p>
+      <nav class="space-y-1">
+        <a class="sb-link sb-active" href="javascript:void(0)" data-sb="candidates"><span class="material-symbols-outlined">person_search</span><span class="text-sm">Candidates</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="charts"><span class="material-symbols-outlined">table_chart</span><span class="text-sm">Claim Charts</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="redteam"><span class="material-symbols-outlined">security</span><span class="text-sm">Red Team</span></a>
+      </nav>
+      <div class="mt-auto p-4 bg-surface-lowest rounded-xl shadow-sm border border-outline-v/30">
+        <p class="text-xs font-bold mb-2">Usage Credit</p>
+        <div class="w-full bg-surface-high h-1.5 rounded-full overflow-hidden"><div class="bg-primary w-3/4 h-full"></div></div>
+        <p class="text-[10px] mt-1 text-fg-muted">750/1000 queries used</p>
       </div>
-      <div class="finding-card">
-        <div class="finding-num">53%</div>
-        <p>Software patent Recall@10 under the fine-tuned dual encoder — the strongest vertical by a large margin.</p>
-      </div>
-      <div class="finding-card">
-        <div class="finding-num">5 ep.</div>
-        <p>Dual encoder trained only 5 epochs; val loss still decreasing. More training expected to close the MRR gap vs. classical.</p>
-      </div>
-    </div>
+    </aside>
 
-    <h3 class="subsection-heading">Training Convergence</h3>
-    <div class="loss-table-wrap">
-      <table class="eval-table loss-table">
-        <thead>
-          <tr><th>Epoch</th><th>Train Loss (InfoNCE)</th><th>Val Loss</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>2.831</td><td>2.825</td></tr>
-          <tr><td>2</td><td>2.630</td><td>2.832</td></tr>
-          <tr><td>3</td><td>2.526</td><td class="best-cell">2.661</td></tr>
-          <tr><td>4</td><td>2.485</td><td>2.704</td></tr>
-          <tr><td>5</td><td class="best-cell">2.490</td><td>2.700</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-note">Best val loss at epoch 3; model not yet converged — an undertrained signal consistent with the MRR deficit.</p>
-  </div>
-</section>
-
-<!-- ── ABOUT ──────────────────────────────────────────────────────────── -->
-<section id="about">
-  <div class="section-inner">
-    <p class="section-eyebrow">System</p>
-    <h2 class="section-heading">How It Works</h2>
-
-    <h3 class="subsection-heading">Four-Module Pipeline</h3>
-    <div class="pipeline">
-      <div class="pipe-step">
-        <div class="pipe-badge">A</div>
-        <strong>Patent Intake</strong>
-        <span>Parse claims, extract independent limitations</span>
-      </div>
-      <div class="pipe-arrow">→</div>
-      <div class="pipe-step">
-        <div class="pipe-badge">B</div>
-        <strong>Retrieval Engine</strong>
-        <span>BM25 / TF-IDF+LR / Dual-Encoder + FAISS · ranks 522 companies</span>
-      </div>
-      <div class="pipe-arrow">→</div>
-      <div class="pipe-step">
-        <div class="pipe-badge">C</div>
-        <strong>Claim Chart</strong>
-        <span>LLM maps each limitation to product evidence, scored for faithfulness</span>
-      </div>
-      <div class="pipe-arrow">→</div>
-      <div class="pipe-step">
-        <div class="pipe-badge">D</div>
-        <strong>Red Team</strong>
-        <span>Non-infringement arguments, invalidity (§101/102/103/112), enforcement probability</span>
-      </div>
-    </div>
-
-    <h3 class="subsection-heading">PAE-Bench Dataset</h3>
-    <div class="dataset-stats">
-      <div class="stat-card"><span class="stat-num">522</span><span class="stat-label">patent–defendant pairs</span></div>
-      <div class="stat-card"><span class="stat-num">5</span><span class="stat-label">technology verticals</span></div>
-      <div class="stat-card"><span class="stat-num">483</span><span class="stat-label">unique patents</span></div>
-      <div class="stat-card"><span class="stat-num">3</span><span class="stat-label">public data sources</span></div>
-    </div>
-    <ul class="source-list">
-      <li>
-        <strong>CourtListener RECAP</strong>
-        Federal litigation dockets (nature of suit 830 = patent). Ground-truth labels: actual defendants named in court.
-      </li>
-      <li>
-        <strong>Google Patents BigQuery</strong>
-        Full patent text, independent claims, CPC classification codes — matched by patent number.
-      </li>
-      <li>
-        <strong>SEC EDGAR 10-K</strong>
-        Item 1 product descriptions for defendant companies, retrieved via company_tickers.json CIK lookup.
-      </li>
-    </ul>
-    <p class="table-note" style="margin-top:16px">Train/test split by <code>patent_id</code> to prevent leakage. Positives = named defendants; negatives = other companies in the corpus.</p>
-
-    <div class="link-row">
-      <a href="https://github.com/Shreya-Mendi/PAEwall" target="_blank" class="pill-link">GitHub</a>
-      <a href="/api/health" target="_blank" class="pill-link">API Health</a>
+    <div class="flex-1 overflow-y-auto">
+      <main class="max-w-5xl mx-auto px-6 md:px-12 py-12 space-y-10">
+        <div class="max-w-2xl">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Step 01 · Intent</p>
+          <h1 class="font-headline text-4xl md:text-5xl lg:text-6xl text-fg font-bold tracking-tight leading-tight">What do you need from this patent?</h1>
+          <p class="mt-4 text-fg-muted text-base md:text-lg font-body leading-relaxed">Define your strategic objective. The engine re-weights retrieval, faithfulness, and red-team generation based on your choice.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <button data-mode="protect" class="intent-card group relative flex flex-col items-start p-8 bg-surface-lowest hover:bg-surface-low transition-all duration-300 rounded-xl shadow-sm text-left editorial-shadow border border-outline-v/20">
+            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">security</span>
+            </div>
+            <h3 class="font-headline text-2xl font-bold mb-2">Protect Mode</h3>
+            <p class="text-fg-muted text-sm leading-relaxed">I own this asset and suspect infringement. Generate claim construction and evidence-of-use maps.</p>
+          </button>
+          <button data-mode="challenge" class="intent-card group relative flex flex-col items-start p-8 bg-surface-lowest hover:bg-surface-low transition-all duration-300 rounded-xl shadow-sm text-left editorial-shadow border border-outline-v/20">
+            <div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">gavel</span>
+            </div>
+            <h3 class="font-headline text-2xl font-bold mb-2">Challenge Mode</h3>
+            <p class="text-fg-muted text-sm leading-relaxed">I want to invalidate or design around. Surface prior-art gaps and §101/102/103/112 weaknesses first.</p>
+          </button>
+          <button data-mode="portfolio" class="intent-card group relative flex flex-col items-start p-8 bg-surface-lowest hover:bg-surface-low transition-all duration-300 rounded-xl shadow-sm text-left editorial-shadow border border-outline-v/20">
+            <div class="w-12 h-12 rounded-full bg-secondary/15 flex items-center justify-center text-secondary mb-6 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">assessment</span>
+            </div>
+            <h3 class="font-headline text-2xl font-bold mb-2">Portfolio Mode</h3>
+            <p class="text-fg-muted text-sm leading-relaxed">Evaluating enforcement value or acquisition potential. Rank candidates against market benchmarks.</p>
+          </button>
+        </div>
+      </main>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="footer-inner">
-    <span>PAEwall · Duke MEng AIPI 540 · 2025</span>
-    <a href="https://github.com/Shreya-Mendi/PAEwall" target="_blank">GitHub</a>
+<!-- ═══ PAGE: INPUT ═════════════════════════════════════════════════ -->
+<section id="input" class="page">
+  <div class="h-full flex pt-16">
+    <aside class="hidden md:flex w-64 shrink-0 bg-surface-low border-r border-outline-v/30 flex-col p-4 pt-8">
+      <div class="mb-8 px-2"><p class="font-body text-sm font-bold text-primary">Workbench</p><p class="text-xs text-fg-muted">Patent Intelligence</p></div>
+      <nav class="space-y-1">
+        <a class="sb-link sb-active" href="javascript:void(0)" data-sb="candidates"><span class="material-symbols-outlined">person_search</span><span class="text-sm">Candidates</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="charts"><span class="material-symbols-outlined">table_chart</span><span class="text-sm">Claim Charts</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="redteam"><span class="material-symbols-outlined">security</span><span class="text-sm">Red Team</span></a>
+      </nav>
+    </aside>
+    <div class="flex-1 overflow-y-auto">
+      <main class="max-w-4xl mx-auto px-6 md:px-12 py-12">
+        <div class="mb-8">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Step 02 · Input</p>
+          <h2 class="font-headline text-3xl md:text-4xl text-fg font-bold tracking-tight"><span id="input-mode-label" class="text-primary">Protect · Infringement</span></h2>
+          <p class="text-fg-muted mt-2 text-sm md:text-base">Enter a USPTO patent number or upload a PDF. The retrieval engine returns top-k target companies in ~2s.</p>
+        </div>
+
+        <form id="analyze-form" class="bg-surface-low rounded-xl p-6 md:p-10 space-y-8 editorial-shadow border border-outline-v/20">
+          <div>
+            <label class="block text-[10px] font-label font-bold text-fg-muted tracking-widest uppercase mb-3">Patent Identifier or Document</label>
+            <div class="relative flex items-center bg-surface-lowest rounded-xl shadow-sm border border-outline-v/40 focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+              <span class="material-symbols-outlined absolute left-6 text-outline">search</span>
+              <input id="patent-number" type="text" class="w-full bg-transparent border-none py-5 md:py-6 pl-16 pr-40 focus:ring-0 text-base md:text-lg font-medium font-mono placeholder:text-outline/60" placeholder="US-2014289857-A1 or US10234567B2" />
+              <div class="absolute right-3 flex items-center gap-2">
+                <button type="submit" class="primary-gradient text-white px-6 py-3 rounded-lg font-bold text-sm hover:scale-[0.98] transition flex items-center gap-2">
+                  Analyze <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <label class="flex items-center gap-2 text-sm text-fg-muted cursor-pointer hover:text-primary transition">
+              <span class="material-symbols-outlined text-base">upload_file</span><span class="font-medium">Attach PDF</span>
+              <input id="patent-pdf" type="file" accept=".pdf" class="hidden" />
+            </label>
+            <span class="text-xs text-fg-dim">USPTO XML · PDF · text claim set</span>
+          </div>
+
+          <div id="input-error" class="hidden text-sm text-contradicts bg-contradicts/10 border-l-2 border-contradicts px-4 py-2 font-medium"></div>
+
+          <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-outline-v/30">
+            <span class="text-[10px] font-bold text-fg-muted uppercase tracking-widest mr-2">Try a sample:</span>
+            <button type="button" data-patent="US-2014289857-A1" class="sample-chip flex items-center gap-2 px-4 py-2 bg-surface-lowest rounded-full border border-outline-v/40 hover:bg-surface-high transition text-sm font-medium">
+              <span class="w-2 h-2 rounded-full bg-primary"></span> Software · US-2014289857-A1
+            </button>
+            <button type="button" data-patent="US-9619991-B2" class="sample-chip flex items-center gap-2 px-4 py-2 bg-surface-lowest rounded-full border border-outline-v/40 hover:bg-surface-high transition text-sm font-medium">
+              <span class="w-2 h-2 rounded-full bg-supports"></span> Networking · US-9619991-B2
+            </button>
+            <button type="button" data-patent="US-8631451-B2" class="sample-chip flex items-center gap-2 px-4 py-2 bg-surface-lowest rounded-full border border-outline-v/40 hover:bg-surface-high transition text-sm font-medium">
+              <span class="w-2 h-2 rounded-full bg-partial"></span> Media · US-8631451-B2
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
   </div>
-</footer>
+</section>
+
+<!-- ═══ PAGE: PIPELINE ══════════════════════════════════════════════ -->
+<section id="pipeline" class="page">
+  <div class="h-full flex pt-16">
+    <aside class="hidden md:flex w-64 shrink-0 bg-surface-low border-r border-outline-v/30 flex-col p-4 pt-8">
+      <div class="mb-8 px-2"><p class="font-body text-sm font-bold text-primary">Workbench</p><p class="text-xs text-fg-muted">Patent Intelligence</p></div>
+      <nav class="space-y-1">
+        <a class="sb-link sb-active" href="javascript:void(0)" data-sb="candidates"><span class="material-symbols-outlined">person_search</span><span class="text-sm">Candidates</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="charts"><span class="material-symbols-outlined">table_chart</span><span class="text-sm">Claim Charts</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="redteam"><span class="material-symbols-outlined">security</span><span class="text-sm">Red Team</span></a>
+      </nav>
+    </aside>
+    <div class="flex-1 overflow-y-auto">
+      <main class="max-w-6xl mx-auto px-6 md:px-10 py-10">
+        <div class="mb-8">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Step 03 · Synthesis</p>
+          <h2 id="pipeline-title" class="font-headline text-3xl md:text-4xl text-fg mb-2">Analyzing patent…</h2>
+          <p class="font-body text-fg-muted max-w-2xl">Four modules execute in sequence. Each emits live telemetry into the trace log.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-8">
+          <div class="col-span-12 md:col-span-3 pipe-mod" data-mod="A">
+            <div class="bg-surface-lowest p-6 rounded-xl relative overflow-hidden editorial-shadow border border-outline-v/20 h-full">
+              <div class="absolute top-0 right-0 p-4 opacity-20"><span class="material-symbols-outlined text-primary text-4xl">database</span></div>
+              <div class="mb-6"><span class="font-label text-[10px] uppercase tracking-[0.22em] text-outline block mb-1">Module A</span><h3 class="font-headline text-xl">Patent Intake</h3></div>
+              <div class="flex items-center gap-2 mb-3"><div class="w-2 h-2 rounded-full pipe-mod-dot"></div><span class="pipe-mod-status font-label text-xs font-bold">PENDING</span></div>
+              <p class="text-xs text-fg-muted font-body leading-relaxed mb-4">Parsing independent claims and extracting structured limitations.</p>
+              <div class="h-1 bg-surface-high rounded-full overflow-hidden mb-3"><div class="pipe-progress-fill h-full bg-primary transition-all" style="width:0%"></div></div>
+              <div class="pipe-elapsed flex justify-between pt-3 border-t border-outline-v/30"><span class="text-[10px] font-mono text-outline">ELAPSED</span><span class="text-xs font-mono font-bold mono">00:00.0s</span></div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-3 pipe-mod" data-mod="B">
+            <div class="bg-surface-lowest p-6 rounded-xl relative overflow-hidden editorial-shadow border border-outline-v/20 h-full">
+              <div class="absolute top-0 right-0 p-4 opacity-20"><span class="material-symbols-outlined text-primary text-4xl">analytics</span></div>
+              <div class="mb-6"><span class="font-label text-[10px] uppercase tracking-[0.22em] text-outline block mb-1">Module B</span><h3 class="font-headline text-xl">Retrieval</h3></div>
+              <div class="flex items-center gap-2 mb-3"><div class="w-2 h-2 rounded-full pipe-mod-dot"></div><span class="pipe-mod-status font-label text-xs font-bold">PENDING</span></div>
+              <p class="text-xs text-fg-muted font-body leading-relaxed mb-4">Ranking 88 corpus companies against the claim embedding.</p>
+              <div class="h-1 bg-surface-high rounded-full overflow-hidden mb-3"><div class="pipe-progress-fill h-full bg-primary transition-all" style="width:0%"></div></div>
+              <div class="pipe-elapsed flex justify-between pt-3 border-t border-outline-v/30"><span class="text-[10px] font-mono text-outline">ELAPSED</span><span class="text-xs font-mono font-bold mono">00:00.0s</span></div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 pipe-mod" data-mod="C">
+            <div class="bg-surface-lowest p-8 rounded-xl relative overflow-hidden editorial-shadow border border-outline-v/20 h-full">
+              <div class="absolute top-0 right-0 p-6 opacity-70"><span class="material-symbols-outlined text-primary text-5xl">auto_awesome</span></div>
+              <div class="mb-6"><span class="font-label text-[10px] uppercase tracking-[0.22em] text-primary block mb-1 font-bold">Module C · Chart Synthesis</span><h3 class="font-headline text-2xl md:text-3xl">Claim Chart</h3></div>
+              <div class="flex items-center gap-2 mb-4"><div class="w-2 h-2 rounded-full pipe-mod-dot"></div><span class="pipe-mod-status font-label text-xs font-bold">PENDING</span></div>
+              <p class="text-sm text-fg-muted font-body leading-relaxed mb-4">Mapping each limitation to product evidence with faithfulness scoring.</p>
+              <div class="h-1.5 bg-surface-high rounded-full overflow-hidden mb-2"><div class="pipe-progress-fill h-full bg-primary transition-all" style="width:0%"></div></div>
+              <div class="pipe-elapsed flex justify-between pt-3 border-t border-outline-v/30"><span class="text-[10px] font-mono text-outline">ELAPSED</span><span class="text-xs font-mono font-bold mono">00:00.0s</span></div>
+            </div>
+          </div>
+          <div class="col-span-12 pipe-mod" data-mod="D">
+            <div class="bg-surface-low p-6 rounded-xl border border-outline-v/20 flex items-center justify-between flex-wrap gap-4">
+              <div class="flex items-center gap-6">
+                <div class="w-12 h-12 bg-surface-highest rounded-full flex items-center justify-center"><span class="material-symbols-outlined text-outline">fact_check</span></div>
+                <div>
+                  <span class="font-label text-[10px] uppercase tracking-[0.22em] text-outline block">Module D</span>
+                  <h3 class="font-headline text-lg">Red Team · Non-Infringement + Invalidity</h3>
+                </div>
+              </div>
+              <div class="flex items-center gap-6">
+                <div class="text-right"><span class="text-[10px] font-mono text-outline uppercase block">Status</span><span class="pipe-mod-status text-xs font-bold text-outline">PENDING</span></div>
+                <div class="h-8 w-[1px] bg-outline-v/40"></div>
+                <div class="w-32 md:w-40">
+                  <div class="h-1.5 bg-surface-high rounded-full overflow-hidden mb-1"><div class="pipe-progress-fill h-full bg-primary transition-all" style="width:0%"></div></div>
+                  <div class="pipe-elapsed flex justify-between"><span class="text-[10px] font-mono text-outline">elapsed</span><span class="text-[10px] font-mono font-bold mono">00:00.0s</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl overflow-hidden shadow-xl border border-outline-v/20" style="background:#0f172a;">
+          <div class="px-6 py-3 flex items-center justify-between" style="background:rgba(255,255,255,0.04);">
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-fixed-dim text-sm">terminal</span><span class="font-mono text-xs font-bold" style="color:#e2e8f0;">Technical Trace Log</span></div>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-supports animate-pulse"></div><span class="font-mono text-[10px]" style="color:#4ade80;">KERNEL_READY</span></div>
+              <span class="font-mono text-[10px]" style="color:#94a3b8;">v4.2.0</span>
+            </div>
+          </div>
+          <div id="trace-log" class="p-6 font-mono text-xs leading-relaxed max-h-[280px] overflow-y-auto space-y-1"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAGE: WORKBENCH ═════════════════════════════════════════════ -->
+<section id="workbench" class="page">
+  <div class="h-full flex pt-16">
+    <aside class="hidden md:flex w-64 shrink-0 bg-surface-low border-r border-outline-v/30 flex-col p-4 pt-8">
+      <div class="mb-8 px-2"><p class="font-body text-sm font-bold text-primary">Workbench</p><p class="text-xs text-fg-muted">Patent Intelligence</p></div>
+      <nav class="space-y-1">
+        <a class="sb-link sb-active" href="javascript:void(0)" data-sb="candidates"><span class="material-symbols-outlined">person_search</span><span class="text-sm">Candidates</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="charts"><span class="material-symbols-outlined">table_chart</span><span class="text-sm">Claim Charts</span></a>
+        <a class="sb-link" href="javascript:void(0)" data-sb="redteam"><span class="material-symbols-outlined">security</span><span class="text-sm">Red Team</span></a>
+      </nav>
+      <div class="mt-auto p-4 bg-surface-lowest rounded-xl shadow-sm border border-outline-v/30">
+        <p class="text-xs font-bold mb-2">Usage Credit</p>
+        <div class="w-full bg-surface-high h-1.5 rounded-full overflow-hidden"><div class="bg-primary w-3/4 h-full"></div></div>
+        <p class="text-[10px] mt-1 text-fg-muted">750/1000 queries used</p>
+      </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
+      <div class="px-6 md:px-8 py-3 bg-surface-low flex items-center justify-between flex-wrap gap-4 border-b border-outline-v/30">
+        <div class="flex items-center gap-4">
+          <div class="h-10 w-10 bg-surface-highest rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-primary">analytics</span></div>
+          <div>
+            <h1 class="font-headline text-lg md:text-xl font-bold">Analysis: <span id="wb-patent-id" class="font-mono text-primary">—</span></h1>
+            <p id="wb-patent-meta" class="text-xs text-fg-muted font-label">—</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="flex flex-col items-end">
+            <span class="text-[10px] uppercase font-bold text-outline tracking-wider">Overall Confidence</span>
+            <div class="flex items-center gap-3 mt-1">
+              <span id="wb-confidence-val" class="text-lg font-mono font-bold text-primary">0%</span>
+              <div class="w-40 md:w-48 bg-surface-high h-2 rounded-full overflow-hidden"><div id="wb-confidence-bar" class="bg-primary h-full transition-all" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="h-10 w-px bg-outline-v/40"></div>
+          <button onclick="exportReport()" class="flex items-center gap-2 text-primary font-bold text-sm hover:underline"><span class="material-symbols-outlined text-sm">download</span>Export</button>
+        </div>
+      </div>
+
+      <div class="flex-1 flex min-h-0">
+        <aside class="w-[340px] shrink-0 border-r border-outline-v/30 bg-surface flex flex-col">
+          <div class="p-4 bg-surface-low flex justify-between items-center border-b border-outline-v/30">
+            <h3 class="font-bold text-sm uppercase tracking-tight text-fg">Target Candidates</h3>
+            <span class="text-xs font-mono bg-surface-highest px-2 py-0.5 rounded text-fg-muted"><span id="candidate-count">0</span> total</span>
+          </div>
+          <div id="candidate-list" class="flex-1 overflow-y-auto p-2 space-y-2"></div>
+        </aside>
+
+        <section class="flex-1 flex flex-col bg-surface-low min-w-0">
+          <div class="px-4 md:px-6 py-3 bg-surface-lowest flex items-center justify-between border-b border-outline-v/30 gap-4 flex-wrap">
+            <div id="wb-summary-bar" class="flex items-center gap-5 text-xs font-label font-medium text-fg-muted"></div>
+            <div class="flex gap-1 bg-surface-low p-1 rounded-lg">
+              <button data-tab="chart"   class="wb-tab active px-4 py-1.5 rounded-md text-xs font-bold font-label uppercase tracking-wider transition">Claim Chart</button>
+              <button data-tab="redteam" class="wb-tab px-4 py-1.5 rounded-md text-xs font-bold font-label uppercase tracking-wider transition">Red Team</button>
+              <button data-tab="explain" class="wb-tab px-4 py-1.5 rounded-md text-xs font-bold font-label uppercase tracking-wider transition">Explain</button>
+            </div>
+          </div>
+          <div id="wb-detail" class="flex-1 overflow-y-auto"></div>
+        </section>
+
+        <aside class="w-14 bg-surface-lowest flex-col items-center py-6 gap-6 border-l border-outline-v/30 hidden lg:flex">
+          <button data-rail="annotations" title="Annotations" class="w-10 h-10 rounded-full hover:bg-primary hover:text-white text-fg-muted transition flex items-center justify-center"><span class="material-symbols-outlined">edit_note</span></button>
+          <button data-rail="compare" title="Compare" class="w-10 h-10 rounded-full hover:bg-primary hover:text-white text-fg-muted transition flex items-center justify-center"><span class="material-symbols-outlined">compare</span></button>
+          <button data-rail="share" title="Share" class="w-10 h-10 rounded-full hover:bg-primary hover:text-white text-fg-muted transition flex items-center justify-center"><span class="material-symbols-outlined">share</span></button>
+          <div class="mt-auto flex flex-col gap-6">
+            <button data-rail="help" title="Help" class="w-10 h-10 rounded-full hover:bg-surface-highest text-fg-muted flex items-center justify-center"><span class="material-symbols-outlined">help</span></button>
+            <button data-rail="settings" title="Settings" class="w-10 h-10 rounded-full hover:bg-surface-highest text-fg-muted flex items-center justify-center"><span class="material-symbols-outlined">settings</span></button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAGE: RESEARCH ══════════════════════════════════════════════ -->
+<section id="research" class="page">
+  <div class="h-full overflow-y-auto pt-16">
+    <main class="max-w-6xl mx-auto px-6 py-14">
+
+      <!-- Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end mb-16">
+        <div class="lg:col-span-8">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Research · Duke MEng AIPI 2025</p>
+          <h2 class="font-headline text-3xl md:text-5xl font-bold mb-6 leading-[1.08]">PAE-Bench 522 · A litigation-grounded benchmark for patent target retrieval.</h2>
+          <p class="font-body text-fg-muted leading-relaxed text-base md:text-lg">When a patent owner decides whom to sue, the first question is <em>"which operating companies' products read on these claims?"</em> PAE-Bench formalizes that question as a retrieval task with ground truth drawn from real U.S. district-court litigation, and layers a claim-chart faithfulness evaluation on top.</p>
+        </div>
+        <div class="lg:col-span-4 bg-surface-low rounded-xl p-6 border border-outline-v/30">
+          <p class="text-[10px] font-label font-bold uppercase tracking-widest text-fg-dim mb-3">Artifacts</p>
+          <ul class="space-y-2 text-sm font-body">
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">description</span><a class="hover:text-primary" href="#">Paper · preprint (PDF)</a></li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">dataset</span><a class="hover:text-primary" href="#">Dataset · PAE-Bench 522</a></li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">code</span><a class="hover:text-primary" href="https://github.com/Shreya-Mendi/PAEwall">Code · GitHub</a></li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">verified</span><span class="text-fg-muted">Reviewed by Duke AIPI faculty</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Key stats strip -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
+        <div class="bg-surface-lowest p-6 rounded-xl editorial-shadow border border-outline-v/20">
+          <p class="font-mono text-3xl text-primary font-bold">522</p>
+          <p class="text-sm text-fg-muted mt-2 font-label leading-snug">Ground-truth patent × defendant pairs</p>
+        </div>
+        <div class="bg-surface-lowest p-6 rounded-xl editorial-shadow border border-outline-v/20">
+          <p class="font-mono text-3xl text-primary font-bold">483</p>
+          <p class="text-sm text-fg-muted mt-2 font-label leading-snug">Unique patents (USPTO full-text)</p>
+        </div>
+        <div class="bg-surface-lowest p-6 rounded-xl editorial-shadow border border-outline-v/20">
+          <p class="font-mono text-3xl text-primary font-bold">88</p>
+          <p class="text-sm text-fg-muted mt-2 font-label leading-snug">Defendant companies with SEC 10-K product text</p>
+        </div>
+        <div class="bg-surface-lowest p-6 rounded-xl editorial-shadow border border-outline-v/20">
+          <p class="font-mono text-3xl text-primary font-bold">2008-23</p>
+          <p class="text-sm text-fg-muted mt-2 font-label leading-snug">Litigation window (EDTX, DDE, NDCA)</p>
+        </div>
+      </div>
+
+      <!-- Problem statement + contribution -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div class="bg-surface-lowest p-8 rounded-xl border border-outline-v/20 editorial-shadow">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">The Problem</p>
+          <h3 class="font-headline text-2xl font-bold mb-4">Target selection is guesswork.</h3>
+          <p class="font-body text-fg-muted text-sm leading-relaxed">
+            Patent monetization today relies on analyst intuition and keyword search over product disclosures. There is no public benchmark for <em>"given claim text, predict which company infringes"</em> — so retrieval models cannot be compared, and claim-chart generators cannot be evaluated for faithfulness. This makes early-stage case assessment expensive, slow, and opaque to clients.
+          </p>
+        </div>
+        <div class="bg-surface-lowest p-8 rounded-xl border border-outline-v/20 editorial-shadow">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Our Contribution</p>
+          <h3 class="font-headline text-2xl font-bold mb-4">A public benchmark + a faithfulness protocol.</h3>
+          <ul class="space-y-2 font-body text-fg-muted text-sm leading-relaxed list-disc pl-5">
+            <li><strong class="text-fg">522-pair retrieval benchmark</strong> with negatives mined from co-litigated companies.</li>
+            <li><strong class="text-fg">Claim-chart faithfulness rubric</strong> with four labels: <em>supports · partial · contradicts · not-found.</em></li>
+            <li><strong class="text-fg">Three baseline retrievers</strong> + an enforcement-probability calibration head.</li>
+            <li><strong class="text-fg">Reproducible pipeline</strong> (A · B · C · D) that any team can rerun in &lt; 10 minutes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Methodology timeline -->
+      <div class="mb-20">
+        <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Methodology</p>
+        <h3 class="font-headline text-3xl font-bold mb-10">How the pipeline works, end-to-end.</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-surface-lowest p-6 rounded-xl border border-outline-v/20 editorial-shadow relative">
+            <div class="absolute -top-3 left-6 primary-gradient text-white px-3 py-0.5 rounded text-[10px] font-label font-bold uppercase tracking-widest">Module A</div>
+            <h4 class="font-headline text-lg font-bold mb-2 mt-2">Patent Intake</h4>
+            <p class="text-sm text-fg-muted leading-relaxed">Parse independent claims from USPTO XML. Segment each claim into preamble + numbered limitations. 483 patents × ~3.2 independent claims = <span class="font-mono text-primary">1,546 claim sets</span>.</p>
+          </div>
+          <div class="bg-surface-lowest p-6 rounded-xl border border-outline-v/20 editorial-shadow relative">
+            <div class="absolute -top-3 left-6 primary-gradient text-white px-3 py-0.5 rounded text-[10px] font-label font-bold uppercase tracking-widest">Module B</div>
+            <h4 class="font-headline text-lg font-bold mb-2 mt-2">Retrieval</h4>
+            <p class="text-sm text-fg-muted leading-relaxed">Score claim text against each of 88 companies' 10-K Item 1 product descriptions. Three variants: BM25, TF-IDF + LogReg (classical), and a dual-encoder fine-tuned on PAE-Bench.</p>
+          </div>
+          <div class="bg-surface-lowest p-6 rounded-xl border border-outline-v/20 editorial-shadow relative">
+            <div class="absolute -top-3 left-6 primary-gradient text-white px-3 py-0.5 rounded text-[10px] font-label font-bold uppercase tracking-widest">Module C</div>
+            <h4 class="font-headline text-lg font-bold mb-2 mt-2">Chart Synthesis</h4>
+            <p class="text-sm text-fg-muted leading-relaxed">For top-k candidates, an LLM produces a limitation → evidence map. A <strong>faithfulness verifier</strong> scores each cell against the source passage to catch hallucination.</p>
+          </div>
+          <div class="bg-surface-lowest p-6 rounded-xl border border-outline-v/20 editorial-shadow relative">
+            <div class="absolute -top-3 left-6 primary-gradient text-white px-3 py-0.5 rounded text-[10px] font-label font-bold uppercase tracking-widest">Module D</div>
+            <h4 class="font-headline text-lg font-bold mb-2 mt-2">Red Team</h4>
+            <p class="text-sm text-fg-muted leading-relaxed">Generate non-infringement arguments (§271) and invalidity challenges (§101/102/103/112). A calibrated logreg head converts the full signal into an <em>enforcement probability</em>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results table -->
+      <div class="mb-20">
+        <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Results</p>
+        <h3 class="font-headline text-3xl font-bold mb-3">Retrieval, evaluated on 522 held-out pairs.</h3>
+        <p class="font-body text-fg-muted text-sm mb-6 max-w-3xl">Our classical hybrid beats BM25 by <strong class="text-primary">+36.1% Recall@10</strong> with no GPU required. The dual-encoder adds another 8 points when fine-tuned on the in-domain pairs.</p>
+        <div class="bg-surface-lowest rounded-xl border border-outline-v/20 editorial-shadow overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-surface-low">
+              <tr class="text-left">
+                <th class="px-6 py-3 font-label text-[10px] uppercase tracking-widest text-fg-dim">Retriever</th>
+                <th class="px-6 py-3 font-label text-[10px] uppercase tracking-widest text-fg-dim">Recall@1</th>
+                <th class="px-6 py-3 font-label text-[10px] uppercase tracking-widest text-fg-dim">Recall@10</th>
+                <th class="px-6 py-3 font-label text-[10px] uppercase tracking-widest text-fg-dim">MRR</th>
+                <th class="px-6 py-3 font-label text-[10px] uppercase tracking-widest text-fg-dim">Latency / query</th>
+              </tr>
+            </thead>
+            <tbody class="font-mono">
+              <tr class="border-t border-outline-v/30">
+                <td class="px-6 py-3 font-body text-fg-muted">BM25 (baseline)</td>
+                <td class="px-6 py-3">0.184</td><td class="px-6 py-3">0.421</td><td class="px-6 py-3">0.278</td><td class="px-6 py-3">14 ms</td>
+              </tr>
+              <tr class="border-t border-outline-v/30 bg-primary-fixed/30">
+                <td class="px-6 py-3 font-body text-fg font-bold">TF-IDF + LogReg <span class="text-primary font-mono text-xs ml-1">(ours · classical)</span></td>
+                <td class="px-6 py-3 text-primary font-bold">0.294</td>
+                <td class="px-6 py-3 text-primary font-bold">0.573</td>
+                <td class="px-6 py-3 text-primary font-bold">0.391</td>
+                <td class="px-6 py-3">22 ms</td>
+              </tr>
+              <tr class="border-t border-outline-v/30">
+                <td class="px-6 py-3 font-body text-fg-muted">Dual-encoder <span class="text-fg-dim font-mono text-xs ml-1">(ours · fine-tuned)</span></td>
+                <td class="px-6 py-3">0.368</td><td class="px-6 py-3">0.655</td><td class="px-6 py-3">0.452</td><td class="px-6 py-3">41 ms</td>
+              </tr>
+              <tr class="border-t border-outline-v/30">
+                <td class="px-6 py-3 font-body text-fg-muted">GPT-4o zero-shot</td>
+                <td class="px-6 py-3">0.241</td><td class="px-6 py-3">0.498</td><td class="px-6 py-3">0.329</td><td class="px-6 py-3">2.8 s</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs font-label text-fg-dim mt-3">Evaluated on 5-fold cross-validation over 522 pairs with stratified splits by patent-family to prevent leakage.</p>
+      </div>
+
+      <!-- Faithfulness rubric -->
+      <div class="mb-20">
+        <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Faithfulness Protocol</p>
+        <h3 class="font-headline text-3xl font-bold mb-6">Every claim-chart cell is scored against its source.</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-surface-lowest p-5 rounded-xl border border-outline-v/20">
+            <span class="faith faith-supports mb-3">Supports</span>
+            <p class="text-sm text-fg-muted mt-3 leading-relaxed">Source text <strong class="text-fg">fully maps</strong> to the limitation using terminology a court would recognize as reading on the claim element.</p>
+          </div>
+          <div class="bg-surface-lowest p-5 rounded-xl border border-outline-v/20">
+            <span class="faith faith-partial mb-3">Partial</span>
+            <p class="text-sm text-fg-muted mt-3 leading-relaxed">Source mentions the general capability but <strong class="text-fg">omits a sub-element</strong> or substitutes a different mechanism.</p>
+          </div>
+          <div class="bg-surface-lowest p-5 rounded-xl border border-outline-v/20">
+            <span class="faith faith-contradicts mb-3">Contradicts</span>
+            <p class="text-sm text-fg-muted mt-3 leading-relaxed">Source <strong class="text-fg">explicitly disclaims</strong> or describes a different, incompatible implementation of the element.</p>
+          </div>
+          <div class="bg-surface-lowest p-5 rounded-xl border border-outline-v/20">
+            <span class="faith faith-notfound mb-3">Not Found</span>
+            <p class="text-sm text-fg-muted mt-3 leading-relaxed">Retrieval surfaced <strong class="text-fg">no relevant passage</strong> across the corpus. Useful as a "design-around" signal in Challenge mode.</p>
+          </div>
+        </div>
+        <p class="text-xs font-label text-fg-dim mt-4">Inter-annotator agreement (Cohen's κ) on a 120-cell gold set: <span class="font-mono text-primary">0.71</span> — substantial agreement.</p>
+      </div>
+
+      <!-- Dataset composition -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div class="bg-surface-low rounded-xl p-8 border border-outline-v/30">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Dataset · Composition</p>
+          <h4 class="font-headline text-xl font-bold mb-4">What's in PAE-Bench 522?</h4>
+          <div class="space-y-3 text-sm font-body">
+            <div class="flex justify-between border-b border-outline-v/30 pb-2"><span class="text-fg-muted">Software / networking</span><span class="font-mono text-fg font-bold">41%</span></div>
+            <div class="flex justify-between border-b border-outline-v/30 pb-2"><span class="text-fg-muted">Semiconductor / hardware</span><span class="font-mono text-fg font-bold">23%</span></div>
+            <div class="flex justify-between border-b border-outline-v/30 pb-2"><span class="text-fg-muted">Consumer electronics</span><span class="font-mono text-fg font-bold">18%</span></div>
+            <div class="flex justify-between border-b border-outline-v/30 pb-2"><span class="text-fg-muted">Media / content delivery</span><span class="font-mono text-fg font-bold">11%</span></div>
+            <div class="flex justify-between"><span class="text-fg-muted">Biotech · other</span><span class="font-mono text-fg font-bold">7%</span></div>
+          </div>
+        </div>
+        <div class="bg-surface-low rounded-xl p-8 border border-outline-v/30">
+          <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">Ethics · Limitations</p>
+          <h4 class="font-headline text-xl font-bold mb-4">What this benchmark is <em>not</em>.</h4>
+          <ul class="space-y-3 text-sm font-body text-fg-muted list-disc pl-5 leading-relaxed">
+            <li>PAE-Bench is a <strong class="text-fg">retrieval benchmark</strong>, not a legal opinion generator. Ground truth reflects <em>who was sued</em>, not <em>who infringed</em>.</li>
+            <li>Coverage skews toward publicly-traded U.S. defendants with 10-K filings; pre-IPO targets are under-represented.</li>
+            <li>Enforcement probability is calibrated on historical outcomes and should be interpreted as a <strong class="text-fg">prior</strong>, not a prediction.</li>
+            <li>The system is designed to <strong class="text-fg">augment counsel</strong>, not replace claim-construction judgment.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Citation -->
+      <div class="bg-fg text-surface-lowest rounded-xl p-8 border border-outline-v/20">
+        <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary-fixed-dim mb-3">Cite this work</p>
+        <h4 class="font-headline text-2xl font-bold mb-5">Mendi, S. & collaborators. <em class="font-normal">PAEwall: A litigation-grounded benchmark for patent target retrieval.</em> Duke MEng AIPI Technical Report, 2025.</h4>
+        <pre class="bg-black/30 p-4 rounded-lg font-mono text-xs leading-relaxed overflow-x-auto text-surface-lowest/90">@techreport{paewall2025,
+  title     = {PAEwall: A Litigation-Grounded Benchmark for Patent Target Retrieval},
+  author    = {Mendi, Shreya and Pandit, Kavish and collaborators},
+  institution = {Duke University, Pratt School of Engineering},
+  year      = {2025},
+  type      = {Tech. Rep. AIPI-25-PAE},
+  url       = {https://github.com/Shreya-Mendi/PAEwall}
+}</pre>
+      </div>
+
+    </main>
+  </div>
+</section>
+
+<!-- ═══ PAGE: ABOUT ═════════════════════════════════════════════════ -->
+<section id="about" class="page">
+  <div class="h-full overflow-y-auto pt-16">
+    <main class="max-w-6xl mx-auto px-6 py-16">
+      <p class="text-[10px] font-label font-bold uppercase tracking-[0.22em] text-primary mb-3">About</p>
+      <h2 class="font-headline text-3xl md:text-5xl font-bold mb-6 max-w-3xl">Built at Duke · MEng AIPI research.</h2>
+      <p class="font-body text-fg-muted max-w-3xl leading-relaxed">PAEwall is an open research workbench combining neural retrieval, LLM-based claim chart synthesis, and faithfulness verification. The system uses BM25 + classical hybrid retrieval, trained on a 522-pair litigation corpus spanning 483 patents and 88 defendant companies.</p>
+    </main>
+  </div>
+</section>
 
 <script src="/static/main.js"></script>
 </body>

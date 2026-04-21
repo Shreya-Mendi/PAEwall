@@ -9,8 +9,9 @@ Given a U.S. patent, PAEwall ranks the companies most likely infringing it, gene
 | Resource | Link |
 |---|---|
 | 🌐 **Live app** | [paewall-production.up.railway.app](https://paewall-production.up.railway.app) |
+| 📕 **Paper (PDF)** | [`paper/paewall_paper.pdf`](paper/paewall_paper.pdf) |
 | 📄 **Paper (Markdown)** | [`paper/paewall_paper.md`](paper/paewall_paper.md) |
-| 📄 **Paper (LaTeX)** | [`paper/paewall_paper.tex`](paper/paewall_paper.tex) |
+| 📄 **Paper (LaTeX source)** | [`paper/paewall_paper.tex`](paper/paewall_paper.tex) |
 | 🎤 **Demo Day slides** | [`slides/demo_day_slides.md`](slides/demo_day_slides.md) |
 | 🗣️ **5-min presenter script** | [`slides/demo_day_script.txt`](slides/demo_day_script.txt) |
 | 📊 **Figures** | [`paper/figures/`](paper/figures/) |

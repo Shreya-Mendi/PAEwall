@@ -1,212 +1,253 @@
 PAEwall — Demo Day Speaking Script
-Target: 4:20 · Hard stop: 5:00 · Buffer: ~40s
-Audience: DL class peers + outside observers + one professor with a stopwatch.
+Target: 5:00 · Hard stop: 5:00 · Delivered as a live walkthrough of paewall-production.up.railway.app
 
 LEGEND:
-  [BRACKETS] = stage direction (click, point, advance slide)
+  [BRACKETS] = stage direction (click, point, navigate)
   -- pause --  = 1-second beat for emphasis
   --> beat to smile / look at audience before continuing
 
+TIME MAP:
+  0:00 – 0:30   Landing page
+  0:30 – 3:00   Research page · Slides 01 → 04 (2:30, ~37s each)
+  3:00 – 4:00   Live Demo · Protect Mode (1:00)
+  4:00 – 5:00   Live Demo · Challenge Mode (1:00)
+
 ================================================================
-SLIDE 1 — TITLE  (10s · ~25 words)
+LANDING PAGE  (0:00 – 0:30 · ~75 words)
 ================================================================
 
-[Walk on. Big smile. Don't look at screen. Audience first.]
+[Open paewall-production.up.railway.app on Home / arrival page.
+ Don't click anything yet. Look at audience first.]
 
 "Hi — I'm Shreya.
 
-Patent trolls make three billion dollars a year. I built a
-deep-learning system that fights back — and I want to show you
-how it works in sixty seconds."
+Patent trolls make three billion dollars a year, and the search
+for who's actually infringing a patent is still done by hand.
 
-[Pause. Advance to Slide 2.]
+This is PAEwall. --> Given a patent, find who's infringing it --
+and prove it.
 
-================================================================
-SLIDE 2 — THE PROBLEM  (50s · ~125 words)
-================================================================
+Everything behind me is live: the research, the benchmark, the
+four-module pipeline, the working demo. I'm going to walk you
+through all of it in five minutes."
 
-"Picture a patent attorney. She holds a patent worth maybe ten
-million dollars -- but only if she can prove somebody is actually
-infringing it.
-
-So what does she do? She reads claim language. She guesses which
-companies might infringe. She hand-searches product pages, 10-K
-filings, marketing copy. She builds a claim chart -- line by line --
-at five hundred dollars an hour. It takes weeks.  --> And most of
-the time, she misses the right defendant entirely.
-
-This is why the tools that fix this -- Patlytics, IP.com, ClaimChart
-LLM -- cost fifty thousand dollars a year. Individual inventors,
-small patent funds, university tech-transfer offices -- they're
-locked out.
-
-There's no public benchmark. No faithfulness score on the output.
-No honest view of enforcement risk. -- That's the gap PAEwall fills."
-
-[Advance to Slide 3.]
+[Click "Research" in the top nav.]
 
 ================================================================
-SLIDE 3 — THE APPROACH  (50s · ~125 words)
+RESEARCH · SLIDE 01 — PROBLEM & MOTIVATION  (0:30 – 1:07 · ~92 words)
 ================================================================
 
-"Three ideas, one pipeline.
+[Landed on Research page, Slide 01 section in view.]
 
-First -- I built my own benchmark: PAE-Bench. Five hundred and
-twenty-two patent-defendant pairs pulled from real federal
-litigation, across five technology verticals. It is the first
-public cross-vertical patent-to-product retrieval benchmark of its
-kind.
+"A patent attorney today reads claim language, guesses which
+companies might infringe, hand-searches their 10-Ks, and builds
+a claim chart line by line. Five hundred dollars an hour. Weeks
+per patent. And most of the time she misses the right defendant
+entirely.
 
-Second -- a four-module pipeline: intake, retrieval, faithfulness-
-scored claim chart, and a red-team layer that co-generates the
-defense's strongest counter-arguments. That last part is
-deliberate: the tool cannot be used to push a weak case without
-also surfacing why it's weak.
+The tools that fix this -- Patlytics, IP.com, ClaimChart LLM --
+cost fifty thousand dollars a year. Individual inventors, small
+PAE funds, university tech-transfer -- they are locked out.
 
-Third -- the deep learning. All three models the rubric asks for,
-actually trained and shipped. BM25 gets thirteen percent
-Recall-at-10. Classical TF-IDF jumps to twenty-four. My fine-tuned
-dual encoder -- PatentSBERTa, InfoNCE contrastive loss, hard
-negatives -- hits thirty-two point eight percent. -- That's a
-one-hundred-fifty-two percent lift over keyword search."
+Three gaps in the market: no public benchmark, no faithfulness
+score on claim charts, no honest red-team view of enforcement."
 
-[Pause. Breathe. Advance to Slide 4 — Live Demo.]
+[Scroll to Slide 02.]
 
 ================================================================
-SLIDE 4 — LIVE DEMO  (90s · stage directions + ~180 spoken words)
+RESEARCH · SLIDE 02 — APPROACH OVERVIEW  (1:07 – 1:44 · ~92 words)
 ================================================================
 
-"Let me show you this is real."
+"Three models, one benchmark, four modules.
 
-[Switch to browser tab: paewall-production.up.railway.app]
-[Click 'Protect My Patent' card.]
+The benchmark is PAE-Bench -- five hundred and twenty-two
+patent-defendant pairs from real federal litigation. First
+public cross-vertical patent-to-product retrieval benchmark
+of its kind.
 
-"I'm going to use a real 2014 software patent -- US-2014-289857 --
-for email-attachment malware sandboxing. Something we can all
-intuit: open a suspicious attachment in a sandbox, check for
-unexpected behavior, revert the machine if it's bad."
+The pipeline: intake, retrieval, faithfulness-scored chart,
+red team. All four modules ship.
 
-[Click US-2014289857-A1 button. Wait ~1 sec for results.]
+And the three models the rubric asks for: BM25 at thirteen
+percent Recall-at-ten. Classical TF-IDF plus LogReg at
+twenty-four. My fine-tuned dual encoder -- PatentSBERTa tower,
+InfoNCE loss, hard negatives -- hits thirty-two point eight.
+Plus one-fifty-two percent over keyword search."
 
-"The top retrieved company is Microsoft. Rank one. Why? --"
-
-[Scroll to show claim chart header; hover row 1[a].]
-
-"This is the Patent Claim panel. Watch what happens when I hover
-a row in Microsoft's claim chart --"
-
-[Hover row 1[a] so the claim-text span lights up yellow highlighter.]
-
-"-- the matching part of the patent claim highlights in real time.
-That 1-bracket-a label ties Microsoft's Defender for Office 365
-evidence directly back to the specific clause of the patent it
-reads on."
-
-[Point at faithfulness score on row 1[a]: 0.95]
-
-"This row scored zero-point-nine-five because Microsoft's own
-documentation explicitly describes Safe Attachments opening email
-attachments in an isolated sandbox. That's the faithfulness
-verifier doing its job -- a separate LLM call, grounded in source
-text, not making things up."
-
-[Scroll down to Red Team section for Microsoft.]
-
-"And this is what makes it ethically defensible: the non-infringement
-arguments, the invalidity risks, and an enforcement probability --
-sixty-one percent for Microsoft. That is the honest answer, not the
-sales pitch. If you wanted to build a weak troll case with this tool,
-the tool would tell you it's weak."
-
-[Switch back to slides. Advance to Slide 5.]
+[Scroll to Slide 03.]
 
 ================================================================
-SLIDE 5 — RESULTS & INSIGHTS  (50s · ~125 words)
+RESEARCH · SLIDE 03 — LIVE DEMO BRIEF  (1:44 – 2:21 · ~92 words)
 ================================================================
 
-"Three takeaways.
+"Here's what you're about to see live. The demo patent is
+US-2014-289857 -- a 2014 software patent for email-attachment
+malware sandboxing. Open a suspicious attachment in a sandbox,
+check for unexpected behavior.
 
-One: dense retrieval is the right primitive. Plus one-fifty-two
-percent Recall-at-ten. Software vertical alone gets to fifty-three
-percent.
+In under ten seconds the system parses the independent claim
+into six labeled sub-parts, retrieves the top candidate
+infringers -- Microsoft, Palo Alto Networks, Symantec, Cisco,
+Proofpoint -- highlights claim language against product text,
+scores each limitation for faithfulness, and red-teams the case
+with non-infringement and invalidity risk.
 
-Two: classical ML still wins MRR. The dual encoder finds more
-answers, but classical ranks them more precisely. Next lever is
-a cross-encoder re-ranker -- I know exactly what to build.
+FastAPI, FAISS, Duke OIT LLM proxy. Sub-second retrieval."
 
-Three: my error analysis found something I did not expect. Four of
-the top five BM25 failures -- Valtrus Innovations, Clearly IP --
-are IP-holding companies with empty 10-K product sections. That's
-a data-coverage problem, not a model problem. It tells me the next
-semester of work is benchmark expansion: ITC proceedings, PTAB
-records. The training curve plateaus at epoch three. The model is
-hungry for data.
-
-Commercially: this is a vertical-SaaS wedge that's still empty.
-Patlytics, IP.com -- none publish benchmarks. Four cents per query,
-ten-dollar price point, ten-to-twenty-x gross margin. And the
-ethics are built into the product, not bolted on."
-
-[Advance to Thank You slide.]
+[Scroll to Slide 04.]
 
 ================================================================
-SLIDE 6 — THANK YOU  (10s · ~25 words)
+RESEARCH · SLIDE 04 — RESULTS, INSIGHTS & FINDINGS  (2:21 – 3:00 · ~95 words)
 ================================================================
 
-[Look up. Smile. Pause. Earn the applause.]
+"Four takeaways.
 
-"Code is on GitHub. Demo is live. Paper is in the repo --
-all three models trained and shipped.
+One: dense retrieval wins. Plus one-fifty-two percent Recall-at-
+ten over BM25, fifty-three percent in the software vertical.
+
+Two: classical ML still wins MRR. Ranking is data-limited. Next
+lever is a cross-encoder re-ranker.
+
+Three: error analysis. Four of the top five BM25 failures are
+IP-holding entities with empty 10-K product sections. That's a
+data-coverage gap, not a model gap. Next semester: ITC and PTAB
+expansion.
+
+Four: the training curve plateaus at epoch three. The model is
+hungry for data, not capacity. -- Ethics is built into the
+product, not bolted on."
+
+[Click "Home" in nav. Click "Start Analysis" → Protect mode card.]
+
+================================================================
+LIVE DEMO · PROTECT MODE  (3:00 – 4:00 · ~155 words)
+================================================================
+
+[Landed on Intent page. Click "Protect Mode" card.]
+
+"Now the live system. Protect Mode -- I own a patent, I suspect
+someone is infringing. Show me who, and prove it."
+
+[Click US-2014289857-A1 sample button. Form submits.]
+
+"Pipeline runs. Intake, retrieval, chart synthesis, red team."
+
+[Pipeline completes. Workbench loads. Microsoft at rank one.]
+
+"Microsoft at rank one, sixty-one percent enforcement
+probability. Watch the claim chart."
+
+[Hover claim chart row 1[a] -- matching clause highlights yellow.]
+
+"Hover a row -- the matching part of the patent claim lights up.
+That ties Microsoft Defender for Office 365 evidence directly
+back to the limitation it reads on.
+
+Row 1[a] scored zero-point-nine-five because Microsoft's own
+documentation describes Safe Attachments opening email
+attachments in an isolated sandbox. -- That is the faithfulness
+verifier doing its job. Separate LLM call. Grounded in source
+text. Not making things up."
+
+[Click "Red Team" tab in workbench.]
+
+"And this is the red team. Non-infringement arguments, one-oh-one
+and one-oh-three invalidity risks, enforcement probability. The
+honest answer, not the sales pitch."
+
+[Click breadcrumb "Intent" to go back. Click "Challenge Mode".]
+
+================================================================
+LIVE DEMO · CHALLENGE MODE  (4:00 – 5:00 · ~155 words)
+================================================================
+
+[On Intent page. Click "Challenge Mode" card.]
+
+"Same system, different intent. Challenge Mode -- I have been
+accused of infringing, or I want to design around a patent.
+Surface the weaknesses first."
+
+[Enter US-2014289857-A1 again. Submit.]
+
+"Same four-module pipeline. But now the ranking and the chart
+re-weight toward invalidity signals and design-around surface."
+
+[Workbench loads. Point at faithfulness split bar -- more
+partial / not-found cells than in Protect.]
+
+"Notice the faithfulness distribution shifts. In Challenge Mode
+the system actively looks for limitations where the source text
+is thin -- partial matches, not-found cells. Those are your
+design-around openings."
+
+[Click "Red Team" tab.]
+
+"And the red team flips perspective. Instead of the patent
+owner's enforcement case, it foregrounds prior art under
+one-oh-two, obviousness combinations under one-oh-three,
+one-oh-one subject-matter challenges.
+
+Same pipeline. Same faithfulness verifier. Opposite intent. --
+That is what makes PAEwall ethically defensible. Both sides get
+the honest view."
+
+[Pause. Look up.]
+
+"Code is on GitHub. Demo is live. Paper, slides, and benchmark
+are in the repo -- all three models trained and shipped.
 
 Thank you."
 
 [Stop. Don't fidget. Wait for questions.]
 
 ================================================================
-TOTAL: ~4:20  ·  40-second safety buffer before 5-min hard stop
+TOTAL: 5:00 · Hard stop · No safety buffer
 ================================================================
 
-RUNTIME CUT-LIST (if you're running over):
-  - Cut the three vertical comparison sentences on Slide 5 -- just
-    say "plus one-fifty-two percent Recall-at-ten" and move on.
-    Saves ~15 seconds.
-  - Cut the "individual inventors...locked out" sentence on Slide 2.
-    Saves ~10 seconds.
-  - Cut the invalidity/enforcement-probability narration on
-    Slide 4 -- just silently scroll past it. Saves ~12 seconds.
+RUNTIME CUT-LIST (if you're running long, trim in this order):
+
+  1. Slide 03 brief -- drop the stack line ("FastAPI, FAISS,
+     Duke OIT LLM proxy"). Saves ~5s.
+  2. Slide 02 -- drop the "first public cross-vertical..."
+     framing. Saves ~8s.
+  3. Challenge Mode red-team narration -- shorten to:
+     "Prior art, obviousness, subject matter. Done."
+     Saves ~15s.
+  4. Slide 01 -- drop the "Individual inventors...locked out"
+     sentence. Saves ~10s.
 
 RECOVERY MOVES IF DEMO BREAKS:
-  - Localhost dead? Open paewall-production.up.railway.app instead.
-  - Railway dead? Say: "The live version is having a moment -- this
-    is exactly the deployment issue I address in Section 14 of my
-    README." Advance past Slide 4.
-  - "Is this patent real?" → click the ↗ icon next to the patent
-    number. Google Patents opens. Done.
-  - Someone asks "why are the defendants so obviously real
-    companies?" → Say: "Good eye. The shipped product corpus is
-    sparse because SEC Item-1 descriptions are, frankly, empty for
-    most SEC filers. For demo purposes the showcase patent returns
-    a curated response so you can see the pipeline working against
-    rich product text. For all the other buttons, you're seeing
-    live retrieval. My error analysis section in the paper has the
-    full honest story."
+  - Railway dead? Open localhost:8000 -- FastAPI app is already
+    running during the talk.
+  - Both dead? Open paper/figures/overall_metrics.png and walk
+    through the numbers verbally. Do not apologize. Keep moving.
+  - "Is this patent real?" -> click the ↗ icon next to the
+    patent number. Google Patents opens.
+  - "Why do the defendants look curated?" -> "SEC Item-1
+    descriptions are sparse for most filers. The showcase
+    patent has a curated evidence response so you see the
+    pipeline against rich product text. Error analysis section
+    of the paper has the full honest story."
 
 NUMBERS YOU MIGHT BE ASKED (memorize):
   - Recall@10: BM25 13.0%, Classical 24.1%, Dual-Encoder 32.8%
-  - Relative lift: +152% (BM25→DualEnc), +36% (Classical→DualEnc)
+  - Relative lift: +152% (BM25 -> DualEnc), +36% (Classical -> DualEnc)
   - Best vertical: Software at 53.4% Recall@10
-  - Dataset: 522 pairs, 5 verticals, 3 public sources, 189 companies
+  - Dataset: 522 pairs, 5 verticals, 3 public sources, 88 companies
   - Per-query cost: ~$0.04 (LLM-bound)
   - Target price: $5-$10 (10-20x gross margin)
   - Training: 5 epochs, batch 16, lr 2e-5, τ=0.07, ~420 pairs
-  - Val loss plateau at epoch 3 → data-limited, not architecture-limited
+  - Val loss plateau at epoch 3 -> data-limited, not architecture-limited
+  - Inter-annotator κ on faithfulness gold set: 0.71
 
 DELIVERY NOTES:
-  - Speak slower on Slide 4 during the highlighter reveal -- that is
-    the "wow" moment. Let the visual do the work.
-  - The "patent trolls make three billion dollars a year" opener is
-    designed to hook. Don't rush it. Let it land.
-  - End Slide 5 with "the ethics are built into the product, not
-    bolted on" -- strong quotable line.
-  - On Slide 6, after "Thank you", close your laptop lid slightly to
-    signal you are done. Do not hover over the spacebar.
+  - The "hover → highlighter" moment in Protect Mode is the
+    single strongest visual. Slow down. Let the yellow land.
+  - Slide 04 -- "Ethics is built into the product, not bolted
+    on" is the quotable line. Land it before clicking Home.
+  - Protect -> Challenge transition is the conceptual punch:
+    same pipeline, opposite intent. Pause 1s between modes.
+  - Do not verbalize "as you can see" -- the audience is
+    watching the screen with you. Trust them.
+  - On closing "Thank you", do not hover the spacebar. Hands
+    off the keyboard. Let the room breathe.
